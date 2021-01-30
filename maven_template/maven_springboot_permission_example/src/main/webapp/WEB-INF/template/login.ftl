@@ -15,7 +15,7 @@
 		    	<table cellpadding="5">
 		    		<tr>
 		    			<td>账号:</td>
-		    			<td><input class="easyui-validatebox" type="text" name="username" data-options="required:true, validType:['length[6,16]']" value="xuxueli" ></input></td>
+		    			<td><input class="easyui-validatebox" type="text" name="username" data-options="required:true, validType:['length[6,16]']" value="wujun" ></input></td>
 		    		</tr>
 		    		<tr>
 		    			<td>密码:</td>

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
 	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="XxlPermissionMenuMapper">
+<mapper namespace="junPermissionMenuMapper">
 	
-	<resultMap id="XxlPermissionMenuResultMap" type="com.xxl.permission.core.model.XxlPermissionMenu" >
+	<resultMap id="junPermissionMenuResultMap" type="com.jun.permission.core.model.junPermissionMenu" >
 	    <id column="id" property="id" jdbcType="INTEGER" />
 	    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
 	    <result column="order" property="order" jdbcType="INTEGER" />
@@ -21,8 +21,8 @@
 		t.permession_id
 	</sql>
 
-	<insert id="add" parameterType="com.xxl.permission.core.model.XxlPermissionMenu" >
-		INSERT INTO xxl_permission_menu(
+	<insert id="add" parameterType="com.jun.permission.core.model.junPermissionMenu" >
+		INSERT INTO jun_permission_menu(
 			parent_id,
 			`order`,
 			`name`,
@@ -39,12 +39,12 @@
 	</insert>
 
 	<delete id="delete" parameterType="java.lang.Integer" >
-		delete from xxl_permission_menu
+		delete from jun_permission_menu
 		where id = #{id}
 	</delete>
 
-	<update id="update" parameterType="com.xxl.permission.core.model.XxlPermissionMenu" >
-		UPDATE xxl_permission_menu
+	<update id="update" parameterType="com.jun.permission.core.model.junPermissionMenu" >
+		UPDATE jun_permission_menu
 		SET parent_id = #{parentId},
 			`order` = #{order},
 			`name` = #{name},
@@ -53,49 +53,49 @@
 		where id = #{id}
 	</update>
 
-	<select id="load" resultMap="XxlPermissionMenuResultMap" >
+	<select id="load" resultMap="junPermissionMenuResultMap" >
 		SELECT <include refid="Base_Column_List" />
-		FROM xxl_permission_menu AS t
+		FROM jun_permission_menu AS t
 		where id = #{id}
 	</select>
 
-	<select id="getAllMenus" resultMap="XxlPermissionMenuResultMap" >
+	<select id="getAllMenus" resultMap="junPermissionMenuResultMap" >
 		SELECT <include refid="Base_Column_List" />
-		FROM xxl_permission_menu AS t
+		FROM jun_permission_menu AS t
 		ORDER BY t.`order` ASC
 	</select>
 
-	<select id="getMenusByRoleId" parameterType="java.lang.Integer" resultMap="XxlPermissionMenuResultMap" >
+	<select id="getMenusByRoleId" parameterType="java.lang.Integer" resultMap="junPermissionMenuResultMap" >
 		SELECT <include refid="Base_Column_List" />
-		FROM xxl_permission_menu AS t
+		FROM jun_permission_menu AS t
 		WHERE t.id in (
 			SELECT menu_id
-			FROM xxl_permission_role_menu
+			FROM jun_permission_role_menu
 			WHERE role_id = #{roleId, jdbcType=INTEGER}
 		)
 		ORDER BY t.`order` ASC
 	</select>
 
-	<select id="getMenusByParentId" parameterType="java.lang.Integer" resultMap="XxlPermissionMenuResultMap">
+	<select id="getMenusByParentId" parameterType="java.lang.Integer" resultMap="junPermissionMenuResultMap">
 		SELECT <include refid="Base_Column_List" />
-		FROM xxl_permission_menu t
+		FROM jun_permission_menu t
 		where t.parent_id = #{parentId}
 	</select>
 
 	<select id="findBindRoleCount" parameterType="java.lang.Integer" resultType="java.lang.Integer" >
 		select count(1)
-		from xxl_permission_role_menu
+		from jun_permission_role_menu
 		where menu_id = #{menuId}
 	</select>
 
 	<!--<select id="getEffectParent" parameterType="java.util.HashMap" resultMap="AdminMenu">
 		SELECT <include refid="Base_Column_List" />
-		FROM xxl_permission_menu AS t
+		FROM jun_permission_menu AS t
 		WHERE menu_id = #{parentId} 
 			and (
-				#{moduleId} = (	select parent_id from xxl_permission_menu where menu_id = #{parentId}	)
-				or #{moduleId} = (	select parent_id from xxl_permission_menu where menu_id = (
-					select parent_id from xxl_permission_menu where menu_id = #{parentId}	)
+				#{moduleId} = (	select parent_id from jun_permission_menu where menu_id = #{parentId}	)
+				or #{moduleId} = (	select parent_id from jun_permission_menu where menu_id = (
+					select parent_id from jun_permission_menu where menu_id = #{parentId}	)
 				)
 			)
 	</select>-->

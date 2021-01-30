@@ -1,9 +1,9 @@
-package com.xxl.permission.core.result;
+package com.jun.permission.core.result;
 
 import java.io.Serializable;
 
 /**
- * @author xuxueli 2015-3-29 18:27:32
+ * @author wujun 2015-3-29 18:27:32
  * @param <T>
  */
 public class ReturnT<T> implements Serializable {

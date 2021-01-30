@@ -1,22 +1,22 @@
-package com.xxl.permission.dao;
+package com.jun.permission.dao;
 
-import com.xxl.permission.core.model.XxlPermissionMenu;
+import com.jun.permission.core.model.junPermissionMenu;
 
 import java.util.List;
 
 /**
- * @author xuxueli
+ * @author wujun
  */
-public interface IXxlPermissionMenuDao {
+public interface IjunPermissionMenuDao {
 
-	public int add(XxlPermissionMenu xxlPermissionMenu);
+	public int add(junPermissionMenu junPermissionMenu);
 	public int delete(int id);
-	public int update(XxlPermissionMenu xxlPermissionMenu);
+	public int update(junPermissionMenu junPermissionMenu);
 
-	public XxlPermissionMenu load(int id);
-	public List<XxlPermissionMenu> getAllMenus();
-	public List<XxlPermissionMenu> getMenusByRoleId(int roleId);
-	public List<XxlPermissionMenu> getMenusByParentId(int parentId);
+	public junPermissionMenu load(int id);
+	public List<junPermissionMenu> getAllMenus();
+	public List<junPermissionMenu> getMenusByRoleId(int roleId);
+	public List<junPermissionMenu> getMenusByParentId(int parentId);
 
 	public int findBindRoleCount(int menuId);
 }

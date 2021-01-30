@@ -1,9 +1,9 @@
-package com.xxl.permission.core.constant;
+package com.jun.permission.core.constant;
 
 
 /**
  * 通用字典类
- * @author xuxueli
+ * @author wujun
  */
 public class CommonDic {
 

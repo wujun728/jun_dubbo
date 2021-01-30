@@ -1,4 +1,4 @@
-package com.xxl.permission.controller.core;
+package com.jun.permission.controller.core;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class LoginIdentity implements Serializable {
 	
-	// XxlPermissionUser.后台用户信息
+	// junPermissionUser.后台用户信息
 	private int userId;
 	private String userName;
 	private String password;

@@ -12,7 +12,7 @@
 		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 	<mvc:annotation-driven /> 
-	<context:component-scan base-package="com.xxl.permission.controller" />
+	<context:component-scan base-package="com.jun.permission.controller" />
 	
 	<mvc:resources mapping="/favicon.ico" location="/favicon.ico" />
 	<mvc:resources mapping="/static/**" location="/static/" />
@@ -34,11 +34,11 @@
 	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/**"/>
-			<bean class="com.xxl.permission.controller.interceptor.PermissionInterceptor"/>
+			<bean class="com.jun.permission.controller.interceptor.PermissionInterceptor"/>
 		</mvc:interceptor>
 	</mvc:interceptors>
 	
- 	<bean id="exceptionResolver" class="com.xxl.permission.controller.resolver.WebExceptionResolver"></bean>
+ 	<bean id="exceptionResolver" class="com.jun.permission.controller.resolver.WebExceptionResolver"></bean>
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver"/>
 	
 </beans>

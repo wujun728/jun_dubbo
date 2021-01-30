@@ -1,11 +1,11 @@
-package com.xxl.permission.controller.interceptor;
+package com.jun.permission.controller.interceptor;
 
 import com.google.code.kaptcha.Constants;
-import com.xxl.permission.controller.annotation.PermessionType;
-import com.xxl.permission.controller.core.LoginIdentity;
-import com.xxl.permission.core.constant.CommonDic.HttpSessionKeyDic;
-import com.xxl.permission.core.exception.WebException;
-import com.xxl.permission.core.util.HttpSessionUtil;
+import com.jun.permission.controller.annotation.PermessionType;
+import com.jun.permission.controller.core.LoginIdentity;
+import com.jun.permission.core.constant.CommonDic.HttpSessionKeyDic;
+import com.jun.permission.core.exception.WebException;
+import com.jun.permission.core.util.HttpSessionUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * “登陆+权限”拦截器
- * @author xuxueli
+ * @author wujun
  */
 public class PermissionInterceptor extends HandlerInterceptorAdapter {
 	private static transient Logger logger = LoggerFactory.getLogger(PermissionInterceptor.class);

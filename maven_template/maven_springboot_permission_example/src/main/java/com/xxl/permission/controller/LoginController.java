@@ -1,14 +1,14 @@
-package com.xxl.permission.controller;
+package com.jun.permission.controller;
 
-import com.xxl.permission.controller.annotation.PermessionType;
-import com.xxl.permission.controller.core.LoginIdentity;
-import com.xxl.permission.core.constant.CommonDic;
-import com.xxl.permission.core.constant.CommonDic.HttpSessionKeyDic;
-import com.xxl.permission.core.model.XxlPermissionRole;
-import com.xxl.permission.core.result.ReturnT;
-import com.xxl.permission.core.util.HttpSessionUtil;
-import com.xxl.permission.dao.IXxlPermissionRoleDao;
-import com.xxl.permission.service.ILoginService;
+import com.jun.permission.controller.annotation.PermessionType;
+import com.jun.permission.controller.core.LoginIdentity;
+import com.jun.permission.core.constant.CommonDic;
+import com.jun.permission.core.constant.CommonDic.HttpSessionKeyDic;
+import com.jun.permission.core.model.junPermissionRole;
+import com.jun.permission.core.result.ReturnT;
+import com.jun.permission.core.util.HttpSessionUtil;
+import com.jun.permission.dao.IjunPermissionRoleDao;
+import com.jun.permission.service.ILoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
- * @author xuxueli
+ * @author wujun
  */
 @Controller
 public class LoginController {
@@ -31,7 +31,7 @@ public class LoginController {
 	@Autowired
 	private ILoginService loginService;
 	@Autowired
-	private IXxlPermissionRoleDao xxlPermissionRoleDao;
+	private IjunPermissionRoleDao junPermissionRoleDao;
 	
 
 	@RequestMapping("")
@@ -44,7 +44,7 @@ public class LoginController {
 			return "redirect:/home";
 		}
 
-		List<XxlPermissionRole> roleList = xxlPermissionRoleDao.getAllRoles();
+		List<junPermissionRole> roleList = junPermissionRoleDao.getAllRoles();
 		model.addAttribute("roleList", roleList);
 		model.addAttribute("SUPER_ROLE_ID", CommonDic.SUPER_ROLE_ID);
 

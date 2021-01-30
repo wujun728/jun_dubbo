@@ -1,7 +1,7 @@
-package com.xxl.permission.service;
+package com.jun.permission.service;
 
-import com.xxl.permission.core.model.XxlPermissionMenu;
-import com.xxl.permission.core.result.ReturnT;
+import com.jun.permission.core.model.junPermissionMenu;
+import com.jun.permission.core.result.ReturnT;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * 用户-角色-权限
- * @author xuxueli
+ * @author wujun
  */
 public interface IUserPermissionService {
 	
@@ -36,7 +36,7 @@ public interface IUserPermissionService {
 
 	// ---------------------- menu ----------------------
 	public Map<String, Object> menuQuery();
-	public ReturnT<Integer> menuAdd(XxlPermissionMenu menu);
+	public ReturnT<Integer> menuAdd(junPermissionMenu menu);
 	public ReturnT<Integer> menuDel(int menuId);
-	public ReturnT<Integer> menuUpdate(XxlPermissionMenu menu);
+	public ReturnT<Integer> menuUpdate(junPermissionMenu menu);
 }

@@ -1,12 +1,12 @@
-package com.xxl.permission.core.exception;
+package com.jun.permission.core.exception;
 
-import com.xxl.permission.core.result.ReturnT;
+import com.jun.permission.core.result.ReturnT;
 
 import java.io.Serializable;
 
 /**
  * 自定义异常
- * @author xuxueli
+ * @author wujun
  */
 public class WebException extends RuntimeException implements Serializable {
 	public static final long serialVersionUID = 42L;

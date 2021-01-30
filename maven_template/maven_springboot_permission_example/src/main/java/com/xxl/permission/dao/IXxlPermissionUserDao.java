@@ -1,20 +1,20 @@
-package com.xxl.permission.dao;
+package com.jun.permission.dao;
 
-import com.xxl.permission.core.model.XxlPermissionUser;
+import com.jun.permission.core.model.junPermissionUser;
 
 import java.util.List;
 import java.util.Set;
 
-public interface IXxlPermissionUserDao {
+public interface IjunPermissionUserDao {
 
-	public int add(XxlPermissionUser xxlPermissionUser);
+	public int add(junPermissionUser junPermissionUser);
 	public int delete(List<Integer> userIds);
-	public int update(XxlPermissionUser xxlPermissionUser);
+	public int update(junPermissionUser junPermissionUser);
 
-	public XxlPermissionUser loadUser(int userId);
-	public XxlPermissionUser findUserByUserName (String username);
+	public junPermissionUser loadUser(int userId);
+	public junPermissionUser findUserByUserName (String username);
 
-	public List<XxlPermissionUser> queryUser(int offset, int pagesize, String userName);
+	public List<junPermissionUser> queryUser(int offset, int pagesize, String userName);
 	public int queryUserCount(int offset, int pagesize, String userName);
 
 	public int bindUserRoles(int userId, Set<Integer> addRoldIds);

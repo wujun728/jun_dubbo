@@ -1,26 +1,26 @@
-package com.xxl.permission.dao;
+package com.jun.permission.dao;
 
-import com.xxl.permission.core.model.XxlPermissionRole;
+import com.jun.permission.core.model.junPermissionRole;
 
 import java.util.List;
 import java.util.Set;
 
 
 /**
- * @author xuxueli
+ * @author wujun
  */
-public interface IXxlPermissionRoleDao {
+public interface IjunPermissionRoleDao {
 
-	public int add(XxlPermissionRole xxlPermissionRole);
+	public int add(junPermissionRole junPermissionRole);
 	public int delete(List<Integer> roleIds);
-	public int update(XxlPermissionRole xxlPermissionRole);
+	public int update(junPermissionRole junPermissionRole);
 
-	public XxlPermissionRole loadRole(int id);
-	public List<XxlPermissionRole> getAllRoles();
+	public junPermissionRole loadRole(int id);
+	public List<junPermissionRole> getAllRoles();
 	public int findUserRoleCount(int userId, int roleId);
 
 	public int findUserCountByRole(int roleId);
-	public List<XxlPermissionRole> findRoleByUserId(int userId);
+	public List<junPermissionRole> findRoleByUserId(int userId);
 
 	public int bindRoleMenu(int roleId, Set<Integer> menudIds);
 	public int unBindRoleMenu(int[] roleIds);

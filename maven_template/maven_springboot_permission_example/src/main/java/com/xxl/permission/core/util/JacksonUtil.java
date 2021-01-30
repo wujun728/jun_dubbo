@@ -1,4 +1,4 @@
-package com.xxl.permission.core.util;
+package com.jun.permission.core.util;
 
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -15,7 +15,7 @@ import java.util.Map;
  * 1、obj need private and set/get；
  * 2、do not support inner class；
  * 
- * @author xuxueli 2015-9-25 18:02:56
+ * @author wujun 2015-9-25 18:02:56
  */
 public class JacksonUtil {
     private final static ObjectMapper objectMapper = new ObjectMapper();

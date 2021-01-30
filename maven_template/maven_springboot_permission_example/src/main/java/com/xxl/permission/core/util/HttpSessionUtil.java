@@ -1,4 +1,4 @@
-package com.xxl.permission.core.util;
+package com.jun.permission.core.util;
 
 import javax.servlet.http.HttpSession;
 

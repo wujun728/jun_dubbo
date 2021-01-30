@@ -1,6 +1,6 @@
-package com.xxl.permission.service;
+package com.jun.permission.service;
 
-import com.xxl.permission.core.result.ReturnT;
+import com.jun.permission.core.result.ReturnT;
 
 import javax.servlet.http.HttpSession;
 

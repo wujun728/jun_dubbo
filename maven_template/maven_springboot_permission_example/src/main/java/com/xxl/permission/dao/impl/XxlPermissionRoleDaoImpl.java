@@ -1,7 +1,7 @@
-package com.xxl.permission.dao.impl;
+package com.jun.permission.dao.impl;
 
-import com.xxl.permission.core.model.XxlPermissionRole;
-import com.xxl.permission.dao.IXxlPermissionRoleDao;
+import com.jun.permission.core.model.junPermissionRole;
+import com.jun.permission.dao.IjunPermissionRoleDao;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -12,37 +12,37 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author xuxueli
+ * @author wujun
  */
 @Repository
-public class XxlPermissionRoleDaoImpl implements IXxlPermissionRoleDao {
+public class junPermissionRoleDaoImpl implements IjunPermissionRoleDao {
 
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 
 	@Override
-	public int add(XxlPermissionRole xxlPermissionRole) {
-		return sqlSessionTemplate.insert("XxlPermissionRoleMapper.add", xxlPermissionRole);
+	public int add(junPermissionRole junPermissionRole) {
+		return sqlSessionTemplate.insert("junPermissionRoleMapper.add", junPermissionRole);
 	}
 
 	@Override
 	public int delete(List<Integer> roleIds) {
-		return sqlSessionTemplate.delete("XxlPermissionRoleMapper.delete", roleIds);
+		return sqlSessionTemplate.delete("junPermissionRoleMapper.delete", roleIds);
 	}
 
 	@Override
-	public int update(XxlPermissionRole xxlPermissionRole) {
-		return sqlSessionTemplate.update("XxlPermissionRoleMapper.update", xxlPermissionRole);
+	public int update(junPermissionRole junPermissionRole) {
+		return sqlSessionTemplate.update("junPermissionRoleMapper.update", junPermissionRole);
 	}
 
 	@Override
-	public XxlPermissionRole loadRole(int id) {
-		return sqlSessionTemplate.selectOne("XxlPermissionRoleMapper.loadRole", id);
+	public junPermissionRole loadRole(int id) {
+		return sqlSessionTemplate.selectOne("junPermissionRoleMapper.loadRole", id);
 	}
 
 	@Override
-	public List<XxlPermissionRole> getAllRoles() {
-		return sqlSessionTemplate.selectList("XxlPermissionRoleMapper.getAllRoles");
+	public List<junPermissionRole> getAllRoles() {
+		return sqlSessionTemplate.selectList("junPermissionRoleMapper.getAllRoles");
 	}
 
 	@Override
@@ -50,17 +50,17 @@ public class XxlPermissionRoleDaoImpl implements IXxlPermissionRoleDao {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("userId", userId);
 		params.put("roleId", roleId);
-		return sqlSessionTemplate.selectOne("XxlPermissionRoleMapper.findUserRoleCount", params);
+		return sqlSessionTemplate.selectOne("junPermissionRoleMapper.findUserRoleCount", params);
 	}
 
 	@Override
 	public int findUserCountByRole(int roleId) {
-		return sqlSessionTemplate.selectOne("XxlPermissionRoleMapper.findUserCountByRole", roleId);
+		return sqlSessionTemplate.selectOne("junPermissionRoleMapper.findUserCountByRole", roleId);
 	}
 
 	@Override
-	public List<XxlPermissionRole> findRoleByUserId(int userId) {
-		return sqlSessionTemplate.selectList("XxlPermissionRoleMapper.findRoleByUserId", userId);
+	public List<junPermissionRole> findRoleByUserId(int userId) {
+		return sqlSessionTemplate.selectList("junPermissionRoleMapper.findRoleByUserId", userId);
 	}
 
 	@Override
@@ -69,14 +69,14 @@ public class XxlPermissionRoleDaoImpl implements IXxlPermissionRoleDao {
 		params.put("roleId", roleId);
 		params.put("menudIds", menudIds);
 
-		return sqlSessionTemplate.insert("XxlPermissionRoleMapper.bindRoleMenu", params);
+		return sqlSessionTemplate.insert("junPermissionRoleMapper.bindRoleMenu", params);
 	}
 
 	@Override
 	public int unBindRoleMenu(int[] roleIds) {
 		Map<String, Object> params= new HashMap<String, Object>();
 		params.put("roleIds", roleIds);
-		return sqlSessionTemplate.delete("XxlPermissionRoleMapper.unBindRoleMenu", params);
+		return sqlSessionTemplate.delete("junPermissionRoleMapper.unBindRoleMenu", params);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class XxlPermissionRoleDaoImpl implements IXxlPermissionRoleDao {
 		params.put("roleId", roleId);
 		params.put("delMenudIds", delMenudIds);
 		
-		return sqlSessionTemplate.insert("XxlPermissionRoleMapper.unBindRoleMenus", params);
+		return sqlSessionTemplate.insert("junPermissionRoleMapper.unBindRoleMenus", params);
 	}
 
 }

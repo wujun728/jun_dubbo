@@ -1,19 +1,19 @@
-package com.xxl.permission.service.impl;
+package com.jun.permission.service.impl;
 
-import com.xxl.permission.controller.core.LoginIdentity;
-import com.xxl.permission.core.constant.CommonDic;
-import com.xxl.permission.core.constant.CommonDic.HttpSessionKeyDic;
-import com.xxl.permission.core.model.XxlPermissionMenu;
-import com.xxl.permission.core.model.XxlPermissionRole;
-import com.xxl.permission.core.model.XxlPermissionUser;
-import com.xxl.permission.core.result.ReturnT;
-import com.xxl.permission.core.util.HttpSessionUtil;
-import com.xxl.permission.core.util.JacksonUtil;
-import com.xxl.permission.dao.IXxlPermissionMenuDao;
-import com.xxl.permission.dao.IXxlPermissionRoleDao;
-import com.xxl.permission.dao.IXxlPermissionUserDao;
-import com.xxl.permission.service.IUserPermissionService;
-import com.xxl.permission.service.helper.MenuModuleHelper;
+import com.jun.permission.controller.core.LoginIdentity;
+import com.jun.permission.core.constant.CommonDic;
+import com.jun.permission.core.constant.CommonDic.HttpSessionKeyDic;
+import com.jun.permission.core.model.junPermissionMenu;
+import com.jun.permission.core.model.junPermissionRole;
+import com.jun.permission.core.model.junPermissionUser;
+import com.jun.permission.core.result.ReturnT;
+import com.jun.permission.core.util.HttpSessionUtil;
+import com.jun.permission.core.util.JacksonUtil;
+import com.jun.permission.dao.IjunPermissionMenuDao;
+import com.jun.permission.dao.IjunPermissionRoleDao;
+import com.jun.permission.dao.IjunPermissionUserDao;
+import com.jun.permission.service.IUserPermissionService;
+import com.jun.permission.service.helper.MenuModuleHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -25,18 +25,18 @@ import java.util.*;
 
 /**
  * 用户-角色-权限
- * @author xuxueli
+ * @author wujun
  */
 @Service
 public class UserPermissionServiceImpl implements IUserPermissionService {
 	//private static transient Logger logger = LoggerFactory.getLogger(UserPermissionServiceImpl.class);
 	
 	@Autowired
-	private IXxlPermissionUserDao xxlPermissionUserDao;
+	private IjunPermissionUserDao junPermissionUserDao;
 	@Autowired
-	private IXxlPermissionRoleDao xxlPermissionRoleDao;
+	private IjunPermissionRoleDao junPermissionRoleDao;
 	@Autowired
-	private IXxlPermissionMenuDao xxlPermissionMenuDao;
+	private IjunPermissionMenuDao junPermissionMenuDao;
 
 	// ---------------------- user ----------------------
 
@@ -45,8 +45,8 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 		int offset = page<1? 0 : (page-1)*rows;
 		int pagesize = rows;
 		
-		List<XxlPermissionUser> rowsData = xxlPermissionUserDao.queryUser(offset, pagesize, userName);
-		int totalNumber = xxlPermissionUserDao.queryUserCount(offset, pagesize, userName);
+		List<junPermissionUser> rowsData = junPermissionUserDao.queryUser(offset, pagesize, userName);
+		int totalNumber = junPermissionUserDao.queryUserCount(offset, pagesize, userName);
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
 		resultMap.put("rows", rowsData);  
@@ -60,11 +60,11 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败,用户参数不完整");
 		}
 
-		XxlPermissionUser user = new XxlPermissionUser();
+		junPermissionUser user = new junPermissionUser();
 		user.setUserName(userName);
 		user.setPassword(password);
 
-		int count = xxlPermissionUserDao.add(user);
+		int count = junPermissionUserDao.add(user);
 		return new ReturnT<Integer>(count);
 	}
 
@@ -81,19 +81,19 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 				return new ReturnT<Integer>(ReturnT.FAIL_CODE, "删除失败,不允许删除自个儿");
 			}
 			// 02：不允许删除,不存在用户
-			XxlPermissionUser user = xxlPermissionUserDao.loadUser(userId);
+			junPermissionUser user = junPermissionUserDao.loadUser(userId);
 			if (user == null) {
 				return new ReturnT<Integer>(ReturnT.FAIL_CODE, "删除失败,用户[" + userId + "]不存在");
 			}
 			// 03：存在关联角色，不允许删除
-			List<XxlPermissionRole> roleList = xxlPermissionRoleDao.findRoleByUserId(userId);
+			List<junPermissionRole> roleList = junPermissionRoleDao.findRoleByUserId(userId);
 			if (CollectionUtils.isNotEmpty(roleList)) {
 				return new ReturnT<Integer>(ReturnT.FAIL_CODE, "删除失败,用户[" + userId + "]存在关联角色，不允许删除");
 			}
 		}
 		
 		// 批量删除-用户
-		int count = xxlPermissionUserDao.delete( Arrays.asList( ArrayUtils.toObject(userIds) ) );
+		int count = junPermissionUserDao.delete( Arrays.asList( ArrayUtils.toObject(userIds) ) );
 		return new ReturnT<Integer>(count);
 	}
 
@@ -103,7 +103,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败,用户参数不完整");
 		}
 
-		XxlPermissionUser user = xxlPermissionUserDao.loadUser(userId);
+		junPermissionUser user = junPermissionUserDao.loadUser(userId);
 		if (user == null) {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败,用户不存在");
 		}
@@ -111,7 +111,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 		user.setUserName(userName);
 		user.setPassword(password);
 
-		int count = xxlPermissionUserDao.update(user);
+		int count = junPermissionUserDao.update(user);
 		if (count < 1) {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败");
 		}
@@ -123,14 +123,14 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 	public String userRoleQueryJson(int userId) {
 
 		// all
-		List<XxlPermissionRole> allRoles = xxlPermissionRoleDao.getAllRoles();
+		List<junPermissionRole> allRoles = junPermissionRoleDao.getAllRoles();
 
 		// my
-		List<XxlPermissionRole> myRoles = xxlPermissionRoleDao.findRoleByUserId(userId);
+		List<junPermissionRole> myRoles = junPermissionRoleDao.findRoleByUserId(userId);
 
 		// 设置选中
-		for (XxlPermissionRole all : allRoles) {
-			for (XxlPermissionRole my : myRoles) {
+		for (junPermissionRole all : allRoles) {
+			for (junPermissionRole my : myRoles) {
 				if (all.getId() == my.getId()) {
 					all.setChecked(true);
 				}
@@ -142,17 +142,17 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 
 	public ReturnT<Integer> userRoleUpdate(HttpSession session, int userId, int[] roleIds) {
 		
-		XxlPermissionUser user = xxlPermissionUserDao.loadUser(userId);
+		junPermissionUser user = junPermissionUserDao.loadUser(userId);
 		if (user == null) {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败,用户不存在");
 		}
 		
 		// remove old
-		xxlPermissionUserDao.unBindUserRoleAll(new int[]{userId});
+		junPermissionUserDao.unBindUserRoleAll(new int[]{userId});
 
 		// add new
 		if (roleIds!=null && roleIds.length>0) {
-			xxlPermissionUserDao.bindUserRoles(userId, new HashSet<Integer>(Arrays.asList(ArrayUtils.toObject(roleIds))));
+			junPermissionUserDao.bindUserRoles(userId, new HashSet<Integer>(Arrays.asList(ArrayUtils.toObject(roleIds))));
 		}
 
 		return new ReturnT<Integer>(ReturnT.SUCCESS_CODE, null);
@@ -161,7 +161,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 	// ---------------------- role ----------------------
 	@Override
 	public Map<String, Object> roleQuery() {
-		List<XxlPermissionRole> rowsData = xxlPermissionRoleDao.getAllRoles();
+		List<junPermissionRole> rowsData = junPermissionRoleDao.getAllRoles();
 		int totalNumber = rowsData!=null?rowsData.size():0;
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -176,11 +176,11 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败,角色名称为空");
 		}
 
-		XxlPermissionRole role = new XxlPermissionRole();
+		junPermissionRole role = new junPermissionRole();
 		role.setName(name);
 		role.setOrder(order);
 
-		int count = xxlPermissionRoleDao.add(role);
+		int count = junPermissionRoleDao.add(role);
 		return new ReturnT<Integer>(count);
 	}
 
@@ -192,11 +192,11 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 		
 		for (int roleId : roleIds) {
 			// Role-关联用户,不允许删除
-			int count = xxlPermissionRoleDao.findUserCountByRole(roleId);
+			int count = junPermissionRoleDao.findUserCountByRole(roleId);
 			if (count > 0) {
 				return new ReturnT<Integer>(ReturnT.FAIL_CODE, "删除失败,角色["+roleId+"]已绑定用户，不允许删除");
 			}
-			List<XxlPermissionMenu> roleMenuList = xxlPermissionMenuDao.getMenusByRoleId(roleId);
+			List<junPermissionMenu> roleMenuList = junPermissionMenuDao.getMenusByRoleId(roleId);
 			if (CollectionUtils.isNotEmpty(roleMenuList)) {
 				return new ReturnT<Integer>(ReturnT.FAIL_CODE, "删除失败,角色["+roleId+"]已分配菜单，不允许删除");
 			}
@@ -207,7 +207,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 		}
 		
 		// 角色-菜单关联,删除批量
-		int count = xxlPermissionRoleDao.delete(Arrays.asList(ArrayUtils.toObject(roleIds)));
+		int count = junPermissionRoleDao.delete(Arrays.asList(ArrayUtils.toObject(roleIds)));
 
 		return new ReturnT<Integer>(count);
 	}
@@ -222,7 +222,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败,超级管理员不允许操作");
 		}
 
-		XxlPermissionRole role = xxlPermissionRoleDao.loadRole(roleId);
+		junPermissionRole role = junPermissionRoleDao.loadRole(roleId);
 		if (role == null) {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败,角色ID非法");
 		}
@@ -230,7 +230,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 		role.setName(name);
 		role.setOrder(order);
 
-		int count = xxlPermissionRoleDao.update(role);
+		int count = junPermissionRoleDao.update(role);
 		if (count < 1) {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "操作失败");
 		}
@@ -240,12 +240,12 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 	// ---------------------- role-menu ----------------------
 	@Override
 	public String roleMenuQueryJson(int roleId) {
-		List<XxlPermissionMenu> Allmenus = xxlPermissionMenuDao.getAllMenus();
-		List<XxlPermissionMenu> myMenus = xxlPermissionMenuDao.getMenusByRoleId(roleId);
+		List<junPermissionMenu> Allmenus = junPermissionMenuDao.getAllMenus();
+		List<junPermissionMenu> myMenus = junPermissionMenuDao.getMenusByRoleId(roleId);
 		
 		// 标志我的权限
-		for (XxlPermissionMenu my : myMenus) {
-			for (XxlPermissionMenu all : Allmenus) {
+		for (junPermissionMenu my : myMenus) {
+			for (junPermissionMenu all : Allmenus) {
 				if (my.getId() == all.getId()) {
 					all.setChecked(true);
 				}
@@ -264,17 +264,17 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "超级管理员不需要分配权限");
 		}
 		
-		XxlPermissionRole role = xxlPermissionRoleDao.loadRole(roleId);
+		junPermissionRole role = junPermissionRoleDao.loadRole(roleId);
 		if (role == null) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "角色菜单更新失败,角色不存在");
 		}
 		
 		// remove old
-		xxlPermissionRoleDao.unBindRoleMenu(new int[]{roleId});
+		junPermissionRoleDao.unBindRoleMenu(new int[]{roleId});
 
 		// add new
 		if (menuIds!=null && menuIds.length>0) {
-			xxlPermissionRoleDao.bindRoleMenu(roleId, new HashSet<Integer>(Arrays.asList(ArrayUtils.toObject(menuIds))));
+			junPermissionRoleDao.bindRoleMenu(roleId, new HashSet<Integer>(Arrays.asList(ArrayUtils.toObject(menuIds))));
 		}
 
 		return ReturnT.SUCCESS;
@@ -284,7 +284,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 
 	@Override
 	public Map<String, Object> menuQuery() {
-		List<XxlPermissionMenu> rowsData = xxlPermissionMenuDao.getAllMenus();
+		List<junPermissionMenu> rowsData = junPermissionMenuDao.getAllMenus();
 		int totalNumber = rowsData!=null ? rowsData.size() : 0;
 		
 		Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -294,18 +294,18 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 	}
 
 	@Override
-	public ReturnT<Integer> menuAdd(XxlPermissionMenu menu) {
+	public ReturnT<Integer> menuAdd(junPermissionMenu menu) {
 		// 校验父菜单
 		boolean ifBiz = menu.getParentId() == CommonDic.BIZ_MENU_ID;	// 0-biz
 		if (!ifBiz) {
-			XxlPermissionMenu parent = xxlPermissionMenuDao.load(menu.getParentId());
+			junPermissionMenu parent = junPermissionMenuDao.load(menu.getParentId());
 			if (parent == null) {
 				return new ReturnT<Integer>(ReturnT.FAIL_CODE, "新增失败,父菜单ID为空");
 			}
 
 			boolean ifGroup = parent.getParentId() == 0;	// 0-biz-group
 			if (!ifGroup) {
-				XxlPermissionMenu parent2 = xxlPermissionMenuDao.load(parent.getParentId());
+				junPermissionMenu parent2 = junPermissionMenuDao.load(parent.getParentId());
 				boolean ifMenu = parent2.getParentId()==0;		// 0-biz-group-menu
 				if (!ifMenu) {
 					return new ReturnT<Integer>(ReturnT.FAIL_CODE, "新增失败,父菜单只能为菜单组");
@@ -319,38 +319,38 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "新增失败,菜单名称为空");
 		}
 
-		int count = xxlPermissionMenuDao.add(menu);
+		int count = junPermissionMenuDao.add(menu);
 		return new ReturnT<Integer>(count);
 	}
 
 	@Override
 	public ReturnT<Integer> menuDel(int menuId) {
 		// 角色-菜单关联,不允许删除
-		int count = xxlPermissionMenuDao.findBindRoleCount(menuId);
+		int count = junPermissionMenuDao.findBindRoleCount(menuId);
 		if (count > 0) {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "删除失败,该菜单使用中");
 		}
 		
 		// 存在子菜单,不允许删除
-		List<XxlPermissionMenu> subList = xxlPermissionMenuDao.getMenusByParentId(menuId);
+		List<junPermissionMenu> subList = junPermissionMenuDao.getMenusByParentId(menuId);
 		if (CollectionUtils.isNotEmpty(subList)) {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "删除失败,存在子菜单依赖");
 		}
 		
-		count = xxlPermissionMenuDao.delete(menuId);
+		count = junPermissionMenuDao.delete(menuId);
 		return new ReturnT<Integer>(count);
 	}
 
 	@Override
-	public ReturnT<Integer> menuUpdate(XxlPermissionMenu menu) {
+	public ReturnT<Integer> menuUpdate(junPermissionMenu menu) {
 
-		XxlPermissionMenu existsMenu = xxlPermissionMenuDao.load(menu.getId());
+		junPermissionMenu existsMenu = junPermissionMenuDao.load(menu.getId());
 		if (existsMenu == null) {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "更新失败,菜单ID非法");
 		}
 
 		if (menu.getParentId() != existsMenu.getParentId()) {
-			List<XxlPermissionMenu> childMenuList = xxlPermissionMenuDao.getMenusByParentId(menu.getId());
+			List<junPermissionMenu> childMenuList = junPermissionMenuDao.getMenusByParentId(menu.getId());
 			if (CollectionUtils.isNotEmpty(childMenuList)) {
 				return new ReturnT<Integer>(ReturnT.FAIL_CODE, "更新失败,存在子菜单时不允许更新父菜单");
 			}
@@ -358,14 +358,14 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 			// 校验父菜单
 			boolean ifBiz = menu.getParentId() == CommonDic.BIZ_MENU_ID;	// 0-biz
 			if (!ifBiz) {
-				XxlPermissionMenu parent = xxlPermissionMenuDao.load(menu.getParentId());
+				junPermissionMenu parent = junPermissionMenuDao.load(menu.getParentId());
 				if (parent == null) {
 					return new ReturnT<Integer>(ReturnT.FAIL_CODE, "新增失败,父菜单ID为空");
 				}
 
 				boolean ifGroup = parent.getParentId() == 0;	// 0-biz-group
 				if (!ifGroup) {
-					XxlPermissionMenu parent2 = xxlPermissionMenuDao.load(parent.getParentId());
+					junPermissionMenu parent2 = junPermissionMenuDao.load(parent.getParentId());
 					boolean ifMenu = parent2.getParentId()==0;		// 0-biz-group-menu
 					if (!ifMenu) {
 						return new ReturnT<Integer>(ReturnT.FAIL_CODE, "新增失败,父菜单只能为菜单组");
@@ -380,7 +380,7 @@ public class UserPermissionServiceImpl implements IUserPermissionService {
 			return new ReturnT<Integer>(ReturnT.FAIL_CODE, "更新失败,菜单名称为空");
 		}
 
-		int count = xxlPermissionMenuDao.update(menu);
+		int count = junPermissionMenuDao.update(menu);
 		return new ReturnT<Integer>(count);
 	}
 

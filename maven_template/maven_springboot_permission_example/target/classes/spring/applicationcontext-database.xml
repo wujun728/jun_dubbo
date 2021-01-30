@@ -62,7 +62,7 @@
 	</tx:advice>
 
 	<aop:config>
-		<aop:pointcut id="txoperation" expression="execution(* com.xxl.permission..service.imp.*.*(..))" />	<!-- 定义一个切入点 -->
+		<aop:pointcut id="txoperation" expression="execution(* com.jun.permission..service.imp.*.*(..))" />	<!-- 定义一个切入点 -->
 		<aop:advisor pointcut-ref="txoperation" advice-ref="txAdvice" />						<!-- 切入点事务通知 -->
 	</aop:config>
 	

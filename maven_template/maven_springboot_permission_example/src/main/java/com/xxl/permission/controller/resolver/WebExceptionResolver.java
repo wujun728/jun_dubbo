@@ -1,8 +1,8 @@
-package com.xxl.permission.controller.resolver;
+package com.jun.permission.controller.resolver;
 
-import com.xxl.permission.core.exception.WebException;
-import com.xxl.permission.core.result.ReturnT;
-import com.xxl.permission.core.util.JacksonUtil;
+import com.jun.permission.core.exception.WebException;
+import com.jun.permission.core.result.ReturnT;
+import com.jun.permission.core.util.JacksonUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * 异常解析器
  * 
- * @author xuxueli
+ * @author wujun
  */
 public class WebExceptionResolver implements HandlerExceptionResolver {
 	private static transient Logger logger = LoggerFactory.getLogger(WebExceptionResolver.class);

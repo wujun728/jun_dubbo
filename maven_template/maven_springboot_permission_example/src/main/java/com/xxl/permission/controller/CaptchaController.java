@@ -1,8 +1,8 @@
-package com.xxl.permission.controller;
+package com.jun.permission.controller;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.Producer;
-import com.xxl.permission.controller.annotation.PermessionType;
+import com.jun.permission.controller.annotation.PermessionType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +17,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * 随机验证码
- * @author xuxueli
+ * @author wujun
  */
 @Controller
 public class CaptchaController {

@@ -1,4 +1,4 @@
-package com.xxl.permission.controller.annotation;
+package com.jun.permission.controller.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 /**
  * 权限类型
- * @author xuxueli
+ * @author wujun
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

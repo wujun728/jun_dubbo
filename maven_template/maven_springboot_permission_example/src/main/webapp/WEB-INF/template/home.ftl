@@ -33,7 +33,7 @@
     </div>
     
     <!-- South:底部 
-    <div region="south" split="true" title="by xuxueli"></div>
+    <div region="south" split="true" title="by wujun"></div>
     -->
     
     <!-- West:菜单 -->

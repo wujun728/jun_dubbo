@@ -1,7 +1,7 @@
-package com.xxl.permission.dao.impl;
+package com.jun.permission.dao.impl;
 
-import com.xxl.permission.core.model.XxlPermissionMenu;
-import com.xxl.permission.dao.IXxlPermissionMenuDao;
+import com.jun.permission.core.model.junPermissionMenu;
+import com.jun.permission.dao.IjunPermissionMenuDao;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -9,52 +9,52 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * @author xuxueli
+ * @author wujun
  */
 @Repository
-public class XxlPermissionMenuDaoImpl implements IXxlPermissionMenuDao {
+public class junPermissionMenuDaoImpl implements IjunPermissionMenuDao {
 
 	@Autowired
 	private SqlSessionTemplate sqlSessionTemplate;
 
 	@Override
-	public int add(XxlPermissionMenu xxlPermissionMenu) {
-		return sqlSessionTemplate.insert("XxlPermissionMenuMapper.add", xxlPermissionMenu);
+	public int add(junPermissionMenu junPermissionMenu) {
+		return sqlSessionTemplate.insert("junPermissionMenuMapper.add", junPermissionMenu);
 	}
 
 	@Override
 	public int delete(int id) {
-		return sqlSessionTemplate.delete("XxlPermissionMenuMapper.delete", id);
+		return sqlSessionTemplate.delete("junPermissionMenuMapper.delete", id);
 	}
 
 	@Override
-	public int update(XxlPermissionMenu xxlPermissionMenu) {
-		return sqlSessionTemplate.update("XxlPermissionMenuMapper.update", xxlPermissionMenu);
+	public int update(junPermissionMenu junPermissionMenu) {
+		return sqlSessionTemplate.update("junPermissionMenuMapper.update", junPermissionMenu);
 	}
 
 	@Override
-	public XxlPermissionMenu load(int id) {
-		return sqlSessionTemplate.selectOne("XxlPermissionMenuMapper.load", id);
+	public junPermissionMenu load(int id) {
+		return sqlSessionTemplate.selectOne("junPermissionMenuMapper.load", id);
 	}
 
 	@Override
-	public List<XxlPermissionMenu> getAllMenus() {
-		return sqlSessionTemplate.selectList("XxlPermissionMenuMapper.getAllMenus");
+	public List<junPermissionMenu> getAllMenus() {
+		return sqlSessionTemplate.selectList("junPermissionMenuMapper.getAllMenus");
 	}
 
 	@Override
-	public List<XxlPermissionMenu> getMenusByRoleId(int roleId) {
-		return sqlSessionTemplate.selectList("XxlPermissionMenuMapper.getMenusByRoleId", roleId);
+	public List<junPermissionMenu> getMenusByRoleId(int roleId) {
+		return sqlSessionTemplate.selectList("junPermissionMenuMapper.getMenusByRoleId", roleId);
 	}
 
 	@Override
-	public List<XxlPermissionMenu> getMenusByParentId(int parentId) {
-		return sqlSessionTemplate.selectList("XxlPermissionMenuMapper.getMenusByParentId", parentId);
+	public List<junPermissionMenu> getMenusByParentId(int parentId) {
+		return sqlSessionTemplate.selectList("junPermissionMenuMapper.getMenusByParentId", parentId);
 	}
 
 	@Override
 	public int findBindRoleCount(int menuId) {
-		return sqlSessionTemplate.selectOne("XxlPermissionMenuMapper.findBindRoleCount", menuId);
+		return sqlSessionTemplate.selectOne("junPermissionMenuMapper.findBindRoleCount", menuId);
 	}
 
 }

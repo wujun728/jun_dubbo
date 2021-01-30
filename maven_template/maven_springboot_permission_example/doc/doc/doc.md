@@ -64,7 +64,7 @@ CREATE TABLE `admin_user_role` (
 
 ##### 权限注解
 ```
-package com.xxl.controller.annotation;
+package com.jun.controller.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -73,7 +73,7 @@ import java.lang.annotation.Target;
 
 /**
  * 权限类型
- * @author xuxueli
+ * @author wujun
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -111,14 +111,14 @@ public List<ArticleMenu> articleMenuQuery() {
 <mvc:interceptors>
 	<mvc:interceptor>
 		<mvc:mapping path="/**"/>
-		<bean class="com.xxl.controller.interceptor.PermissionInterceptor"/>
+		<bean class="com.jun.controller.interceptor.PermissionInterceptor"/>
 	</mvc:interceptor>
 </mvc:interceptors>
 ```
 
 ##### 权限拦截器，源码
 ```
-package com.xxl.controller.interceptor;
+package com.jun.controller.interceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -130,16 +130,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.google.code.kaptcha.Constants;
-import com.xxl.controller.annotation.PermessionType;
-import com.xxl.controller.core.LoginIdentity;
-import com.xxl.core.constant.CommonDic.HttpSessionKeyDic;
-import com.xxl.core.constant.CommonDic.ReturnCodeEnum;
-import com.xxl.core.exception.WebException;
-import com.xxl.core.util.HttpSessionUtil;
+import com.jun.controller.annotation.PermessionType;
+import com.jun.controller.core.LoginIdentity;
+import com.jun.core.constant.CommonDic.HttpSessionKeyDic;
+import com.jun.core.constant.CommonDic.ReturnCodeEnum;
+import com.jun.core.exception.WebException;
+import com.jun.core.util.HttpSessionUtil;
 
 /**
  * “登陆+权限”拦截器
- * @author xuxueli
+ * @author wujun
  */
 public class PermissionInterceptor extends HandlerInterceptorAdapter {
 	//private static transient Logger logger = LoggerFactory.getLogger(LoginPermissionInterceptor.class);

@@ -1,16 +1,16 @@
-package com.xxl.permission.service.impl;
+package com.jun.permission.service.impl;
 
-import com.xxl.permission.controller.core.LoginIdentity;
-import com.xxl.permission.core.constant.CommonDic;
-import com.xxl.permission.core.model.XxlPermissionMenu;
-import com.xxl.permission.core.model.XxlPermissionUser;
-import com.xxl.permission.core.result.ReturnT;
-import com.xxl.permission.core.util.HttpSessionUtil;
-import com.xxl.permission.dao.IXxlPermissionMenuDao;
-import com.xxl.permission.dao.IXxlPermissionRoleDao;
-import com.xxl.permission.dao.IXxlPermissionUserDao;
-import com.xxl.permission.service.ILoginService;
-import com.xxl.permission.service.helper.LoginIdentityHelper;
+import com.jun.permission.controller.core.LoginIdentity;
+import com.jun.permission.core.constant.CommonDic;
+import com.jun.permission.core.model.junPermissionMenu;
+import com.jun.permission.core.model.junPermissionUser;
+import com.jun.permission.core.result.ReturnT;
+import com.jun.permission.core.util.HttpSessionUtil;
+import com.jun.permission.dao.IjunPermissionMenuDao;
+import com.jun.permission.dao.IjunPermissionRoleDao;
+import com.jun.permission.dao.IjunPermissionUserDao;
+import com.jun.permission.service.ILoginService;
+import com.jun.permission.service.helper.LoginIdentityHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -23,22 +23,22 @@ import java.util.List;
 
 /**
  * 后台用户
- * @author xuxueli
+ * @author wujun
  */
 @Service
 public class LoginServiceImpl implements ILoginService {
 	private static transient Logger logger = LoggerFactory.getLogger(LoginServiceImpl.class);
 	
 	@Autowired
-	private IXxlPermissionUserDao xxlPermissionUserDao;
+	private IjunPermissionUserDao junPermissionUserDao;
 	@Autowired
-	private IXxlPermissionRoleDao xxlPermissionRoleDao;
+	private IjunPermissionRoleDao junPermissionRoleDao;
 	@Autowired
-	private IXxlPermissionMenuDao xxlPermissionMenuDao;
+	private IjunPermissionMenuDao junPermissionMenuDao;
 	
 	/*
 	 * 登陆
-	 * @see com.xxl.service.IAdminUserService#loginDo(javax.servlet.http.HttpSession, java.lang.String, java.lang.String)
+	 * @see com.jun.service.IAdminUserService#loginDo(javax.servlet.http.HttpSession, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public ReturnT<String> login(HttpSession session, String username, String password, int roleId) {
@@ -49,7 +49,7 @@ public class LoginServiceImpl implements ILoginService {
 		}
 		
 		// 用户校验--账号密码校验
-		XxlPermissionUser user = xxlPermissionUserDao.findUserByUserName(username);
+		junPermissionUser user = junPermissionUserDao.findUserByUserName(username);
 		if (user == null) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "用户名不存在");
 		}
@@ -58,17 +58,17 @@ public class LoginServiceImpl implements ILoginService {
 		}
 
 		// 角色校验
-		int  userRoleCount = xxlPermissionRoleDao.findUserRoleCount(user.getId(), roleId);
+		int  userRoleCount = junPermissionRoleDao.findUserRoleCount(user.getId(), roleId);
 		if (userRoleCount < 1) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "对不起,角色权限不足");
 		}
 
 		// 菜单校验
-		List<XxlPermissionMenu> menus = null;
+		List<junPermissionMenu> menus = null;
 		if (CommonDic.SUPER_ROLE_ID == roleId) {
-			menus = xxlPermissionMenuDao.getAllMenus();
+			menus = junPermissionMenuDao.getAllMenus();
 		} else {
-			menus = xxlPermissionMenuDao.getMenusByRoleId(roleId);
+			menus = junPermissionMenuDao.getMenusByRoleId(roleId);
 		}
 
 		if (CollectionUtils.isEmpty(menus)) {
@@ -84,7 +84,7 @@ public class LoginServiceImpl implements ILoginService {
 	
 	/*
 	 * 注销登陆
-	 * @see com.xxl.service.IAdminUserService#logout(javax.servlet.http.HttpSession)
+	 * @see com.jun.service.IAdminUserService#logout(javax.servlet.http.HttpSession)
 	 */
 	@Override
 	public ReturnT<String> logout(HttpSession session) {
@@ -97,7 +97,7 @@ public class LoginServiceImpl implements ILoginService {
 
 	/*
 	 * 修改密码
-	 * @see com.xxl.service.IAdminUserService#modifyPwd(javax.servlet.http.HttpSession, java.lang.String, java.lang.String, java.lang.String)
+	 * @see com.jun.service.IAdminUserService#modifyPwd(javax.servlet.http.HttpSession, java.lang.String, java.lang.String, java.lang.String)
 	 */
 	@Override
 	public ReturnT<String> modifyPwd(HttpSession session, String password, String newPwd, String reNewPwd) {
@@ -126,12 +126,12 @@ public class LoginServiceImpl implements ILoginService {
 		}
 		
 		// 修改密码
-		XxlPermissionUser user = xxlPermissionUserDao.findUserByUserName(identity.getUserName());
+		junPermissionUser user = junPermissionUserDao.findUserByUserName(identity.getUserName());
 		if (user == null) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "系统登录异常");
 		}
 		user.setPassword(newPwd);
-		int count = xxlPermissionUserDao.update(user);
+		int count = junPermissionUserDao.update(user);
 		if (count < 1) {
 			return new ReturnT<String>(ReturnT.FAIL_CODE, "密码修改失败，请稍后重试");
 		}

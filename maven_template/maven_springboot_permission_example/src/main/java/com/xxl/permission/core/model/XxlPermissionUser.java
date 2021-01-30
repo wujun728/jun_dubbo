@@ -1,11 +1,11 @@
-package com.xxl.permission.core.model;
+package com.jun.permission.core.model;
 
 /**
  * 后台用户信息
- * @author xuxueli
+ * @author wujun
  *
  */
-public class XxlPermissionUser {
+public class junPermissionUser {
 	
 	private int id;
 	private String userName;

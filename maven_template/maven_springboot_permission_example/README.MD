@@ -38,7 +38,7 @@ JS插件引用：
 		04：修复bug：ueditor.all.min.js：解决弹框层级冲突：zIndex:999改为zIndex:99999,解决与easyui的遮罩9000冲突;	
 	003：七牛云存储 (整合ueditor) :
 		01：引入七牛的JAR：qiniu-java-sdk.Jar;
-		02：修改：修改ueditor的JAR/加新JAR配置文件：ueditor-1.1.1-qiniu-xxl.jar/ueditor.properties (保存文件时,优先判断保存七牛云)
+		02：修改：修改ueditor的JAR/加新JAR配置文件：ueditor-1.1.1-qiniu-jun.jar/ueditor.properties (保存文件时,优先判断保存七牛云)
 		03：修改：config.json：修改*UrlPrefix地址：http://7xir7k.com1.z0.glb.clouddn.com/@;
 
 

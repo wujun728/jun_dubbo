@@ -1,13 +1,13 @@
-package com.xxl.permission.core.model;
+package com.jun.permission.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 权限菜单[三级:模块-组-子项]
- * @author xuxueli
+ * @author wujun
  */
-public class XxlPermissionMenu {
+public class junPermissionMenu {
 
 	private int id;					// 主键ID
 	private int parentId;			// 父节点ID
@@ -36,11 +36,11 @@ public class XxlPermissionMenu {
 	}
 	
 	// 子菜单：用于手动生成权限菜单
-	private List<XxlPermissionMenu> subMenus = new ArrayList<XxlPermissionMenu>();
-	public List<XxlPermissionMenu> getSubMenus() {
+	private List<junPermissionMenu> subMenus = new ArrayList<junPermissionMenu>();
+	public List<junPermissionMenu> getSubMenus() {
 		return subMenus;
 	}
-	public void setSubMenus(List<XxlPermissionMenu> subMenus) {
+	public void setSubMenus(List<junPermissionMenu> subMenus) {
 		this.subMenus = subMenus;
 	}
 
