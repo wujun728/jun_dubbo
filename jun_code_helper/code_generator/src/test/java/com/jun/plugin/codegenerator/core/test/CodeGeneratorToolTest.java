@@ -3,8 +3,8 @@ package com.jun.plugin.codegenerator.core.test;
 
 import org.junit.Test;
 
-import com.jun.plugin.codegenerator.core.CodeGeneratorTool;
-import com.jun.plugin.codegenerator.core.model.ClassInfo;
+import com.jun.plugin.codegenerator.model.ClassInfo;
+import com.jun.plugin.codegenerator.util.CodeGeneratorTool;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

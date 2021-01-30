@@ -31,3 +31,17 @@ spring:
         #template-loader-path: classpath:/templates/
     mvc:
       static-path-pattern: /static/**
+OEM:
+  version: 3.1
+  header: SQL转Java JPA、MYBATIS实现类代码生成平台
+  keywords: sql转实体类,sql转DAO,SQL转service,SQL转JPA实现,SQL转MYBATIS实现
+  title: JAVA代码生成平台
+  slogan: For reducing the repetitive CRUD work
+  description: SpringBootCodeGenerator(JAVA代码生成平台)，又名`大狼狗代码生成器`、`SQL转JAVA`、`SQL转JPA`、`SQL转Mybatis`、`Mybatis在线生成器`、`SQL转Java JPA、MYBATIS实现类代码生成平台`。
+  author: zhengkai.blog.csdn.net
+  packageName: com.software.system
+  copyright: powered by Moshow郑锴(大狼狗)
+  returnUtilSuccess: ReturnT.success
+  returnUtilFailure: ReturnT.error
+  outputStr: zhengkai.blog.csdn.net
+  mode: local

@@ -7,8 +7,6 @@ import freemarker.template.TemplateExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jun.plugin.codegenerator.core.CodeGeneratorTool;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -21,6 +19,7 @@ public class FreemarkerUtil {
     /**
      * freemarker config
      */
+    static String template_path = "template_v1";
     private static Configuration freemarkerConfig = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
     static{
         String templatePath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
@@ -30,7 +29,7 @@ public class FreemarkerUtil {
         }
 
         try {
-            freemarkerConfig.setDirectoryForTemplateLoading(new File(templatePath, "templates/code-generator"));
+            freemarkerConfig.setDirectoryForTemplateLoading(new File(templatePath, "templates/"+template_path));
             freemarkerConfig.setNumberFormat("#");
             freemarkerConfig.setClassicCompatible(true);
             freemarkerConfig.setDefaultEncoding("UTF-8");
