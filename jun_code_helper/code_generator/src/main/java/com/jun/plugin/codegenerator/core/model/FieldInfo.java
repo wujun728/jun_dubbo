@@ -9,8 +9,13 @@ public class FieldInfo {
     private String fieldName;
     private String fieldClass;
     private String fieldComment;
+    private String fieldLength;
 
-    public String getColumnName() {
+    public String getFieldLength() {
+		return fieldLength;
+	}
+
+	public String getColumnName() {
         return columnName;
     }
 
@@ -41,5 +46,10 @@ public class FieldInfo {
     public void setFieldComment(String fieldComment) {
         this.fieldComment = fieldComment;
     }
+
+	public void setFieldLength(String fieldLength) {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

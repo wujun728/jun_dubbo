@@ -33,6 +33,8 @@ public class IndexController {
     @RequestMapping("/codeGenerate")
     @ResponseBody
     public ReturnT<Map<String, String>> codeGenerate(String tableSql) {
+    	
+    	String template_ssm = "template_ssm";
 
         try {
 
@@ -50,13 +52,13 @@ public class IndexController {
             // result
             Map<String, String> result = new HashMap<String, String>();
 
-            result.put("controller_code", freemarkerTool.processString("code-generator/controller.ftl", params));
-            result.put("service_code", freemarkerTool.processString("code-generator/service.ftl", params));
-            result.put("service_impl_code", freemarkerTool.processString("code-generator/service_impl.ftl", params));
+            result.put("controller_code", freemarkerTool.processString(template_ssm+"/controller.ftl", params));
+            result.put("service_code", freemarkerTool.processString(template_ssm+"/service.ftl", params));
+            result.put("service_impl_code", freemarkerTool.processString(template_ssm+"/service_impl.ftl", params));
 
-            result.put("dao_code", freemarkerTool.processString("code-generator/dao.ftl", params));
-            result.put("mybatis_code", freemarkerTool.processString("code-generator/mybatis.ftl", params));
-            result.put("model_code", freemarkerTool.processString("code-generator/model.ftl", params));
+            result.put("dao_code", freemarkerTool.processString(template_ssm+"/dao.ftl", params));
+            result.put("mybatis_code", freemarkerTool.processString(template_ssm+"/mybatis.ftl", params));
+            result.put("model_code", freemarkerTool.processString(template_ssm+"/model.ftl", params));
 
             // 计算,生成代码行数
             int lineNum = 0;
