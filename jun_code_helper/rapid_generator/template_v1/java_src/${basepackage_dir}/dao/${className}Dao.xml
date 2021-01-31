@@ -1,0 +1,67 @@
+<#include "/macro.include"/>
+<#assign className = table.className>
+<#assign classNameFirstLower = table.classNameFirstLower>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<#macro mapperEl value>${r"#{"}${value}}</#macro>
+<mapper namespace="${basepackage}.dao.${className}Dao">
+
+    <select id="get" resultType="${className}">
+        select
+            *
+        from ${table.sqlName}
+        where <#list table.pkColumns as column>${column.sqlName} = <@mapperEl "${column.columnNameLower}"/><#if column_has_next>, </#if></#list>
+    </select>
+
+    <select id="getBy" resultType="${className}">
+        select
+            *
+        from ${table.sqlName}
+        where 1 = 1
+        <if test="id != null">
+            and id = <@mapperEl "id"/>
+        </if>
+        <if test="name != null and name != ''">
+            and name = <@mapperEl "name"/>
+        </if>
+    </select>
+
+    <select id="list" resultType="${className}">
+        select
+            *
+        from ${table.sqlName}
+        where 1 = 1
+        <if test="name != null and name != ''">
+            and	IFNULL(name,'') like CONCAT('%', <@mapperEl "name"/>, '%')
+        </if>
+    </select>
+
+    <insert id="insert">
+        insert into ${table.sqlName} (
+        <#list table.columns as column>
+            <if test="${column.columnNameLower} != null">,${column.sqlName}</if>
+        </#list>
+        ) values (
+        <#list table.columns as column>
+            <if test="${column.columnNameLower} != null">,<@mapperEl column.columnNameLower/></if>
+        </#list>
+        )
+    </insert>
+
+    <update id="update">
+        update ${table.sqlName}
+        <set>
+            <#list table.notPkColumns as column>
+            <if test="${column.columnNameLower} != null">${column.sqlName} = <@mapperEl column.columnNameLower/>,</if>
+            </#list>
+        </set>
+        where
+            <#list table.pkColumns as column>${column.sqlName} = <@mapperEl "${column.columnNameLower}"/><#if column_has_next>, </#if></#list>
+    </update>
+
+    <update id="delete">
+        delete from ${table.sqlName}
+        where <#list table.pkColumns as column>${column.sqlName} = <@mapperEl "${column.columnNameLower}"/><#if column_has_next>, </#if></#list>
+    </update>
+
+</mapper>

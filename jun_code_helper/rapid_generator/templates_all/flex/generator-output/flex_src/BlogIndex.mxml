@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mx:Application xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" 
+	xmlns:Blog="com.company.project.Blog.*" 
+	xmlns:components="com.wai.components.*">
+	<mx:Style source="./assets/css/global.css"/>
+	<mx:Script>
+		<![CDATA[
+		]]>
+	</mx:Script>
+	
+	<mx:VBox width="100%" height="100%">
+		<Blog:BlogView width="100%" height="100%"/>
+	</mx:VBox>
+	
+</mx:Application>

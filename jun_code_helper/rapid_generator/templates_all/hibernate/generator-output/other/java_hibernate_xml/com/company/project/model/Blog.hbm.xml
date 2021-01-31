@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.company.project.model">
+    <class name="Blog" table="blog">
+
+        <id name="id" column="id" type="java.lang.Long">
+            <generator class="increment"/>
+        </id>
+		
+		
+		
+		<property 
+			name="username" 
+			column="username" 
+			update="true"
+            insert="true"
+            type="java.lang.String"
+			not-null="false" 
+			unique="true" 
+			length="50"/>
+		
+		<property 
+			name="birthDate" 
+			column="birth_date" 
+			update="true"
+            insert="true"
+            type="java.sql.Timestamp"
+			not-null="true" 
+			unique="false" 
+			length="19"/>
+		
+		<property 
+			name="sex" 
+			column="sex" 
+			update="true"
+            insert="true"
+            type="java.lang.String"
+			not-null="false" 
+			unique="false" 
+			length="1"/>
+		
+		<property 
+			name="title" 
+			column="title" 
+			update="true"
+            insert="true"
+            type="java.lang.String"
+			not-null="false" 
+			unique="false" 
+			length="10"/>
+		
+		<property 
+			name="length" 
+			column="length" 
+			update="true"
+            insert="true"
+            type="java.lang.Integer"
+			not-null="false" 
+			unique="false" 
+			length="40"/>
+		
+		<property 
+			name="content" 
+			column="content" 
+			update="true"
+            insert="true"
+            type="java.lang.String"
+			not-null="false" 
+			unique="false" 
+			length="56"/>
+		
+		<!-- One-To-Many attributes -->
+
+		<!-- Many-To-One attributes -->
+
+    </class>
+</hibernate-mapping>
+

@@ -1,0 +1,8 @@
+该包包含生成器的模板及代码
+
+所列目录为不同的框架模板及生成器输出.
+
+如struts2框架
+ 	struts2
+		template		: struts2的模板文件
+		generator-output	: 根据模板文件生成的输出文件

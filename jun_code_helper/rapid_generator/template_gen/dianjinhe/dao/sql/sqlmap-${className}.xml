@@ -1,0 +1,120 @@
+<#include "/macro.include"/>
+<#assign className = table.className>   
+<#assign classNameLower = className?uncap_first> 
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" 
+    "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+
+<sqlMap namespace="${className}">
+
+    <resultMap id="RM" class="${basepackage}.dto.${className}DTO">
+        <#list table.columns as column>
+        <result property="${column.columnNameLower}" column="${column.sqlName}"/>
+		</#list>
+    </resultMap>
+
+	<sql id="columns">
+	    <![CDATA[
+        <#list table.columns as column>
+        	${column.sqlName} <#if column_has_next>,</#if>
+        </#list>
+	    ]]>
+	</sql>
+	
+    <insert id="insert" >
+    <![CDATA[
+        INSERT INTO ${table.sqlName} (
+        <#list table.columns as column>
+        	${column.sqlName} <#if column_has_next>,</#if>
+        </#list>
+        ) VALUES (
+        <#list table.columns as column>
+        	#${column.columnNameLower}# <#if column_has_next>,</#if>
+        </#list>        
+        )
+    ]]>
+
+        <selectKey resultClass="java.lang.Long" type="post" keyProperty="<#list table.columns as column><#if column.pk>${column.columnNameLower}</#if></#list>" >
+            select last_insert_id()
+        </selectKey>
+    </insert>
+	
+	<sql id="updates">
+		<![CDATA[
+        UPDATE ${table.sqlName} SET
+	        <#list table.notPkColumns as column>
+	        ${column.sqlName} = #dto.${column.columnNameLower}# <#if column_has_next>,</#if>
+	        </#list>
+		 ]]>
+	</sql>
+	
+    <update id="update" parameterClass="java.util.Map">
+		<include refid="updates"/>
+        WHERE 
+        	<#list table.compositeIdColumns as column>
+	        ${column.sqlName} = #dto.${column.columnNameLower}# <#if column_has_next>,</#if>
+	        </#list>  
+    </update>
+	
+	<update id="updateByCondition" parameterClass="java.util.Map">
+		<include refid="updates"/>       
+        <include refid="IbatisCommon.updateCondition"/>
+	</update>
+
+    <delete id="delete">
+    <![CDATA[
+        DELETE FROM ${table.sqlName} WHERE
+        <#list table.compositeIdColumns as column>
+        ${column.sqlName} = #${column.columnNameLower}# <#if column_has_next>,</#if>
+		</#list>
+    ]]>
+    </delete>
+	
+	<delete id="deleteByCondition">
+        DELETE FROM ${table.sqlName}
+        <include refid="IbatisCommon.updateCondition"/>
+	</delete>
+    
+    <select id="queryById" resultMap="RM">
+	    SELECT <include refid="columns"/>
+	    <![CDATA[
+	        FROM ${table.sqlName} 
+	        WHERE 
+				<#list table.compositeIdColumns as column>
+		        ${column.sqlName} = #${column.columnNameLower}# <#if column_has_next>,</#if>
+		        </#list>
+	    ]]>
+    </select>
+	
+	<select id="queryByCondition" resultMap="RM">
+	    SELECT <include refid="columns"/>
+	    <![CDATA[
+	        FROM ${table.sqlName} 	       
+	    ]]>
+		<include refid="IbatisCommon.queryCondition"/>  
+    </select>
+	
+	<select id="queryAll" resultMap="RM">
+		SELECT
+		<include refid="columns" />
+	    <![CDATA[
+	        FROM ${table.sqlName} 
+	    ]]>
+	</select>
+	
+	<select id="count" resultClass="long">
+        SELECT count(*) FROM ${table.sqlName}
+    </select>
+	
+    <select id="countByCondition" resultClass="long">
+        SELECT count(*) FROM ${table.sqlName} 
+		<include refid="IbatisCommon.queryCondition"/>    
+    </select>	
+
+	<procedure id="page" resultMap="RM" parameterMap="IbatisCommon.pagePara">
+	   <include refid="IbatisCommon.page"/>
+	</procedure>
+	
+</sqlMap>
+
