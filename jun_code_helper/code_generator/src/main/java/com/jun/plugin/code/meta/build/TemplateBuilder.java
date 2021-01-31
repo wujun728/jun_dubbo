@@ -1,21 +1,36 @@
 package com.jun.plugin.code.meta.build;
 
-import javafx.scene.control.Tab;
-
 import java.io.InputStream;
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Set;
 import java.util.logging.Logger;
 
-import com.jun.plugin.code.meta.Main;
-import com.jun.plugin.code.meta.swagger.*;
-import com.jun.plugin.code.meta.util.*;
+import com.jun.plugin.code.meta.swagger.SwaggerMethod;
+import com.jun.plugin.code.meta.swagger.SwaggerModel;
+import com.jun.plugin.code.meta.swagger.SwaggerModelProperties;
+import com.jun.plugin.code.meta.swagger.SwaggerParameters;
+import com.jun.plugin.code.meta.swagger.SwaggerPath;
+import com.jun.plugin.code.meta.swagger.SwaggerResponse;
+import com.jun.plugin.code.meta.util.Column;
+import com.jun.plugin.code.meta.util.JavaTypes;
+import com.jun.plugin.code.meta.util.ModelInfo;
+import com.jun.plugin.code.meta.util.StringUtils;
+import com.jun.plugin.code.meta.util.Table;
+import com.jun.plugin.codegenerator.util.CodeGeneratorTool;
 
 /****
- * @Author:shenkunlin
  * @Description:模板创建
- *               有该对象调用其他对象的构建
- * @Date 2019/6/14 19:14
+ *  有该对象调用其他对象的构建
  *****/
 public class TemplateBuilder {
 	
@@ -132,6 +147,8 @@ public class TemplateBuilder {
 
                     //需要生成的Pojo属性集合
                     List<ModelInfo> models = new ArrayList<ModelInfo>();
+                    List<Column> columnList = new ArrayList<Column>();
+                    List<Column> primaryKeyColumns = new ArrayList<Column>();
                     //所有需要导包的类型
                     Set<String> typeSet = new HashSet<String>();
 
@@ -162,7 +179,9 @@ public class TemplateBuilder {
                        //获取类型，并转成JavaType
                        String javaType = JavaTypes.getType(cloumnsSet.getInt("DATA_TYPE"));
                        //创建该列的信息
-                       models.add(new ModelInfo(javaType, JavaTypes.simpleName(javaType),propertyName,StringUtils.firstUpper(propertyName),remarks, key.equals(columnName),columnName,cloumnsSet.getString("IS_AUTOINCREMENT")));
+                       models.add(new ModelInfo(javaType, JavaTypes.simpleName(javaType),propertyName,
+                    		   StringUtils.firstUpper(propertyName),remarks, key.equals(columnName),columnName,
+                    		   cloumnsSet.getString("IS_AUTOINCREMENT")));
                        //需要导包的类型
                         typeSet.add(javaType);
                         //主键类型
@@ -179,6 +198,25 @@ public class TemplateBuilder {
                         }
                         modelProperties.setDescription(remarks);
                         swaggerModelProperties.add(modelProperties);
+                        
+                        Column column = new Column();
+//                        this.type = type;
+//                        this.simpleType = simpleType;
+//                        this.name = name;
+//                        this.upperName = upperName;
+//                        this.desc = desc;
+//                        this.id = id;
+//                        this.column = column;
+//                        this.identity=identity;
+                        column.setType(javaType);
+                        column.setSimpleType(JavaTypes.simpleName(javaType));
+                        column.setName(propertyName);
+                        column.setUpperName(StringUtils.firstUpper(propertyName));
+                        column.setDesc(remarks);
+                        column.setId(key.equals(columnName));
+                        column.setColumn(columnName);
+                        column.setIdentity(cloumnsSet.getString("IS_AUTOINCREMENT"));
+                        columnList.add(column);
                     }
                     //属性集合
                     swaggerModel.setProperties(swaggerModelProperties);
@@ -196,6 +234,17 @@ public class TemplateBuilder {
                     modelMap.put("keySetMethod","set"+StringUtils.firstUpper(StringUtils.replace_(key)));
                     modelMap.put("keyType",keyType);
                     modelMap.put("serviceName",SERVICENAME);
+                    
+//                    Table tab = new Table();
+//                    tab.setTableName(tableName);
+//                    tab.setClassName(Table);
+//                    tab.setTableName(tableName);
+//                    tab.setClassName(className);
+//                    tab.setClassComment(classComment);
+//                    tab.setColumns(columnList);;;
+//                    Map<String, Object> params = new HashMap<String, Object>();
+//                    params.put("Table", tab);
+                    
 
                     BuilderFactory.batchBuilderV2(modelMap);
                     log.info("正在生成模型："+modelMap);

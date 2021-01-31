@@ -3,9 +3,6 @@ package com.jun.plugin.code.meta.swagger;
 import java.util.List;
 
 /*****
- * @Author: shenkunlin
- * @Date: 2019/7/23 15:11
- * @Description: com.itheima.code.util
  *  Swagger请求路径配置
  ****/
 public class SwaggerPath {

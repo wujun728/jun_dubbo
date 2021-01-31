@@ -1,9 +1,6 @@
 package com.jun.plugin.code.meta.swagger;
 
 /*****
- * @Author: shenkunlin
- * @Date: 2019/7/23 14:51
- * @Description: com.itheima.code.util
  *  响应数据配置
  ****/
 public class SwaggerResponse {

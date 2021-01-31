@@ -2,12 +2,6 @@ package com.jun.plugin.code.meta.swagger;
 
 import java.util.List;
 
-/*****
- * @Author: shenkunlin
- * @Date: 2019/7/22 15:29
- * @Description: com.itheima.code.util
- *  javabean信息
- ****/
 public class SwaggerModel {
 
     //名字

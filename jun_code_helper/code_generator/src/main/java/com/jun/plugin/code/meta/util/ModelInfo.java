@@ -1,9 +1,7 @@
 package com.jun.plugin.code.meta.util;
 
 /****
- * @Author:shenkunlin
  * @Description:记录POJO信息
- * @Date 2019/6/14 22:18
  *****/
 public class ModelInfo {
 

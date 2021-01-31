@@ -1,9 +1,7 @@
 package com.jun.plugin.code.meta.util;
 
 /****
- * @Author:shenkunlin
  * @Description:字符串处理
- * @Date 2019/6/14 19:51
  *****/
 public class StringUtils {
 

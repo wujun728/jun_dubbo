@@ -1,9 +1,6 @@
 package com.jun.plugin.code.meta.swagger;
 
 /*****
- * @Author: shenkunlin
- * @Date: 2019/7/22 15:35
- * @Description: com.itheima.code.util
  *  生成JavaBean的属性配置
  ****/
 public class SwaggerModelProperties {

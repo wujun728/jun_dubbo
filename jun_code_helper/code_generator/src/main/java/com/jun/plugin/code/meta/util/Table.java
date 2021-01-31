@@ -19,6 +19,5 @@ public class Table {
 	private String remarks;
 	private String classNameLower;
 	private List<Column> columns ;
-	private List<Column> primaryKeyColumns;
 	 
 }

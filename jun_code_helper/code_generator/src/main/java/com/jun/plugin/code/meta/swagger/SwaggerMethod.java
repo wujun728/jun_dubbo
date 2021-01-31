@@ -2,11 +2,6 @@ package com.jun.plugin.code.meta.swagger;
 
 import java.util.List;
 
-/*****
- * @Author: shenkunlin
- * @Date: 2019/7/23 14:25
- * @Description: com.itheima.code.util
- ****/
 public class SwaggerMethod {
 
     //提交路径

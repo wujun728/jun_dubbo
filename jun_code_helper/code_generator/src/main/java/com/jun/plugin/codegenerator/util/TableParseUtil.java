@@ -234,7 +234,6 @@ public class TableParseUtil {
         // field List
         List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
         List<Column> columnList = new ArrayList<Column>();
-        List<Column> primaryKeyColumns = new ArrayList<Column>();
 
         String fieldListTmp = tableSql.substring(tableSql.indexOf("(")+1, tableSql.lastIndexOf(")"));
 
@@ -313,14 +312,13 @@ public class TableParseUtil {
                     fieldInfo.setFieldName(fieldName);
                     fieldInfo.setFieldClass(fieldClass);
                     fieldInfo.setFieldComment(fieldComment);
+                    fieldList.add(fieldInfo);
                     
                     Column column = new Column();
                     column.setColumnName(columnName);
                     column.setFieldName(fieldName);
                     column.setFieldClass(fieldClass);
                     column.setFieldComment(fieldComment);
-
-                    fieldList.add(fieldInfo);
                     columnList.add(column);
                 }
             }
@@ -335,6 +333,8 @@ public class TableParseUtil {
         codeJavaInfo.setClassName(className);
         codeJavaInfo.setClassComment(classComment);
         codeJavaInfo.setFieldList(fieldList);
+        codeJavaInfo.setColumns(columnList);;
+        
 
         return codeJavaInfo;
     }

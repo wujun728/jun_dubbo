@@ -3,9 +3,6 @@ package com.jun.plugin.code.meta.build;
 import java.util.Map;
 
 /*****
- * @Author: shenkunlin
- * @Date: 2019/7/22 11:34
- * @Description: com.itheima.code.build
  *  生成Swagger
  ****/
 public class SwaggerBuilder {

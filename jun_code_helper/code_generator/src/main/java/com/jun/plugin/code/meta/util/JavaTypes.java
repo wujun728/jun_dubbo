@@ -1,9 +1,6 @@
 package com.jun.plugin.code.meta.util;
 
 /****
- * @Author:shenkunlin
- * @Description:
- * @Date 2019/6/14 18:27
  *****/
 public class JavaTypes {
 

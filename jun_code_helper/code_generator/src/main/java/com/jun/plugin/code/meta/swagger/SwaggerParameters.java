@@ -1,9 +1,6 @@
 package com.jun.plugin.code.meta.swagger;
 
 /*****
- * @Author: shenkunlin
- * @Date: 2019/7/23 14:54
- * @Description: com.itheima.code.util
  *  Swagger参数
  ****/
 public class SwaggerParameters {
