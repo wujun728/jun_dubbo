@@ -59,6 +59,9 @@ public class TemplateBuilder {
 
     //swagger-ui路径
     public static String SWAGGERUI_PATH;
+    
+    public static String OUTROOT;
+    public static String TEMPLATE_PATH;
 
     static {
         try {
@@ -70,6 +73,7 @@ public class TemplateBuilder {
 
             //获取对应的配置信息
             PACKAGE_POJO = props.getProperty("pojoPackage");
+            OUTROOT = TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+props.getProperty("outRoot");
             PACKAGE_BASE = props.getProperty("basePackage");
             PACKAGE_MAPPER = props.getProperty("mapperPackage");
             PACKAGE_SERVICE_INTERFACE = props.getProperty("serviceInterfacePackage");
@@ -82,6 +86,7 @@ public class TemplateBuilder {
             SWAGGERUI_PATH = props.getProperty("swaggeruipath");
             //工程路径
             PROJECT_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/java/";
+            TEMPLATE_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/resources/"+props.getProperty("template_path");
 
             //加载数据库驱动
             Class.forName(props.getProperty("driver"));
@@ -192,29 +197,8 @@ public class TemplateBuilder {
                     modelMap.put("keyType",keyType);
                     modelMap.put("serviceName",SERVICENAME);
 
-                    //创建JavaBean
-//                    PojoBuilder.builder(modelMap);
-
-                    //创建Controller
-//                    ControllerBuilder.builder(modelMap);
-//                    BuilderFactory.builder(modelMap,
-//                            "/template/controller",
-//                            "Controller.java",
-//                            TemplateBuilder.PACKAGE_CONTROLLER,
-//                            "Controller.java");
-                    BuilderFactory.batchBuilder(modelMap);
+                    BuilderFactory.batchBuilderV2(modelMap);
                     log.info("正在生成模型："+modelMap);
-                    //创建Dao
-//                    DaoBuilder.builder(modelMap);
-
-                    //创建Service接口
-//                    ServiceBuilder.builder(modelMap);
-
-                    //创建ServiceImpl实现类
-//                    ServiceImplBuilder.builder(modelMap);
-
-                    //创建Feign
-//                    FeignBuilder.builder(modelMap);
 
                     //添加swagger路径映射
                     String format="string";
