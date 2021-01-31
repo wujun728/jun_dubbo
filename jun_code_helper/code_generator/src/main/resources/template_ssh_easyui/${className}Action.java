@@ -10,8 +10,8 @@ import org.apache.struts2.convention.annotation.Namespace;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.alibaba.fastjson.JSON;
-import com.erp.model.CompanyInfo;
-import com.erp.service.CompanyInfoService;
+import com.erp.model.${Table};
+import com.erp.service.${Table}Service;
 import com.erp.util.Constants;
 import com.erp.util.PageUtil;
 import com.erp.viewModel.GridModel;
@@ -22,35 +22,31 @@ import com.opensymphony.xwork2.ModelDriven;
 * 类修改者
 * 修改日期
 * 修改说明
-* <p>Title: CompanyInfoAction.java</p>
-* <p>Description:福产流通科技</p>
-* <p>Copyright: Copyright (c) 2006</p>
-* <p>Company:福产流通科技有限公司</p>
 * @author Wujun
 * @date 2013-4-28 下午12:51:26
 * @version V1.0
 */
-@Namespace("/companyInfo")
-@Action(value = "companyInfoAction")
-public class CompanyInfoAction extends BaseAction implements ModelDriven<CompanyInfo>{
+@Namespace("/${table}")
+@Action(value = "${table}Action")
+public class ${Table}Action extends BaseAction implements ModelDriven<${Table}>{
 	//private static final Logger logger = Logger.getLogger(LoginAction.class);
 	private static final long serialVersionUID = -3276708781259160129L;
-	private CompanyInfoService companyInfoService;
-	private CompanyInfo companyInfo;
+	private ${Table}Service ${table}Service;
+	private ${Table} ${table};
 	
-	public CompanyInfo getCompanyInfo()
+	public ${Table} get${Table}()
 	{
-		return companyInfo;
+		return ${table};
 	}
 
-	public void setCompanyInfo(CompanyInfo companyInfo )
+	public void set${Table}(${Table} ${table} )
 	{
-		this.companyInfo = companyInfo;
+		this.${table} = ${table};
 	}
 
 	@Autowired
-	public void setCompanyInfoService(CompanyInfoService companyInfoService) {
-		this.companyInfoService = companyInfoService;
+	public void set${Table}Service(${Table}Service ${table}Service) {
+		this.${table}Service = ${table}Service;
 	}
 	
 	/**  
@@ -58,46 +54,46 @@ public class CompanyInfoAction extends BaseAction implements ModelDriven<Company
 	* Administrator修改者名字
 	* 2013-4-28修改日期
 	* 修改内容
-	* @Title: persistenceCompanyInfo 
-	* @Description:TODO:持久化persistenceCompanyInfo
+	* @Title: persistence${Table} 
+	* @Description:TODO:持久化persistence${Table}
 	* @param @return
 	* @param @throws Exception    设定文件 
 	* @return String    返回类型 
 	* @throws 
 	*/
-	public String persistenceCompanyInfo() throws Exception {
+	public String persistence${Table}() throws Exception {
 		System.out.println(inserted);
 		//String sdfString="[{"name":"123123","tel":"123","fax":"123","address":"123","zip":"123","email":"123123@qq.com","contact":"123","description":"123123"}]";
-		Map<String, List<CompanyInfo>> map=new HashMap<String, List<CompanyInfo>>();
-		map.put("addList", JSON.parseArray(inserted, CompanyInfo.class));
-		map.put("updList", JSON.parseArray(updated, CompanyInfo.class));
-		map.put("delList", JSON.parseArray(deleted, CompanyInfo.class));
-		OutputJson(getMessage(companyInfoService.persistenceCompanyInfo(map)));
+		Map<String, List<${Table}>> map=new HashMap<String, List<${Table}>>();
+		map.put("addList", JSON.parseArray(inserted, ${Table}.class));
+		map.put("updList", JSON.parseArray(updated, ${Table}.class));
+		map.put("delList", JSON.parseArray(deleted, ${Table}.class));
+		OutputJson(getMessage(${table}Service.persistence${Table}(map)));
 		return null;
 	}
 	
 	/**  
-	* 函数功能说明 TODO:CompanyInfo弹出框模式新增
+	* 函数功能说明 TODO:${Table}弹出框模式新增
 	* Administrator修改者名字
 	* 2013-6-9修改日期
 	* 修改内容
-	* @Title: addCompanyInfo 
+	* @Title: add${Table} 
 	* @Description: 
 	* @param @return
 	* @param @throws Exception    设定文件 
 	* @return String    返回类型 
 	* @throws 
 	*/
-	public String persistenceCompanyInfoDlg() throws Exception
+	public String persistence${Table}Dlg() throws Exception
 	{
-		List<CompanyInfo> list=new ArrayList<CompanyInfo>();
+		List<${Table}> list=new ArrayList<${Table}>();
 		list.add(getModel());
-		Integer companyId = getModel().getCompanyId();
+		${keyType} companyId = getModel().${keyGetMethod}();
 		if (null==companyId||"".equals(companyId))
 		{
-			OutputJson(getMessage(companyInfoService.addCompanyInfo(list)), Constants.TEXT_TYPE_PLAIN);
+			OutputJson(getMessage(${table}Service.add${Table}(list)), Constants.TEXT_TYPE_PLAIN);
 		}else {
-			OutputJson(getMessage(companyInfoService.updCompanyInfo(list)), Constants.TEXT_TYPE_PLAIN);
+			OutputJson(getMessage(${table}Service.upd${Table}(list)), Constants.TEXT_TYPE_PLAIN);
 		}
 		return null;
 	}
@@ -107,14 +103,14 @@ public class CompanyInfoAction extends BaseAction implements ModelDriven<Company
 	* Administrator修改者名字
 	* 2013-4-28修改日期
 	* 修改内容
-	* @Title: findAllCompanyInfoList 
-	* @Description: TODO:查询所有或符合条件的CompanyInfo
+	* @Title: findAll${Table}List 
+	* @Description: TODO:查询所有或符合条件的${Table}
 	* @param @return
 	* @param @throws Exception    设定文件 
 	* @return String    返回类型 
 	* @throws 
 	*/
-	public String findAllCompanyInfoList() throws Exception {
+	public String findAll${Table}List() throws Exception {
 		Map<String, Object> map=new HashMap<String, Object>();
 		if (null!=searchValue&&!"".equals(searchValue))
 		{
@@ -122,34 +118,34 @@ public class CompanyInfoAction extends BaseAction implements ModelDriven<Company
 		}
 		PageUtil pageUtil=new PageUtil(page, rows, searchAnds, searchColumnNames, searchConditions, searchVals);
 		GridModel gridModel=new GridModel();
-		gridModel.setRows(companyInfoService.findAllCompanyInfoList(map, pageUtil));
-		gridModel.setTotal(companyInfoService.getCount(map,pageUtil));
+		gridModel.setRows(${table}Service.findAll${Table}List(map, pageUtil));
+		gridModel.setTotal(${table}Service.getCount(map,pageUtil));
 		OutputJson(gridModel);
 		return null;
 	}
  
 	/**  
-	* 函数功能说明 TODO:删除CompanyInfo
+	* 函数功能说明 TODO:删除${Table}
 	* Administrator修改者名字
 	* 2013-6-14修改日期
 	* 修改内容
-	* @Title: delCompanyInfo 
+	* @Title: del${Table} 
 	* @Description: 
 	* @param @return
 	* @param @throws Exception    设定文件 
 	* @return String    返回类型 
 	* @throws 
 	*/
-	public String delCompanyInfo() throws Exception
+	public String del${Table}() throws Exception
 	{
-		OutputJson(getMessage(companyInfoService.delCompanyInfo(getModel().getCompanyId())));
+		OutputJson(getMessage(${table}Service.del${Table}(getModel().${keyGetMethod}())));
 		return null;
 	}
-	public CompanyInfo getModel()
+	public ${Table} getModel()
 	{
-		if(null==companyInfo){
-			companyInfo=new CompanyInfo();
+		if(null==${table}){
+			${table}=new ${Table}();
 		}
-		return companyInfo;
+		return ${table};
 	}
 }

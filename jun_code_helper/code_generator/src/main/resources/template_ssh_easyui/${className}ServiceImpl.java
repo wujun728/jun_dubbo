@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.erp.dao.PublicDao;
-import com.erp.model.CompanyInfo;
-import com.erp.service.CompanyInfoService;
+import com.erp.model.${Table};
+import com.erp.service.${Table}Service;
 import com.erp.shiro.ShiroUser;
 import com.erp.util.Constants;
 import com.erp.util.PageUtil;
@@ -19,108 +19,103 @@ import com.erp.util.PageUtil;
 * 类修改者
 * 修改日期
 * 修改说明
-* <p>Title: CompanyInfoServiceImpl.java</p>
-* <p>Description:福产流通科技</p>
-* <p>Copyright: Copyright (c) 2006</p>
-* <p>Company:福产流通科技有限公司</p>
 * @author Wujun
-* @date 2013-4-28 下午12:52:04
 * @version V1.0
 */
 
-@Service("companyInfoService")
-public class CompanyInfoServiceImpl implements CompanyInfoService {
-	private static final Logger logger = Logger.getLogger(CompanyInfoServiceImpl.class);
-	private PublicDao<CompanyInfo> publicDao;
+@Service("${table}Service")
+public class ${Table}ServiceImpl implements ${Table}Service {
+	private static final Logger logger = Logger.getLogger(${Table}ServiceImpl.class);
+	private PublicDao<${Table}> publicDao;
 	
 	@Autowired
-	public void setPublicDao(PublicDao<CompanyInfo> publicDao) {
+	public void setPublicDao(PublicDao<${Table}> publicDao) {
 		this.publicDao = publicDao;
 	}
 	/* (非 Javadoc) 
-	* <p>Title: persistenceCompanyInfo</p> 
-	* <p>Description: 持久化CompanyInfo</p> 
+	* <p>Title: persistence${Table}</p> 
+	* <p>Description: 持久化${Table}</p> 
 	* @param map
 	* @return 
-	* @see com.erp.service.CompanyInfoService#persistenceCompanyInfo(java.util.Map) 
+	* @see com.erp.service.${Table}Service#persistence${Table}(java.util.Map) 
 	*/
-	public boolean persistenceCompanyInfo(Map<String, List<CompanyInfo>> map) 
+	public boolean persistence${Table}(Map<String, List<${Table}>> map) 
 	{
-		this.addCompanyInfo(map.get("addList"));
-		this.updCompanyInfo(map.get("updList"));
-		this.delCompanyInfo(map.get("delList"));
+		this.add${Table}(map.get("addList"));
+		this.upd${Table}(map.get("updList"));
+		this.del${Table}(map.get("delList"));
 		return true;
 	}
 	
-	public boolean addCompanyInfo(List<CompanyInfo> addlist) 
+	public boolean add${Table}(List<${Table}> addlist) 
 	{
 		
-		logger.debug("addCompanyInfo");
+		logger.debug("add${Table}");
 		if (addlist!=null&&addlist.size()!=0) {
 			ShiroUser users = Constants.getCurrendUser();
-			for (CompanyInfo companyInfo : addlist) {
-				companyInfo.setCreated(new Date());
-				companyInfo.setLastmod(new Date());
-				companyInfo.setStatus("A");
+			for (${Table} ${table} : addlist) {
+				${table}.setCreated(new Date());
+				${table}.setLastmod(new Date());
+				${table}.setStatus("A");
 				if (users!=null)
 				{
-					companyInfo.setCreater(users.getUserId());
-					companyInfo.setModifyer(users.getUserId());
+					${table}.setCreater(users.getUserId());
+					${table}.setModifyer(users.getUserId());
 				}
-				publicDao.save(companyInfo);
+				publicDao.save(${table});
 			}
 		}
 		return true;
 	}
 	
-	public boolean updCompanyInfo(List<CompanyInfo>  updlist) 
+	public boolean upd${Table}(List<${Table}>  updlist) 
 	{
-		logger.debug("updCompanyInfo");
+		logger.debug("upd${Table}");
 		if (updlist!=null&&updlist.size()!=0) {
 			ShiroUser users = Constants.getCurrendUser();
-			for (CompanyInfo companyInfo : updlist) {
-				companyInfo.setLastmod(new Date());
-				companyInfo.setModifyer(users.getUserId());
-				publicDao.update(companyInfo);
+			for (${Table} ${table} : updlist) {
+				${table}.setLastmod(new Date());
+				${table}.setModifyer(users.getUserId());
+				publicDao.update(${table});
 			}
 		}
 		return true;
 	}
 	
-	public boolean delCompanyInfo(List<CompanyInfo>  dellist)
+	public boolean del${Table}(List<${Table}>  dellist)
 	{
-		logger.debug("delCompanyInfo");
+		logger.debug("del${Table}");
 		if (dellist!=null&&dellist.size()!=0) {
-			for (CompanyInfo companyInfo : dellist) {
-				companyInfo.setStatus("I");
-				companyInfo.setLastmod(new Date());
-				publicDao.deleteToUpdate(companyInfo);
+			for (${Table} ${table} : dellist) {
+				${table}.setStatus("I");
+				${table}.setLastmod(new Date());
+				publicDao.deleteToUpdate(${table});
 			}
 		}
 		return true;
 	}
 	
-	public boolean delCompanyInfo(Integer companyId)
+	public boolean del${Table}(Integer companyId)
 	{
-		CompanyInfo companyInfo=publicDao.get(CompanyInfo.class, companyId);
-		companyInfo.setStatus("I");
-		companyInfo.setLastmod(new Date());
-		publicDao.deleteToUpdate(companyInfo);
+		${Table} ${table}=publicDao.get(${Table}.class, companyId);
+		${table}.setStatus("I");
+		${table}.setLastmod(new Date());
+		publicDao.deleteToUpdate(${table});
 		return true;
 	}
 	
 	/* (非 Javadoc) 
-	* <p>Title: findAllCompanyInfoList</p> 
-	* <p>Description: 查询所有CompanyInfo</p> 
+	* <p>Title: findAll${Table}List</p> 
+	* <p>Description: 查询所有${Table}</p> 
 	* @param param
 	* @param page
 	* @param rows
 	* @return 
-	* @see com.erp.service.CompanyInfoService#findAllCompanyInfoList(java.util.Map, java.lang.Integer, java.lang.Integer) 
+	* @see com.erp.service.${Table}Service#findAll${Table}List(java.util.Map, java.lang.Integer, java.lang.Integer) 
 	*/
-	public List<CompanyInfo>  findAllCompanyInfoList(Map<String, Object> param,PageUtil pageUtil) 
+	public List<${Table}>  findAll${Table}List(Map<String, Object> param,PageUtil pageUtil) 
 	{
-		String hql="from CompanyInfo t where t.status='A' ";
+		String hql="from ${Table} t where t.status='A' ";
 		hql+=Constants.getSearchConditionsHQL("t", param);
 		hql+=Constants.getGradeSearchConditionsHQL("t", pageUtil);
 		return publicDao.find(hql, param, pageUtil.getPage(), pageUtil.getRows());
@@ -131,11 +126,11 @@ public class CompanyInfoServiceImpl implements CompanyInfoService {
 	* <p>Description:查询条数 </p> 
 	* @param param
 	* @return 
-	* @see com.erp.service.CompanyInfoService#getCount(java.util.Map) 
+	* @see com.erp.service.${Table}Service#getCount(java.util.Map) 
 	*/
 	public Long getCount(Map<String, Object> param,PageUtil pageUtil)
 	{
-		String hql="select count(*) from CompanyInfo t where t.status='A' ";
+		String hql="select count(*) from ${Table} t where t.status='A' ";
 		hql+=Constants.getSearchConditionsHQL("t", param);
 		hql+=Constants.getGradeSearchConditionsHQL("t", pageUtil);
 		return publicDao.count(hql, param);

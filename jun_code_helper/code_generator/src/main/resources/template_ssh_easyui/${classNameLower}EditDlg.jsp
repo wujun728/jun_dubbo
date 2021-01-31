@@ -2,7 +2,7 @@
 <script type="text/javascript">
 	$(function() {
 		$("#form").form({
-			url :"companyInfo/companyInfoAction!persistenceCompanyInfoDlg.action",
+			url :"${table}/${table}Action!persistence${Table}Dlg.action",
 			onSubmit : function() {
 				parent.$.messager.progress({
 					title : '提示',
