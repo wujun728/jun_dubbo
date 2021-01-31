@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jun.plugin.code.meta.util.Table;
 import com.jun.plugin.codegenerator.model.ClassInfo;
 import com.jun.plugin.codegenerator.model.ParamInfo;
 import com.jun.plugin.codegenerator.model.ReturnT;
@@ -50,10 +51,12 @@ public class IndexController {
 
             // parse table
             ClassInfo classInfo = CodeGeneratorTool.processTableIntoClassInfo(tableSql);
+            Table table = CodeGeneratorTool.processTableIntoTable(tableSql);
 
             // code genarete
             Map<String, Object> params = new HashMap<String, Object>();
             params.put("classInfo", classInfo);
+            params.put("Table", table);
 
             // result
             Map<String, String> result = new HashMap<String, String>();
