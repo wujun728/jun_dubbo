@@ -28,7 +28,7 @@ public class StringUtils {
      * @return
      */
     public static String replaceTab(String str){
-        return str.replaceFirst("tab_","").replaceFirst("tb_","");
+        return str.replaceFirst("tab_","").replaceFirst("tb_","").replaceFirst("t_","");
     }
 
     /***

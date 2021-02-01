@@ -26,6 +26,7 @@ import com.jun.plugin.code.meta.util.JavaTypes;
 import com.jun.plugin.code.meta.util.ModelInfo;
 import com.jun.plugin.code.meta.util.StringUtils;
 import com.jun.plugin.code.meta.util.Table;
+import com.jun.plugin.codegenerator.model.FieldInfo;
 import com.jun.plugin.codegenerator.util.CodeGeneratorTool;
 
 /****
@@ -119,6 +120,15 @@ public class TemplateBuilder {
             //获取数据库连接
             Connection conn = DriverManager.getConnection(props.getProperty("url"),props.getProperty("uname"),props.getProperty("pwd"));
             DatabaseMetaData metaData = conn.getMetaData();
+            
+            System.out.println("获取数据库的产品名称: " + metaData.getDatabaseProductName());
+            System.out.println("获取数据库的版本号: " + metaData.getDatabaseProductVersion());
+            System.out.println("获取数据库的用户名: " + metaData.getUserName());
+            System.out.println("获取数据库的URL: " + metaData.getURL());
+            System.out.println("获取数据库的驱动名称: " + metaData.getDriverName());
+            System.out.println("获取数据库的驱动版本号: " + metaData.getDriverVersion());
+            System.out.println("查看数据库是否只允许读操作: " + metaData.isReadOnly());
+            System.out.println("查看数据库是否支持事务: " + metaData.supportsTransactions());
 
             //获取数据库类型：MySQL
             String databaseType = metaData.getDatabaseProductName();
@@ -126,7 +136,7 @@ public class TemplateBuilder {
             //针对MySQL数据库进行相关生成操作
             if(databaseType.equals("MySQL")){
                 //获取所有表结构
-                ResultSet tableResultSet = metaData.getTables(null, "%", "%", new String[]{"TABLE"});
+                ResultSet tableResultSet = metaData.getTables(null, "%", "%", new String[]{"TABLE","REMARKS"});//"","REMARKS"
 
                 //获取数据库名字
                 String database = conn.getCatalog();
@@ -139,16 +149,23 @@ public class TemplateBuilder {
                 while (tableResultSet.next()){
                     //获取表名
                     String tableName=tableResultSet.getString("TABLE_NAME");
+                    String classComment=tableResultSet.getString("REMARKS");
                     log.info("当前表名："+tableName);
                     //名字操作,去掉tab_,tb_，去掉_并转驼峰
                     String table = StringUtils.replace_(StringUtils.replaceTab(tableName));
                     //大写对象
                     String Table =StringUtils.firstUpper(table);
-
+                    
+                    //模板V0
                     //需要生成的Pojo属性集合
                     List<ModelInfo> models = new ArrayList<ModelInfo>();
                     List<Column> columnList = new ArrayList<Column>();
                     List<Column> primaryKeyColumns = new ArrayList<Column>();
+                    
+                    //模板V1
+                    // field List
+                    List<FieldInfo> fieldList = new ArrayList<FieldInfo>();
+                    
                     //所有需要导包的类型
                     Set<String> typeSet = new HashSet<String>();
 
@@ -158,7 +175,9 @@ public class TemplateBuilder {
                     ResultSet keySet = metaData.getPrimaryKeys(database, UNAME, tableName);
                     String key ="",keyType="";
                     while (keySet.next()){
-                        key=keySet.getString(4);
+                        key=keySet.getString(4);   
+                        // PK_NAME String => primary key name (may be null)
+                        //COLUMN_NAME String => column name
                     }
 
                     //构建SwaggerModel对象
@@ -170,23 +189,26 @@ public class TemplateBuilder {
                     List<SwaggerModelProperties> swaggerModelProperties = new ArrayList<SwaggerModelProperties>();
 
                     while (cloumnsSet.next()){
-                        //列的描述
-                        String remarks = cloumnsSet.getString("REMARKS");
-                        //获取列名
-                       String columnName = cloumnsSet.getString("COLUMN_NAME");
-                        //处理列名
-                        String propertyName = StringUtils.replace_(columnName);
-                       //获取类型，并转成JavaType
-                       String javaType = JavaTypes.getType(cloumnsSet.getInt("DATA_TYPE"));
+                        
+                       String remarks = cloumnsSet.getString("REMARKS");//列的描述
+                       String columnName = cloumnsSet.getString("COLUMN_NAME"); //获取列名
+                       String javaType = JavaTypes.getType(cloumnsSet.getInt("DATA_TYPE"));//获取类型，并转成JavaType
+                       int COLUMN_SIZE  = cloumnsSet.getInt("COLUMN_SIZE");//获取
+                       String TABLE_SCHEM  = cloumnsSet.getString("TABLE_SCHEM");//获取
+                       String COLUMN_DEF  = cloumnsSet.getString("COLUMN_DEF");//获取
+                       int NULLABLE   = cloumnsSet.getInt("NULLABLE");//获取
+                        
+                       String propertyName = StringUtils.replace_(columnName);//处理列名，驼峰
+                       
                        //创建该列的信息
                        models.add(new ModelInfo(javaType, JavaTypes.simpleName(javaType),propertyName,
                     		   StringUtils.firstUpper(propertyName),remarks, key.equals(columnName),columnName,
                     		   cloumnsSet.getString("IS_AUTOINCREMENT")));
-                       //需要导包的类型
-                        typeSet.add(javaType);
-                        //主键类型
+                       
+                        typeSet.add(javaType);//需要导包的类型
+                      
                         if(columnName.equals(key)){
-                            keyType=JavaTypes.simpleName(javaType);
+                            keyType=JavaTypes.simpleName(javaType);//主键类型,单主键支持
                         }
 
                         //SwaggerModelProperties创建
@@ -198,16 +220,8 @@ public class TemplateBuilder {
                         }
                         modelProperties.setDescription(remarks);
                         swaggerModelProperties.add(modelProperties);
-                        
+                        //V0
                         Column column = new Column();
-//                        this.type = type;
-//                        this.simpleType = simpleType;
-//                        this.name = name;
-//                        this.upperName = upperName;
-//                        this.desc = desc;
-//                        this.id = id;
-//                        this.column = column;
-//                        this.identity=identity;
                         column.setType(javaType);
                         column.setSimpleType(JavaTypes.simpleName(javaType));
                         column.setName(propertyName);
@@ -217,34 +231,61 @@ public class TemplateBuilder {
                         column.setColumn(columnName);
                         column.setIdentity(cloumnsSet.getString("IS_AUTOINCREMENT"));
                         columnList.add(column);
+                        
+                        //V1
+                        FieldInfo fieldInfo = new FieldInfo();
+                        fieldInfo.setColumnName(columnName);
+                        fieldInfo.setFieldName(propertyName);
+                        fieldInfo.setFieldClass(JavaTypes.simpleName(javaType));
+                        fieldInfo.setFieldComment(remarks);
+                        fieldList.add(fieldInfo);
                     }
                     //属性集合
                     swaggerModel.setProperties(swaggerModelProperties);
                     swaggerModels.add(swaggerModel);
 
-                    //创建该表的JavaBean
-                    Map<String,Object> modelMap = new HashMap<String,Object>();
+//                    //模板V0的modelMap，创建该表的JavaBean元数据
+//                    Map<String,Object> modelMap = new HashMap<String,Object>();
+//                    modelMap.put("table",table);
+//                    modelMap.put("Table",Table);
+//                    modelMap.put("swagger",SWAGGER);
+//                    modelMap.put("TableName",tableName);
+//                    modelMap.put("models",models);
+//                    modelMap.put("typeSet",typeSet);
+//                    //主键操作
+//                    modelMap.put("keySetMethod","set"+StringUtils.firstUpper(StringUtils.replace_(key)));
+//                    modelMap.put("keyGetMethod","get"+StringUtils.firstUpper(StringUtils.replace_(key)));
+//                    modelMap.put("keyType",keyType);
+//                    modelMap.put("serviceName",SERVICENAME);
+                    
+                    
+                    //模板V1的modelMap，创建该表的JavaBean元数据
+                    Map<String, Object> modelMap = new HashMap<String, Object>();
+                    Table tab = new Table();
+                    tab.setTableName(tableName);
+                    tab.setClassName(Table);
+                    tab.setClassComment(classComment);
+                    tab.setFieldList(fieldList);
+                    modelMap.put("classInfo", tab);
+                    modelMap.put("authorName","junwu");
+                    modelMap.put("packageName",TemplateBuilder.PACKAGE_BASE);
+                    modelMap.put("returnUtil","ReturnInfo");
+                    modelMap.put("returnUtilSuccess","ReturnInfo.ok");
+                    modelMap.put("returnUtilFailure","ReturnInfo.error");
+                    //兼容模板V0属性
+                    tab.setColumns(columnList);
+                    modelMap.put("Table", table);
                     modelMap.put("table",table);
                     modelMap.put("Table",Table);
                     modelMap.put("swagger",SWAGGER);
                     modelMap.put("TableName",tableName);
                     modelMap.put("models",models);
                     modelMap.put("typeSet",typeSet);
-                    //主键操作
+                    //兼容模板V0属性，主键操作
                     modelMap.put("keySetMethod","set"+StringUtils.firstUpper(StringUtils.replace_(key)));
+                    modelMap.put("keyGetMethod","get"+StringUtils.firstUpper(StringUtils.replace_(key)));
                     modelMap.put("keyType",keyType);
                     modelMap.put("serviceName",SERVICENAME);
-                    
-//                    Table tab = new Table();
-//                    tab.setTableName(tableName);
-//                    tab.setClassName(Table);
-//                    tab.setTableName(tableName);
-//                    tab.setClassName(className);
-//                    tab.setClassComment(classComment);
-//                    tab.setColumns(columnList);;;
-//                    Map<String, Object> params = new HashMap<String, Object>();
-//                    params.put("Table", tab);
-                    
 
                     BuilderFactory.batchBuilderV2(modelMap);
                     log.info("正在生成模型："+modelMap);

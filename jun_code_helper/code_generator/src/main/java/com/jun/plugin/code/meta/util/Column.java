@@ -10,7 +10,8 @@ public class Column {
     private String fieldName;//name
     private String fieldClass;//fieldType
     private String fieldComment;//remarks desc
-    private String fieldLength;
+    private String length;
+    private String nullable;
     
     //属性类型
     private String type;
