@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import freemarker.template.Template;
 
@@ -15,10 +16,10 @@ import freemarker.template.Template;
  * @Description:构建对象的工厂
  *****/
 public class BuilderFactory {
-
+	
+	public static Logger log = Logger.getLogger(BuilderFactory.class.toString());
 	/***
 	 * 构建Controller
-	 * 
 	 * @param modelMap
 	 */
 	public static void builder(Map<String, Object> modelMap, // 数据模型
@@ -58,21 +59,21 @@ public class BuilderFactory {
 	 */
 	public static void batchBuilder(Map<String, Object> modelMap) {
 		// 生成Controller层文件
-		BuilderFactory.builder(modelMap, "/template_ds/controller", "Controller.java");
+		BuilderFactory.builder(modelMap, "/template_v1/controller", "Controller.java");
 		// 生成Dao层文件
-		BuilderFactory.builder(modelMap, "/template_ds/dao", "Mapper.java");
+		BuilderFactory.builder(modelMap, "/template_v1/dao", "Mapper.java");
 		// 生成Feign层文件
-		BuilderFactory.builder(modelMap, "/template_ds/feign", "Feign.java");
+		BuilderFactory.builder(modelMap, "/template_v1/feign", "Feign.java");
 		// 生成Pojo层文件
-		BuilderFactory.builder(modelMap, "/template_ds/pojo", "Pojo.java");
+		BuilderFactory.builder(modelMap, "/template_v1/pojo", "Pojo.java");
 		// 生成Service层文件
-		BuilderFactory.builder(modelMap, "/template_ds/service", "Service.java");
+		BuilderFactory.builder(modelMap, "/template_v1/service", "Service.java");
 		// 生成ServiceImpl层文件
-		BuilderFactory.builder(modelMap, "/template_ds/service/impl", "ServiceImpl.java");
+		BuilderFactory.builder(modelMap, "/template_v1/service/impl", "ServiceImpl.java");
 
 	}
 	/***
-	 * 构建 
+	 * 构建 Java文件
 	 * @param modelMap
 	 */
 	public static void batchBuilderV2(Map<String, Object> modelMap) {
@@ -85,26 +86,29 @@ public class BuilderFactory {
             Iterator<String> it = set.iterator();
             while (it.hasNext()) {
                 String key = (String) it.next();
-                if(key.contains(".json")) {
-                	continue;
-                }
                 String templateFileName = key;
                 String templateFileNameSuffix = key.substring(key.lastIndexOf("."), key.length());
                 String templateFileNamePrefix = key.substring(0,key.lastIndexOf("."));
                 String templateFilePathAndName = String.valueOf(m.get(key));
-                String templateFilePath = templateFilePathAndName.replace(templateFileName, "");
-                String templateFilePathMiddle = templateFilePathAndName.replace(templateFileName, "").replace(TemplateBuilder.TEMPLATE_PATH, "");
+                String templateFilePath = templateFilePathAndName.replace("\\"+templateFileName, "");
+                String templateFilePathMiddle="";
+                if(!templateFilePath.endsWith(TemplateBuilder.TEMPLATE_NAME.replace("/", "\\"))) {
+                	templateFilePathMiddle=templateFilePath.substring(templateFilePath.lastIndexOf("\\"), templateFilePath.length()).replace("\\", "");
+                }
+                if(key.contains(".json")) {
+                	log.info("templateFilePath="+templateFilePath);;
+                	continue;
+                }
                 try {
 					// 获取模板对象
 					Template template = TemplateUtil.loadTemplate(templateFilePath, templateFileName);
 					String path = null;
-					if(templateFileNameSuffix.equalsIgnoreCase("java")) {
+					if(templateFileNameSuffix.equalsIgnoreCase(".java")) {
 						// 创建文件夹
 						path = TemplateBuilder.PROJECT_PATH+"/" + TemplateBuilder.PACKAGE_BASE.replace(".", "/")+"/"+templateFileNamePrefix.toLowerCase();
 					}
-					if(templateFileNameSuffix.equalsIgnoreCase("ftl") && templateFilePathMiddle.length()>0) {
-						path = TemplateBuilder.PROJECT_PATH+"/" + TemplateBuilder.PACKAGE_BASE.replace(".", "/")+"/"+
-								templateFilePathMiddle+"/";
+					if(templateFileNameSuffix.equalsIgnoreCase(".ftl") ) {
+						path = TemplateBuilder.PROJECT_PATH+"/" + TemplateBuilder.PACKAGE_BASE.replace(".", "/")+"/"+templateFilePathMiddle+"/";
 					}
 					File file = new File(path);
 					if (!file.exists()) {
@@ -132,7 +136,7 @@ public class BuilderFactory {
 //        getFile(path,list);
 //    }
 	
-	 private static void getFile(String path,List<Map<String,Object>> list) {
+	public static void getFile(String path,List<Map<String,Object>> list) {
 	        File file = new File(path);
 	        File[] array = file.listFiles();
 	        for (int i = 0; i < array.length; i++) {

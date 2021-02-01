@@ -300,6 +300,7 @@ public class TemplateBuilder {
                     modelMap.put("keyGetMethod","get"+StringUtils.firstUpper(StringUtils.replace_(key)));
                     modelMap.put("keyType",keyType);
                     modelMap.put("serviceName",SERVICENAME);
+                    modelMap.put("isAutoImport","true");
 
                     BuilderFactory.batchBuilderV2(modelMap);
                     log.info("正在生成模型："+modelMap);
