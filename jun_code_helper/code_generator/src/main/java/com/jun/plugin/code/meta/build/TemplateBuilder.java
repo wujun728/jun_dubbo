@@ -1,5 +1,6 @@
 package com.jun.plugin.code.meta.build;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -15,6 +16,7 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import com.jun.plugin.code.meta.Main;
 import com.jun.plugin.code.meta.swagger.SwaggerMethod;
 import com.jun.plugin.code.meta.swagger.SwaggerModel;
 import com.jun.plugin.code.meta.swagger.SwaggerModelProperties;
@@ -34,6 +36,15 @@ import com.jun.plugin.codegenerator.util.CodeGeneratorTool;
  *  有该对象调用其他对象的构建
  *****/
 public class TemplateBuilder {
+	
+    public static void main(String[] args) throws IOException {
+        //调用该方法即可
+    	log.info("开始生成代码");
+        TemplateBuilder.builder();
+        //打开文件夹
+        Runtime.getRuntime().exec("cmd.exe /c start "+TemplateBuilder.PROJECT_PATH + TemplateBuilder.PACKAGE_BASE.replace(".", "/"));
+        log.info("代码生成完成");
+    }
 	
 	public static Logger log = Logger.getLogger(TemplateBuilder.class.toString());
 
@@ -78,6 +89,7 @@ public class TemplateBuilder {
     
     public static String OUTROOT;
     public static String TEMPLATE_PATH;
+    public static String TEMPLATE_NAME;
 
     static {
         try {
@@ -103,6 +115,7 @@ public class TemplateBuilder {
             //工程路径
             PROJECT_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/java/";
             TEMPLATE_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/resources/"+props.getProperty("template_path");
+            TEMPLATE_NAME=props.getProperty("template_path");
 
             //加载数据库驱动
             Class.forName(props.getProperty("driver"));
@@ -229,6 +242,7 @@ public class TemplateBuilder {
                         column.setDesc(remarks);
                         column.setId(key.equals(columnName));
                         column.setColumn(columnName);
+                        column.setLength(String.valueOf(COLUMN_SIZE));
                         column.setIdentity(cloumnsSet.getString("IS_AUTOINCREMENT"));
                         columnList.add(column);
                         

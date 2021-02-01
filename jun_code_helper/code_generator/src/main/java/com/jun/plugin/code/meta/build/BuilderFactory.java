@@ -89,36 +89,48 @@ public class BuilderFactory {
                 	continue;
                 }
                 String templateFileName = key;
-//                String templateFileNameSuffix = key.substring(key.lastIndexOf("."), key.length());
+                String templateFileNameSuffix = key.substring(key.lastIndexOf("."), key.length());
                 String templateFileNamePrefix = key.substring(0,key.lastIndexOf("."));
                 String templateFilePathAndName = String.valueOf(m.get(key));
                 String templateFilePath = templateFilePathAndName.replace(templateFileName, "");
+                String templateFilePathMiddle = templateFilePathAndName.replace(templateFileName, "").replace(TemplateBuilder.TEMPLATE_PATH, "");
                 try {
 					// 获取模板对象
 					Template template = TemplateUtil.loadTemplate(templateFilePath, templateFileName);
-					
-					// 创建文件夹
-					String path = TemplateBuilder.PROJECT_PATH+"/" + TemplateBuilder.PACKAGE_BASE.replace(".", "/")+"/"+templateFileNamePrefix.toLowerCase();
+					String path = null;
+					if(templateFileNameSuffix.equalsIgnoreCase("java")) {
+						// 创建文件夹
+						path = TemplateBuilder.PROJECT_PATH+"/" + TemplateBuilder.PACKAGE_BASE.replace(".", "/")+"/"+templateFileNamePrefix.toLowerCase();
+					}
+					if(templateFileNameSuffix.equalsIgnoreCase("ftl") && templateFilePathMiddle.length()>0) {
+						path = TemplateBuilder.PROJECT_PATH+"/" + TemplateBuilder.PACKAGE_BASE.replace(".", "/")+"/"+
+								templateFilePathMiddle+"/";
+					}
 					File file = new File(path);
 					if (!file.exists()) {
 						file.mkdirs();
 					}
-
 					// 创建文件
-					TemplateUtil.writer(template, modelMap, path + "/" + modelMap.get("Table") + ".java");
+					TemplateUtil.writer(template, modelMap, path + "/" + modelMap.get("Table")+upperCaseFirstWord(templateFileNamePrefix) + ".java");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
             }
+            
 		}
 	}
 	
-	public static void main(String[] args) {
-        // This is the path where the file's name you want to take.
-        String path = "D:\\workspace\\github\\jun_code_generator\\jun_code_helper\\code_generator\\src\\main\\resources\\template_ds";
-        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
-        getFile(path,list);
-    }
+	public static String upperCaseFirstWord(String str) {  
+		return str.substring(0, 1).toUpperCase() + str.substring(1);  
+	}  
+	
+  
+//	public static void main(String[] args) {
+//        // This is the path where the file's name you want to take.
+//        String path = "D:\\workspace\\github\\jun_code_generator\\jun_code_helper\\code_generator\\src\\main\\resources\\template_ds";
+//        List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+//        getFile(path,list);
+//    }
 	
 	 private static void getFile(String path,List<Map<String,Object>> list) {
 	        File file = new File(path);
@@ -127,9 +139,9 @@ public class BuilderFactory {
 	            if (array[i].isFile()) {
 	            	Map<String,Object> map = new HashMap<String,Object>();
 	                // only take file name
-	                System.out.println("^^^^^" + array[i].getName());
+	                //System.out.println("^^^^^" + array[i].getName());
 	                // take file path and name
-	                System.out.println("*****" + array[i].getPath());
+	                //System.out.println("*****" + array[i].getPath());
 	                map.put(array[i].getName(), array[i].getPath());
 	                list.add(map);
 	            } else if (array[i].isDirectory()) {

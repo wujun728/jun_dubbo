@@ -16,8 +16,8 @@ public class SwaggerBuilder {
         modelMap.put("Table","swagger");
 
         //生成ServiceImpl层文件
-        BuilderFactory.builder(modelMap,
-                "/template_ds/swagger",
+        BuilderFactory.builder(modelMap,TemplateBuilder.TEMPLATE_NAME+
+                "/swagger",
                 "swagger.json",
                 TemplateBuilder.SWAGGERUI_PATH,
                 ".json");
