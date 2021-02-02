@@ -1,5 +1,7 @@
 package com.jun.plugin.code.meta.util;
 
+import com.jun.plugin.code.meta.build.TemplateBuilder;
+
 /****
  * @Description:字符串处理
  *****/
@@ -28,7 +30,35 @@ public class StringUtils {
      * @return
      */
     public static String replaceTab(String str){
-        return str.replaceFirst("tab_","").replaceFirst("tb_","").replaceFirst("t_","");
+    	str = str.toLowerCase().replaceFirst("tab_","").replaceFirst("tb_","").replaceFirst("t_","");
+    	for(String x : TemplateBuilder.TABLEREMOVEPREFIXES.split(",")){
+    		str = str.replaceFirst(x.toLowerCase(),"");
+    	}
+        return str;
+    }
+    public static String replaceRow(String str){
+    	str = str.toLowerCase().replaceFirst("tab_","").replaceFirst("tb_","").replaceFirst("t_","");
+    	for(String x : TemplateBuilder.ROWREMOVEPREFIXES.split(",")){
+    		str = str.replaceFirst(x.toLowerCase(),"");
+    	}
+    	return str;
+    }
+    public static Boolean checkTab(String str){
+    	str = str.toLowerCase();
+    	for(String x : TemplateBuilder.SKIPTABLE.split(",")){
+    		if(str.contains(x.toLowerCase())){
+    			return true;
+    		}
+    	}
+    	if(TemplateBuilder.INCLUETABLES.equals("*")){
+			return false;
+		}
+    	for(String x : TemplateBuilder.INCLUETABLES.split(",")){
+    		if(str.contains(x.toLowerCase())){
+    			return false;
+    		}
+    	}
+        return true;
     }
 
     /***

@@ -86,6 +86,11 @@ public class BuilderFactory {
             Iterator<String> it = set.iterator();
             while (it.hasNext()) {
                 String key = (String) it.next();
+                if((boolean) modelMap.get("Swagger")==true) {
+                	if(!key.contains(".json")) {
+                		continue;
+                	}
+                }
                 String templateFileName = key;
                 String templateFileNameSuffix = key.substring(key.lastIndexOf("."), key.length());
                 String templateFileNamePrefix = key.substring(0,key.lastIndexOf("."));
@@ -114,8 +119,9 @@ public class BuilderFactory {
 					if (!file.exists()) {
 						file.mkdirs();
 					}
+					String fileNameNew = templateFileNamePrefix.replace("${className}", String.valueOf(modelMap.get("Table"))).replace("${classNameLower}", String.valueOf(modelMap.get("Table")).toLowerCase()) ;
 					// 创建文件
-					TemplateUtil.writer(template, modelMap, path + "/" + modelMap.get("Table")+upperCaseFirstWord(templateFileNamePrefix) + ".java");
+					TemplateUtil.writer(template, modelMap, path + "/" + fileNameNew);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

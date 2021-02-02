@@ -16,13 +16,13 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.erp.util.ExcelVOAttribute;
 
 /**
- * ${Table} entity. @author Wujun
+ * ${classInfo.className} entity. @author Wujun
  */
 @Entity
-@Table(name = "${TableName}")
+@Table(name = "${classInfo.tableName}")
 @DynamicUpdate(true)
 @DynamicInsert(true)
-public class ${Table} implements java.io.Serializable
+public class ${classInfo.className} implements java.io.Serializable
 {
 	private static final long serialVersionUID = -5610203466348081933L;
 	
@@ -40,6 +40,16 @@ public class ${Table} implements java.io.Serializable
 		private ${model.simpleType} ${model.name};//${model.desc!""}
 	</#list>
 	
+	
+	<#if classInfo.fieldList?exists && classInfo.fieldList?size gt 0>
+	<#list classInfo.fieldList as fieldItem >
+	    <#if isComment?exists && isComment==true>/**
+	    * ${fieldItem.fieldComment}
+	    */</#if>
+	    private ${fieldItem.fieldClass} ${fieldItem.fieldName};
+	
+	</#list>
+	</#if>
 	
 
 	<#list models as model>

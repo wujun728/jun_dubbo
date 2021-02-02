@@ -92,12 +92,25 @@
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;padding: 10px;">
 		<form id="form" method="post">
 			<fieldset>
-				<legend><img src="extend/fromedit.png" style="margin-bottom: -3px;"/> 公司编辑</legend>
+				<legend><img src="extend/fromedit.png" style="margin-bottom: -3px;"/> ${table}编辑</legend>
 				<input name="companyId" id="companyId"  type="hidden"/>
 				<input name="created" id="created"  type="hidden"/>
 				<input name="creater" id="creater"  type="hidden"/>
 				<input name="status" id="status"  type="hidden"/>
 				 <table>
+				 	
+				 	
+					<#list models as model>
+						<#if model.id==true>
+							<#if model.identity=='YES'>
+							</#if>
+							<#if model.simpleType=='Date'>
+							</#if>
+							${model_index}
+					    @Column(name = "${model.column}")
+						private ${model.simpleType} ${model.name};//${model.desc!""}
+					</#list>
+				 	
 					 <tr>
 					    <th>公司名称</th>
 						<td><input name="name" id="name" placeholder="请输入公司名称" class="easyui-textbox easyui-validatebox" type="text"/></td>

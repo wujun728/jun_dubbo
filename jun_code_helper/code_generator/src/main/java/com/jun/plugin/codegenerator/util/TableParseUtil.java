@@ -333,9 +333,7 @@ public class TableParseUtil {
         codeJavaInfo.setClassName(className);
         codeJavaInfo.setClassComment(classComment);
         codeJavaInfo.setFieldList(fieldList);
-        codeJavaInfo.setColumns(columnList);;
-        
-
+        codeJavaInfo.setColumnList(columnList);;
         return codeJavaInfo;
     }
     

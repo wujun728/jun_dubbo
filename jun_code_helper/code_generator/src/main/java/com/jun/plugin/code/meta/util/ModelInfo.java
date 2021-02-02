@@ -4,6 +4,9 @@ package com.jun.plugin.code.meta.util;
  * @Description:记录POJO信息
  *****/
 public class ModelInfo {
+    //是否是主键
+    private Boolean nullAble;
+
 
     //属性类型
     private String type;

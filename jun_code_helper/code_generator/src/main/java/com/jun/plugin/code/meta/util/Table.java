@@ -18,6 +18,6 @@ public class Table {
 	private String sqlName;
 	private String remarks;
 	private String classNameLower;
-	private List<Column> columns ;
+	private List<Column> columnList ;
 	 
 }

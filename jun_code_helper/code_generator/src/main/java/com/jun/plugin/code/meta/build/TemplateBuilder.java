@@ -16,7 +16,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.jun.plugin.code.meta.Main;
 import com.jun.plugin.code.meta.swagger.SwaggerMethod;
 import com.jun.plugin.code.meta.swagger.SwaggerModel;
 import com.jun.plugin.code.meta.swagger.SwaggerModelProperties;
@@ -29,7 +28,6 @@ import com.jun.plugin.code.meta.util.ModelInfo;
 import com.jun.plugin.code.meta.util.StringUtils;
 import com.jun.plugin.code.meta.util.Table;
 import com.jun.plugin.codegenerator.model.FieldInfo;
-import com.jun.plugin.codegenerator.util.CodeGeneratorTool;
 
 /****
  * @Description:模板创建
@@ -90,6 +88,10 @@ public class TemplateBuilder {
     public static String OUTROOT;
     public static String TEMPLATE_PATH;
     public static String TEMPLATE_NAME;
+    public static String TABLEREMOVEPREFIXES;
+    public static String ROWREMOVEPREFIXES;
+    public static String SKIPTABLE;
+    public static String INCLUETABLES;
 
     static {
         try {
@@ -116,6 +118,10 @@ public class TemplateBuilder {
             PROJECT_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/java/";
             TEMPLATE_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/resources/"+props.getProperty("template_path");
             TEMPLATE_NAME=props.getProperty("template_path");
+            TABLEREMOVEPREFIXES=props.getProperty("tableRemovePrefixes");
+            ROWREMOVEPREFIXES=props.getProperty("rowRemovePrefixes");
+            SKIPTABLE=props.getProperty("skipTable");
+            INCLUETABLES=props.getProperty("inclueTables");
 
             //加载数据库驱动
             Class.forName(props.getProperty("driver"));
@@ -162,15 +168,19 @@ public class TemplateBuilder {
                 while (tableResultSet.next()){
                     //获取表名
                     String tableName=tableResultSet.getString("TABLE_NAME");
-                    String classComment=tableResultSet.getString("REMARKS");
-                    log.info("当前表名："+tableName);
+                    String tableComment=tableResultSet.getString("REMARKS");
                     //名字操作,去掉tab_,tb_，去掉_并转驼峰
-                    String table = StringUtils.replace_(StringUtils.replaceTab(tableName));
+                    String className = StringUtils.replace_(StringUtils.replaceTab(tableName));
                     //大写对象
-                    String Table =StringUtils.firstUpper(table);
+                    String classNameFirstUpper =StringUtils.firstUpper(className);
                     
+                    if(StringUtils.checkTab(tableName)) {
+                    	continue;
+                    }
+                    log.info("当前表名："+tableName);
                     //模板V0
                     //需要生成的Pojo属性集合
+                    List<Map<String,Object>> colList = new ArrayList<Map<String,Object>>();
                     List<ModelInfo> models = new ArrayList<ModelInfo>();
                     List<Column> columnList = new ArrayList<Column>();
                     List<Column> primaryKeyColumns = new ArrayList<Column>();
@@ -189,15 +199,14 @@ public class TemplateBuilder {
                     String key ="",keyType="";
                     while (keySet.next()){
                         key=keySet.getString(4);   
-                        // PK_NAME String => primary key name (may be null)
-                        //COLUMN_NAME String => column name
+                        String columnName = keySet.getString("COLUMN_NAME");// 列名
                     }
 
                     //构建SwaggerModel对象
                     SwaggerModel swaggerModel = new SwaggerModel();
-                    swaggerModel.setName(Table);
+                    swaggerModel.setName(classNameFirstUpper);
                     swaggerModel.setType("object");
-                    swaggerModel.setDescription(Table);
+                    swaggerModel.setDescription(classNameFirstUpper);
                     //属性集合
                     List<SwaggerModelProperties> swaggerModelProperties = new ArrayList<SwaggerModelProperties>();
 
@@ -210,19 +219,29 @@ public class TemplateBuilder {
                        String TABLE_SCHEM  = cloumnsSet.getString("TABLE_SCHEM");//获取
                        String COLUMN_DEF  = cloumnsSet.getString("COLUMN_DEF");//获取
                        int NULLABLE   = cloumnsSet.getInt("NULLABLE");//获取
-                        
-                       String propertyName = StringUtils.replace_(columnName);//处理列名，驼峰
+
+                       String propertyName = StringUtils.replace_(StringUtils.replaceRow(columnName));//处理列名，驼峰
                        
                        //创建该列的信息
                        models.add(new ModelInfo(javaType, JavaTypes.simpleName(javaType),propertyName,
                     		   StringUtils.firstUpper(propertyName),remarks, key.equals(columnName),columnName,
                     		   cloumnsSet.getString("IS_AUTOINCREMENT")));
-                       
                         typeSet.add(javaType);//需要导包的类型
-                      
                         if(columnName.equals(key)){
                             keyType=JavaTypes.simpleName(javaType);//主键类型,单主键支持
                         }
+                        Map<String,Object> col = new HashMap<String,Object>();
+                        col.put("javaType", javaType);
+                        col.put("simpleType", JavaTypes.simpleName(javaType));
+                        col.put("name", propertyName);
+                        col.put("upperName", StringUtils.firstUpper(propertyName));
+                        col.put("desc", remarks);
+                        col.put("id", key.equals(columnName));
+                        col.put("column", columnName);
+                        col.put("identity", cloumnsSet.getString("IS_AUTOINCREMENT"));
+                        col.put("COLUMN_SIZE", COLUMN_SIZE);
+                        col.put("COLUMN_DEF", COLUMN_DEF);
+                        colList.add(col);
 
                         //SwaggerModelProperties创建
                         SwaggerModelProperties modelProperties = new SwaggerModelProperties();
@@ -277,8 +296,8 @@ public class TemplateBuilder {
                     Map<String, Object> modelMap = new HashMap<String, Object>();
                     Table tab = new Table();
                     tab.setTableName(tableName);
-                    tab.setClassName(Table);
-                    tab.setClassComment(classComment);
+                    tab.setClassName(classNameFirstUpper);
+                    tab.setClassComment(tableComment);
                     tab.setFieldList(fieldList);
                     modelMap.put("classInfo", tab);
                     modelMap.put("authorName","junwu");
@@ -287,10 +306,9 @@ public class TemplateBuilder {
                     modelMap.put("returnUtilSuccess","ReturnInfo.ok");
                     modelMap.put("returnUtilFailure","ReturnInfo.error");
                     //兼容模板V0属性
-                    tab.setColumns(columnList);
-                    modelMap.put("Table", table);
-                    modelMap.put("table",table);
-                    modelMap.put("Table",Table);
+                    tab.setColumnList(columnList);
+                    modelMap.put("table",className);
+                    modelMap.put("Table",classNameFirstUpper);
                     modelMap.put("swagger",SWAGGER);
                     modelMap.put("TableName",tableName);
                     modelMap.put("models",models);
@@ -300,7 +318,8 @@ public class TemplateBuilder {
                     modelMap.put("keyGetMethod","get"+StringUtils.firstUpper(StringUtils.replace_(key)));
                     modelMap.put("keyType",keyType);
                     modelMap.put("serviceName",SERVICENAME);
-                    modelMap.put("isAutoImport","true");
+//                    modelMap.put("isAutoImport","true");
+                    modelMap.put("Swagger",Boolean.FALSE);
 
                     BuilderFactory.batchBuilderV2(modelMap);
                     log.info("正在生成模型："+modelMap);
@@ -310,7 +329,7 @@ public class TemplateBuilder {
                     if(keyType.equalsIgnoreCase("integer") || keyType.equalsIgnoreCase("long")){
                         format="int64";
                     }
-                    swaggerPathList.addAll(swaggerMethodInit(Table,table,StringUtils.firstLower(keyType),format));
+                    swaggerPathList.addAll(swaggerMethodInit(classNameFirstUpper,className,StringUtils.firstLower(keyType),format));
                 }
 
                 //构建Swagger文档数据-JSON数据
@@ -318,7 +337,10 @@ public class TemplateBuilder {
                 swaggerModelMap.put("swaggerModels",swaggerModels);
                 swaggerModelMap.put("swaggerPathList",swaggerPathList);
                 //生成Swagger文件
-                SwaggerBuilder.builder(swaggerModelMap);
+                swaggerModelMap.put("Swagger",Boolean.TRUE);
+
+                BuilderFactory.batchBuilderV2(swaggerModelMap);
+//                SwaggerBuilder.builder(swaggerModelMap);
                 log.info("正在生成swagger："+swaggerModelMap);
             }
         } catch (SQLException e) {
