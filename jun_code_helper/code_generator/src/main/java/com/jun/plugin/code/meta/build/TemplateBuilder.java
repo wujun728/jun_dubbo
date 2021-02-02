@@ -1,7 +1,6 @@
 package com.jun.plugin.code.meta.build;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -23,6 +21,7 @@ import com.jun.plugin.code.meta.swagger.SwaggerParameters;
 import com.jun.plugin.code.meta.swagger.SwaggerPath;
 import com.jun.plugin.code.meta.swagger.SwaggerResponse;
 import com.jun.plugin.code.meta.util.Column;
+import com.jun.plugin.code.meta.util.ConfigUtils;
 import com.jun.plugin.code.meta.util.JavaTypes;
 import com.jun.plugin.code.meta.util.ModelInfo;
 import com.jun.plugin.code.meta.util.StringUtils;
@@ -40,96 +39,12 @@ public class TemplateBuilder {
     	log.info("开始生成代码");
         TemplateBuilder.builder();
         //打开文件夹
-        Runtime.getRuntime().exec("cmd.exe /c start "+TemplateBuilder.PROJECT_PATH + TemplateBuilder.PACKAGE_BASE.replace(".", "/"));
+        Runtime.getRuntime().exec("cmd.exe /c start "+ConfigUtils.PROJECT_PATH + ConfigUtils.PACKAGE_BASE.replace(".", "/"));
         log.info("代码生成完成");
     }
 	
 	public static Logger log = Logger.getLogger(TemplateBuilder.class.toString());
 
-    //配置文件
-    private static Properties props = new Properties();
-
-    //pojoPackage
-    public static String PACKAGE_BASE;
-    
-    //pojoPackage
-    public static String PACKAGE_POJO;
-
-    //mapperPackage
-    public static String PACKAGE_MAPPER;
-
-    //serviceInterfacePackage
-    public static String PACKAGE_SERVICE_INTERFACE;
-
-    //serviceInterfaceImplPackage
-    public static String PACKAGE_SERVICE_INTERFACE_IMPL;
-
-    //controllerPackage
-    public static String PACKAGE_CONTROLLER;
-
-    //feignPackage
-    public static String PACKAGE_FEIGN;
-
-    //数据库账号
-    public static String UNAME;
-
-    //项目路径
-    public static String PROJECT_PATH;
-
-    //是否使用swagger
-    public static Boolean SWAGGER;
-
-    //服务名字
-    public static String SERVICENAME;
-
-    //swagger-ui路径
-    public static String SWAGGERUI_PATH;
-    
-    public static String OUTROOT;
-    public static String TEMPLATE_PATH;
-    public static String TEMPLATE_NAME;
-    public static String TABLEREMOVEPREFIXES;
-    public static String ROWREMOVEPREFIXES;
-    public static String SKIPTABLE;
-    public static String INCLUETABLES;
-
-    static {
-        try {
-            //加载配置文件
-            InputStream is = TemplateBuilder.class.getClassLoader().getResourceAsStream("config.properties");
-
-            //创建Properties对象
-            props.load(is);
-
-            //获取对应的配置信息
-            PACKAGE_POJO = props.getProperty("pojoPackage");
-            OUTROOT = TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+props.getProperty("outRoot");
-            PACKAGE_BASE = props.getProperty("basePackage");
-            PACKAGE_MAPPER = props.getProperty("mapperPackage");
-            PACKAGE_SERVICE_INTERFACE = props.getProperty("serviceInterfacePackage");
-            PACKAGE_SERVICE_INTERFACE_IMPL = props.getProperty("serviceInterfaceImplPackage");
-            PACKAGE_CONTROLLER = props.getProperty("controllerPackage");
-            PACKAGE_FEIGN= props.getProperty("feignPackage");
-            UNAME = props.getProperty("uname");
-            SWAGGER = Boolean.valueOf(props.getProperty("enableSwagger"));
-            SERVICENAME = props.getProperty("serviceName");
-            SWAGGERUI_PATH = props.getProperty("swaggeruipath");
-            //工程路径
-            PROJECT_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/java/";
-            TEMPLATE_PATH=TemplateBuilder.class.getClassLoader().getResource("").getPath().replace("/target/classes/","")+"/src/main/resources/"+props.getProperty("template_path");
-            TEMPLATE_NAME=props.getProperty("template_path");
-            TABLEREMOVEPREFIXES=props.getProperty("tableRemovePrefixes");
-            ROWREMOVEPREFIXES=props.getProperty("rowRemovePrefixes");
-            SKIPTABLE=props.getProperty("skipTable");
-            INCLUETABLES=props.getProperty("inclueTables");
-
-            //加载数据库驱动
-            Class.forName(props.getProperty("driver"));
-            log.info("配置加载完成");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     /***
      * 模板构建
@@ -137,7 +52,7 @@ public class TemplateBuilder {
     public static void builder(){
         try {
             //获取数据库连接
-            Connection conn = DriverManager.getConnection(props.getProperty("url"),props.getProperty("uname"),props.getProperty("pwd"));
+            Connection conn = DriverManager.getConnection(ConfigUtils.props.getProperty("url"),ConfigUtils.props.getProperty("uname"),ConfigUtils.props.getProperty("pwd"));
             DatabaseMetaData metaData = conn.getMetaData();
             
             System.out.println("获取数据库的产品名称: " + metaData.getDatabaseProductName());
@@ -193,9 +108,9 @@ public class TemplateBuilder {
                     Set<String> typeSet = new HashSet<String>();
 
                     //获取表所有的列
-                    ResultSet cloumnsSet = metaData.getColumns(database, UNAME, tableName, null);
+                    ResultSet cloumnsSet = metaData.getColumns(database, ConfigUtils.UNAME, tableName, null);
                     //获取主键
-                    ResultSet keySet = metaData.getPrimaryKeys(database, UNAME, tableName);
+                    ResultSet keySet = metaData.getPrimaryKeys(database, ConfigUtils.UNAME, tableName);
                     String key ="",keyType="";
                     while (keySet.next()){
                         key=keySet.getString(4);   
@@ -301,7 +216,7 @@ public class TemplateBuilder {
                     tab.setFieldList(fieldList);
                     modelMap.put("classInfo", tab);
                     modelMap.put("authorName","junwu");
-                    modelMap.put("packageName",TemplateBuilder.PACKAGE_BASE);
+                    modelMap.put("packageName",ConfigUtils.PACKAGE_BASE);
                     modelMap.put("returnUtil","ReturnInfo");
                     modelMap.put("returnUtilSuccess","ReturnInfo.ok");
                     modelMap.put("returnUtilFailure","ReturnInfo.error");
@@ -309,7 +224,7 @@ public class TemplateBuilder {
                     tab.setColumnList(columnList);
                     modelMap.put("table",className);
                     modelMap.put("Table",classNameFirstUpper);
-                    modelMap.put("swagger",SWAGGER);
+                    modelMap.put("swagger",ConfigUtils.SWAGGER);
                     modelMap.put("TableName",tableName);
                     modelMap.put("models",models);
                     modelMap.put("typeSet",typeSet);
@@ -317,7 +232,7 @@ public class TemplateBuilder {
                     modelMap.put("keySetMethod","set"+StringUtils.firstUpper(StringUtils.replace_(key)));
                     modelMap.put("keyGetMethod","get"+StringUtils.firstUpper(StringUtils.replace_(key)));
                     modelMap.put("keyType",keyType);
-                    modelMap.put("serviceName",SERVICENAME);
+                    modelMap.put("serviceName",ConfigUtils.SERVICENAME);
 //                    modelMap.put("isAutoImport","true");
                     modelMap.put("Swagger",Boolean.FALSE);
 

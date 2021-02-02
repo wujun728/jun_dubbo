@@ -9,6 +9,8 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.jun.plugin.code.meta.util.ConfigUtils;
+
 /****
  * @Description:创建模板，以及输出生成的文件
  *****/
@@ -39,11 +41,11 @@ public class TemplateUtil {
      */
     public static void writer(Template template,Map dataModel,String file) throws Exception{
         //包参数
-        dataModel.put("package_controller",TemplateBuilder.PACKAGE_CONTROLLER);
-        dataModel.put("package_pojo",TemplateBuilder.PACKAGE_POJO);
-        dataModel.put("package_mapper",TemplateBuilder.PACKAGE_MAPPER);
-        dataModel.put("package_service",TemplateBuilder.PACKAGE_SERVICE_INTERFACE);
-        dataModel.put("package_service_impl",TemplateBuilder.PACKAGE_SERVICE_INTERFACE_IMPL);
+        dataModel.put("package_controller",ConfigUtils.PACKAGE_CONTROLLER);
+        dataModel.put("package_pojo",ConfigUtils.PACKAGE_POJO);
+        dataModel.put("package_mapper",ConfigUtils.PACKAGE_MAPPER);
+        dataModel.put("package_service",ConfigUtils.PACKAGE_SERVICE_INTERFACE);
+        dataModel.put("package_service_impl",ConfigUtils.PACKAGE_SERVICE_INTERFACE_IMPL);
 
         // 创建一个Writer对象，一般创建一FileWriter对象，指定生成的文件名。
         Writer out = new FileWriter(new File(file));

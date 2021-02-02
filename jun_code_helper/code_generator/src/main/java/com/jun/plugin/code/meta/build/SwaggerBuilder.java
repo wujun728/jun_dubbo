@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.jun.plugin.code.meta.util.ConfigUtils;
+
 /*****
  *  生成Swagger
  ****/
@@ -18,7 +20,7 @@ public class SwaggerBuilder {
      */
     public static void builder(Map<String,Object> modelMap){
     	List<Map<String,Object>> srcFiles = new ArrayList<Map<String,Object>>();
-    	BuilderFactory.getFile(TemplateBuilder.TEMPLATE_PATH,srcFiles);
+    	BuilderFactory.getFile(ConfigUtils.TEMPLATE_PATH,srcFiles);
     	for(int i = 0; i < srcFiles.size(); i++) {
             HashMap<String, Object> m = (HashMap<String, Object>) srcFiles.get(i);
             Set<String> set = m.keySet();
@@ -35,7 +37,7 @@ public class SwaggerBuilder {
                 	BuilderFactory.builder(modelMap,
                 			templateFilePath,
                 			"swagger.json",
-                			TemplateBuilder.SWAGGERUI_PATH,
+                			ConfigUtils.SWAGGERUI_PATH,
                 			".json");
                 }else {
                 	continue;

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import com.jun.plugin.code.meta.util.ConfigUtils;
+
 import freemarker.template.Template;
 
 /****
@@ -33,7 +35,7 @@ public class BuilderFactory {
 					templateFile);
 
 			// 创建文件夹
-			String path = TemplateBuilder.PROJECT_PATH + storePath.replace(".", "/");
+			String path = ConfigUtils.PROJECT_PATH + storePath.replace(".", "/");
 			File file = new File(path);
 			if (!file.exists()) {
 				file.mkdirs();
@@ -48,7 +50,7 @@ public class BuilderFactory {
 
 	public static void builder(Map<String, Object> modelMap, String templatePath, String templateFile) {
 		String templateName = templateFile.substring(0, templateFile.lastIndexOf("."));
-		String storePath = TemplateBuilder.PACKAGE_BASE + "." + templateName; // 存储路径
+		String storePath = ConfigUtils.PACKAGE_BASE + "." + templateName; // 存储路径
 		String suffix = templateName + ".java"; // 生成文件后缀名字
 		BuilderFactory.builder(modelMap, templatePath, templateFile, storePath, suffix);
 	}
@@ -78,7 +80,7 @@ public class BuilderFactory {
 	 */
 	public static void batchBuilderV2(Map<String, Object> modelMap) {
 		List<Map<String,Object>> srcFiles = new ArrayList<Map<String,Object>>();
-		getFile(TemplateBuilder.TEMPLATE_PATH,srcFiles);
+		getFile(ConfigUtils.TEMPLATE_PATH,srcFiles);
 		
 		for(int i = 0; i < srcFiles.size(); i++) {
             HashMap<String, Object> m = (HashMap<String, Object>) srcFiles.get(i);
@@ -97,7 +99,7 @@ public class BuilderFactory {
                 String templateFilePathAndName = String.valueOf(m.get(key));
                 String templateFilePath = templateFilePathAndName.replace("\\"+templateFileName, "");
                 String templateFilePathMiddle="";
-                if(!templateFilePath.endsWith(TemplateBuilder.TEMPLATE_NAME.replace("/", "\\"))) {
+                if(!templateFilePath.endsWith(ConfigUtils.TEMPLATE_NAME.replace("/", "\\"))) {
                 	templateFilePathMiddle=templateFilePath.substring(templateFilePath.lastIndexOf("\\"), templateFilePath.length()).replace("\\", "");
                 }
                 if(key.contains(".json")) {
@@ -110,10 +112,10 @@ public class BuilderFactory {
 					String path = null;
 					if(templateFileNameSuffix.equalsIgnoreCase(".java")) {
 						// 创建文件夹
-						path = TemplateBuilder.PROJECT_PATH+"/" + TemplateBuilder.PACKAGE_BASE.replace(".", "/")+"/"+templateFileNamePrefix.toLowerCase();
+						path = ConfigUtils.PROJECT_PATH+"/" + ConfigUtils.PACKAGE_BASE.replace(".", "/")+"/"+templateFileNamePrefix.toLowerCase();
 					}
 					if(templateFileNameSuffix.equalsIgnoreCase(".ftl") ) {
-						path = TemplateBuilder.PROJECT_PATH+"/" + TemplateBuilder.PACKAGE_BASE.replace(".", "/")+"/"+templateFilePathMiddle+"/";
+						path = ConfigUtils.PROJECT_PATH+"/" + ConfigUtils.PACKAGE_BASE.replace(".", "/")+"/"+templateFilePathMiddle+"/";
 					}
 					File file = new File(path);
 					if (!file.exists()) {

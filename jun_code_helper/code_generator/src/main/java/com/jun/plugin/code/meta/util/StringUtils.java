@@ -31,29 +31,29 @@ public class StringUtils {
      */
     public static String replaceTab(String str){
     	str = str.toLowerCase().replaceFirst("tab_","").replaceFirst("tb_","").replaceFirst("t_","");
-    	for(String x : TemplateBuilder.TABLEREMOVEPREFIXES.split(",")){
+    	for(String x : ConfigUtils.TABLEREMOVEPREFIXES.split(",")){
     		str = str.replaceFirst(x.toLowerCase(),"");
     	}
         return str;
     }
     public static String replaceRow(String str){
     	str = str.toLowerCase().replaceFirst("tab_","").replaceFirst("tb_","").replaceFirst("t_","");
-    	for(String x : TemplateBuilder.ROWREMOVEPREFIXES.split(",")){
+    	for(String x : ConfigUtils.ROWREMOVEPREFIXES.split(",")){
     		str = str.replaceFirst(x.toLowerCase(),"");
     	}
     	return str;
     }
     public static Boolean checkTab(String str){
     	str = str.toLowerCase();
-    	for(String x : TemplateBuilder.SKIPTABLE.split(",")){
+    	for(String x : ConfigUtils.SKIPTABLE.split(",")){
     		if(str.contains(x.toLowerCase())){
     			return true;
     		}
     	}
-    	if(TemplateBuilder.INCLUETABLES.equals("*")){
+    	if(ConfigUtils.INCLUETABLES.equals("*")){
 			return false;
 		}
-    	for(String x : TemplateBuilder.INCLUETABLES.split(",")){
+    	for(String x : ConfigUtils.INCLUETABLES.split(",")){
     		if(str.contains(x.toLowerCase())){
     			return false;
     		}

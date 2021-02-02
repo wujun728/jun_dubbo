@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import com.jun.plugin.code.meta.build.TemplateBuilder;
+import com.jun.plugin.code.meta.util.ConfigUtils;
 
 public class Main {
 
@@ -13,7 +14,7 @@ public class Main {
     	log.info("开始生成代码");
         TemplateBuilder.builder();
         //打开文件夹
-        Runtime.getRuntime().exec("cmd.exe /c start "+TemplateBuilder.PROJECT_PATH + TemplateBuilder.PACKAGE_BASE.replace(".", "/"));
+        Runtime.getRuntime().exec("cmd.exe /c start "+ConfigUtils.PROJECT_PATH + ConfigUtils.PACKAGE_BASE.replace(".", "/"));
         log.info("代码生成完成");
     }
 }
