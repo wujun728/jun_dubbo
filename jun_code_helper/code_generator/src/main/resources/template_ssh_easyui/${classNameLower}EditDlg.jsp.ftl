@@ -98,19 +98,24 @@
 				<input name="creater" id="creater"  type="hidden"/>
 				<input name="status" id="status"  type="hidden"/>
 				 <table>
-				 	
-				 	
+				 	<#--注释内容-->
+				 	<tr>
 					<#list models as model>
 						<#if model.id==true>
 							<#if model.identity=='YES'>
 							</#if>
 							<#if model.simpleType=='Date'>
 							</#if>
-							${model_index}
+							<#if model_inde%2==0>
+							</#if>
+							
+						<th>${model.desc!""}</th>
+						<td><input name="${model.name}" id="${model.name}" placeholder="请输入${model.desc!""}" class="easyui-textbox easyui-validatebox" type="text"/></td>
+						 
 					    @Column(name = "${model.column}")
 						private ${model.simpleType} ${model.name};//${model.desc!""}
 					</#list>
-				 	
+				 	-->
 					 <tr>
 					    <th>公司名称</th>
 						<td><input name="name" id="name" placeholder="请输入公司名称" class="easyui-textbox easyui-validatebox" type="text"/></td>
