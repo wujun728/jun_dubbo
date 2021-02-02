@@ -1,0 +1,193 @@
+$(function () {
+    $("#bootstrap-table").bootstrapTable({
+        method : 'get', // 服务器数据的请求方式 get or post
+        url : baseURL + '${moduleName}/${pathName}/page', // 服务器数据的加载地址
+        showRefresh : true,
+        showToggle : true,
+		showColumns : true,
+		showExport :true,
+		sortName:"${pk.attrname}",// 排序列名称
+		sortOrder: "desc", 
+		sortable: true,
+		toolbar : '#exampleToolbar',
+ 		striped : true, // 设置为true会有隔行变色效果
+		dataType : "json", // 服务器返回的数据类型
+		pagination : true, // 设置为true会在底部显示分页条
+		// queryParamsType : "limit",
+		// //设置为limit则会发送符合RESTFull格式的参数
+		singleSelect : false, // 设置为true将禁止多选
+		// contentType : "application/x-www-form-urlencoded",
+		// //发送到服务器的数据编码类型
+		pageSize : 10, // 如果设置了分页，每页数据条数
+		pageNumber : 1, // 如果设置了分布，首页页码
+		// search : true, // 是否显示搜索框
+		sidePagination : "server", // 设置在哪里进行分页，可选值为"client" 或者
+		// "server"    
+		queryParams : function(params) {
+			var search = vm.search;
+			search.limit =params.limit,
+			search.offset = params.offset,
+			search.sidx = params.sort, //排序列名  
+			search.order= params.order //排位命令（desc，asc） 
+ 			return search;  
+ 		},
+ 		
+        columns: [		
+        {
+				checkbox : true
+		},	
+#foreach($column in $columns)
+ 
+ 		{
+				field : '${column.attrname}', // 列字段名
+				title : '${column.comments}', // 列标题
+				sortable: true
+		},
+			 		
+#end
+
+		{
+				title : '操作',
+				field : 'id',
+				align : 'center',
+				formatter : function(value, row,index) 
+				{
+					var e = '<a  class="btn btn-primary btn-sm '
+						+ ''
+					    + '" href="#" mce_href="#" title="编辑" onclick="edit(\''
+					    + row.${pk.attrname}
+					    + '\')"><i class="fa fa-edit "></i></a> ';
+					var d = '<a class="btn btn-warning btn-sm '
+						+ ''
+						+ '" href="#" title="删除"  mce_href="#" onclick="remove(\''
+						+ row.${pk.attrname}
+						+ '\')"><i class="fa fa-remove"></i></a> ';
+															 
+					return e + d;
+																		
+				}
+		}
+        ],
+		
+    });
+});
+
+var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		search : {
+					
+				},
+		showList: true,
+		title: null,
+		${classname}: {}
+	},
+	methods: {
+		query: function () {
+			vm.reload();
+		},
+		add: function(){
+			vm.showList = false;
+			vm.title = "新增";
+			vm.${classname} = {};
+		},
+		update: function (event) {
+			var $pk.attrname = getSelectedRow();
+			if($pk.attrname == null){
+				return ;
+			}
+			vm.showList = false;
+            vm.title = "修改";
+            vm.getInfo(${pk.attrname}.${pk.attrname});
+ 		},
+		saveOrUpdate: function (event) {
+			var url = vm.${classname}.${pk.attrname} == null ? "${moduleName}/${pathName}/save" : "${moduleName}/${pathName}/update";
+			$.ajax({
+				type: "POST",
+			    url: baseURL + url,
+                contentType: "application/json",
+			    data: JSON.stringify(vm.${classname}),
+			    success: function(r){
+			    	if(r.code === 0){
+						alert('操作成功', function(index){
+							vm.reload();
+						});
+					}else{
+						alert(r.msg);
+					}
+				}
+			});
+		},
+		del: function (event) {
+			var ${pk.attrname}s = getSelectedRows();
+			if(${pk.attrname}s == null){
+				return ;
+			}
+				${pk.attrname}s = $.map(${pk.attrname}s, function(row) {
+						return row.${pk.attrname};
+					});
+			confirm('确定要删除选中的记录？', function(){
+				$.ajax({
+					type: "POST",
+				    url: baseURL + "${moduleName}/${pathName}/delete",
+                    contentType: "application/json",
+				    data: JSON.stringify(${pk.attrname}s),
+				    success: function(r){
+						if(r.code == 0){
+							alert('操作成功', function(index){
+								$("#jqGrid").trigger("reloadGrid");
+							});
+						}else{
+							alert(r.msg);
+						}
+					}
+				});
+			});
+		},
+		getInfo: function(${pk.attrname}){
+			$.get(baseURL + "${moduleName}/${pathName}/info/"+${pk.attrname}, function(r){
+                vm.${classname} = r.${classname};
+            });
+		},
+		reload: function (event) {
+			vm.showList = true;
+			$('#bootstrap-table').bootstrapTable('refresh');
+		}
+	}
+});
+
+
+		function edit(id) {
+
+			layer.open({
+				type : 2,
+				title : '编辑',
+				maxmin : true,
+				//shadeClose : false, // 点击遮罩关闭层
+				area : [ '800px', '520px' ],
+				content : "${classname}Edit.html?${pk.attrname}=" + id // iframe的url
+			});
+		}
+
+		function remove(id) {
+			var arr = new Array();
+			arr.push(id);
+			confirm('确定要删除选中的记录？', function() {
+
+				$.ajax({
+					type : "POST",
+					url : baseURL + "${moduleName}/${pathName}/delete",
+					contentType : "application/json",
+					data : JSON.stringify(arr),
+					success : function(r) {
+						if (r.code == 0) {
+							alert('操作成功', function() {
+								vm.reload();
+							});
+						} else {
+							alert(r.msg);
+						}
+					}
+				});
+			});
+		}

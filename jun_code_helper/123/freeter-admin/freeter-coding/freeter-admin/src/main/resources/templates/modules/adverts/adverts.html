@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>广告位表</title>
+		<#include "/header.html">
+		
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("adverts:adverts:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("adverts:adverts:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("adverts:adverts:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+			<a class="btn btn-primary" @click="status"><i class="fa fa-pencil-square-o"></i>&nbsp;设置状态</a>
+			
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.name" placeholder="名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">宽度</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.width" placeholder="宽度"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">高度</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.height" placeholder="高度"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">描述</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.description" placeholder="描述"/>
+                        </div>
+                    </div>
+											                 <!--    <div class="form-group">
+                        <div class="col-sm-2 control-label">模版内容</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.template" placeholder="模版内容"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">默认显示个数</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.defultNumber" placeholder="默认显示个数"/>
+                        </div>
+                    </div> -->
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">广告数量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.number" placeholder="广告数量"/>
+                        </div>
+                    </div>
+								 <div class="form-group">
+                        <div class="col-sm-2 control-label">是否启用</div>
+                        <div class="col-sm-10">
+                        <label class="radio-inline"><input type="radio" name="status" value="0" v-model="adverts.status" > 开启</label> 
+						<label class="radio-inline"><input type="radio" name="status" value="1" v-model="adverts.status"  > 关闭</label>
+                         </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.createTime" placeholder="创建时间" readonly="readonly"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建者</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.createBy" placeholder="创建者" readonly="readonly"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.updateTime" placeholder="更新时间" readonly="readonly"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新者</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="adverts.updateBy" placeholder="更新者" readonly="readonly"/>
+                        </div>
+                    </div>
+											                   
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+            
+        
+        </form>
+    </div>
+        <!-- 预览 -->
+	 	<div id="statusLayer" style="display: none; padding: 10px;">
+		<div class="itemb tabitem"> 
+	           				 <div class="form-group">
+                        <div class="col-sm-4 control-label">是否启用</div>
+                        <div class="col-sm-8">
+                        <label class="radio-inline"><input type="radio" name="status" value="0" v-model="adverts.status" > 开启</label> 
+						<label class="radio-inline"><input type="radio" name="status" value="1" v-model="adverts.status"  > 关闭</label>
+                         </div>
+	           		</div>
+	 </div>
+	 </div>
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/adverts/adverts.js?_${.now?long}"></script>
+
+</body>
+</html>

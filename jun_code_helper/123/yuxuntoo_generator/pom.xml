@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.yuxuntoo.www</groupId>
+    <artifactId>yuxunto_generator</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>yuxunto_generator</name>
+    <description>宇讯代码生成器</description>
+    <packaging>pom</packaging>
+   <modules>
+       <module>yuxuntoo-common</module>
+       <module>yuxuntoo-generator</module>
+   </modules>
+
+</project>

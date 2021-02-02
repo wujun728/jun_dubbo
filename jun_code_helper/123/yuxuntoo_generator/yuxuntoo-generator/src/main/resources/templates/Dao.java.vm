@@ -1,0 +1,73 @@
+package ${package}.${moduleName}.dao;
+
+import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.entity.${className}Example;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+/**
+ * ${comments}
+ * 
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+@Repository
+public interface ${className}Mapper {
+    /**
+     *  根据Example信息统计数量
+     */
+    int countByExample(${className}Example example);
+
+    /**
+     * 根据Example信息删除
+     */
+    int deleteByExample(${className}Example example);
+
+    /**
+     *  根据主键删除
+     */
+    int deleteByPrimaryKey(${pk.attrType} id);
+
+    /**
+     *  全量插入信息
+     */
+    int insert(${className} record);
+
+    /**
+     *  插入存在的数据
+     */
+    int insertSelective(${className} record);
+
+    /**
+     *  根据Example信息查询结果集合
+     */
+    List<${className}> selectByExample(${className}Example example);
+
+    /**
+     *  根据主键查询详细信息
+     */
+    ${className} selectByPrimaryKey(${pk.attrType} id);
+
+    /**
+     *  根据Example信息修改传入变量值
+     */
+    int updateByExampleSelective(@Param("record") ${className} record, @Param("example") ${className}Example example);
+
+    /**
+     *  根据Example信息修改全量信息
+     */
+    int updateByExample(@Param("record") ${className} record, @Param("example") ${className}Example example);
+
+    /**
+     *  根据主键修改传入变量值
+     */
+    int updateByPrimaryKeySelective(${className} record);
+
+    /**
+     *  根据主键修改全量信息
+     */
+    int updateByPrimaryKey(${className} record);
+}

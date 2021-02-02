@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.good.dao.CategorySpecDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.good.entity.CategorySpecEntity" id="categorySpecMap">
+        <result property="id" column="id"/>
+        <result property="categoryId" column="category_id"/>
+        <result property="specName" column="spec_name"/>
+        <result property="sort" column="sort"/>
+        <result property="isShow" column="is_show"/>
+        <result property="isMobileShow" column="is_mobile_show"/>
+    </resultMap>
+
+	<select id="selectListVO"
+		resultType="com.freeter.modules.good.entity.vo.CategorySpecVO" >
+		SELECT * FROM cn_category_spec as categorySpec <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectVO"
+		resultType="com.freeter.modules.good.entity.vo.CategorySpecVO" >
+		SELECT * FROM cn_category_spec as categorySpec <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+    <select id="selectListView"
+		resultType="com.freeter.modules.good.entity.view.CategorySpecView" >
+		SELECT  categorySpec.*,(select name from cn_category p where p.category_id = categorySpec.category_id) category_name FROM cn_category_spec as categorySpec <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.freeter.modules.good.entity.view.CategorySpecView" >
+		SELECT * FROM cn_category_spec as categorySpec <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+</mapper>

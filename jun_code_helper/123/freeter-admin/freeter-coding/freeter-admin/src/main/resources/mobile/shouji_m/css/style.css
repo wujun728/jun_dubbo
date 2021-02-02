@@ -1,0 +1,77 @@
+/* 公共样式 */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,input,textarea,p,th,td{margin:0;padding:0;}
+body{background:#f0f2f9;word-break: break-all;font: 12px/1.5 "microsoft yahei",sans-serif,tahoma,arial,'Hiragino Sans GB','SimSun',sans-serif;}
+button,a,img{display:block;border:0;}
+img{vertical-align:center;}
+li,ul{list-style:none;}
+i{ font-style:normal;}
+a{ text-decoration:none;outline:none;}
+input,textarea{padding:2px;outline:none;}
+button{outline:none;}
+/*font*/
+em,strong,i{font-style:normal;font-weight:normal;}
+/* table */
+table{border-collapse:collapse;border-spacing:0;}
+label{display:block;}
+
+.fl{float:left;}
+.fr{float:right;}
+
+.clearfix:after{content:".";display:block;height:0;clear:both;visibility:hidden} /*所有主流浏览器都支持 :after 伪元素。*/ 
+.clearfix:after {visibility: hidden;display: block;font-size: 0;content: " ";clear: both;height: 0;} 
+
+/* 顶部 */
+.content_top{background: #f0f2f9;color:#ff9906;font-size:16px;padding: 8px 15px;}
+.content_top span{display: block;margin-top:4px;}
+.content_top img{margin-right:14px;}
+
+/* 列表 */
+.content_list{background: #f8f8f8;border-top:1px solid #cdced3;border-bottom:1px solid #cdced3;font-size:14px;}
+.content_list ul{display: flex;flex-direction: row; }
+.content_list ul li{flex:1;border-right:1px solid #cdced3;text-align: center;padding:10px 0}
+.content_list ul li:last-child{border:0}
+.content_list ul li a{color:#333}
+.content_list ul li a img{display:block;margin:0 auto;margin-bottom:14px}
+
+/* 预约回收 */
+.recovery{padding:30px 15px 0 15px;background: #fff;}
+.recovery button{
+    color:#fff;height:45px;width:100%;border-radius: 5px;font-size:16px;box-shadow: 0 1px 10px 1px rgba(255,122,78,0.5);
+    background: -moz-linear-gradient(top, #ffb717 0%, #ff8f00 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#ffb717), color-stop(100%,#ff8f00));
+    background: -webkit-linear-gradient(top, #ffb717 0%,#ff8f00 100%);
+    background: -o-linear-gradient(top, #ffb717 0%,#ff8f00 100%);
+    background: -ms-linear-gradient(top, #ffb717 0%,#ff8f00 100%);
+    background: linear-gradient(to bottom, #ffb717 0%,#ff8f00 100%);
+}
+
+/* 消息 */
+.news{padding-bottom:10px;margin-top:15px;font-size:12px;}
+.txtMarquee-left{float:left;width:100%;  position:relative;height:21px;overflow: hidden;line-height:21px;}
+.txtMarquee-left .bd{padding:0 0 0 26px;background: url(../image/new.png) no-repeat; }
+.txtMarquee-left .bd .tempWrap{ width:425px !important; }
+.txtMarquee-left .bd ul{overflow:hidden; zoom:1;height:21px;}
+.txtMarquee-left .bd ul li{color:#ff6333;margin-right:10px;float:left; height:24px; line-height:24px;  text-align:left; _display:inline; width:auto !important;  }/* 用 width:auto !important 覆盖SuperSlide自动生成的宽度，解决文字不衔接问题 */
+.txtMarquee-left .bd ul li span{color:#6b68f7}
+
+/* 内容图片 */
+.content_image{margin:10px 0 16px 0;}
+.content_image img{width:100%}
+
+/* 底部 */
+.switch{border-top:1px solid #cbd3db;background: #fff;clear:both;}
+.switch dl{display: flex;flex-direction: row;text-align: center;}
+.switch dl dd{flex:1;}
+.switch dl dd img{display:block;margin:0 auto;}
+.switch dl dd p{padding:5px 0 10px 0;}
+.switch dl dd a{color:#333;padding-top:10px;}
+
+/* 轮播 */
+.swiper-container{height:162px;border-bottom:1px solid #cdced3}
+.swiper-container .swiper-wrapper .swiper-slide img{width:100%;height:100%}
+.swiper-container-horizontal>.swiper-pagination-bullets, .swiper-pagination-custom, .swiper-pagination-fraction {
+    bottom: 4px !important;
+}
+.swiper-pagination-bullet-active {
+    background: #fff !important;
+}

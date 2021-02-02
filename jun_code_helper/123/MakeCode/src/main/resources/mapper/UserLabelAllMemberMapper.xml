@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gf.mapper.UserLabelAllMemberMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gf.entity.UserLabelAllMember">
+        <id column="member_id" property="memberId" />
+        <result column="mobile" property="mobile" />
+        <result column="province_id" property="provinceId" />
+        <result column="city_id" property="cityId" />
+        <result column="county_id" property="countyId" />
+        <result column="birthday" property="birthday" />
+        <result column="sex" property="sex" />
+        <result column="rank_id" property="rankId" />
+        <result column="age" property="age" />
+        <result column="price_per_order" property="pricePerOrder" />
+        <result column="order_total_amt" property="orderTotalAmt" />
+        <result column="order_count" property="orderCount" />
+        <result column="discount_amt" property="discountAmt" />
+        <result column="hour_order_quantity" property="hourOrderQuantity" />
+        <result column="big_category_id" property="bigCategoryId" />
+        <result column="coupon_order_quantity" property="couponOrderQuantity" />
+        <result column="promotion_order_quantity" property="promotionOrderQuantity" />
+        <result column="promotion_type8_order_quantity" property="promotionType8OrderQuantity" />
+        <result column="goods_visit_times" property="goodsVisitTimes" />
+        <result column="min_order_created_at" property="minOrderCreatedAt" />
+        <result column="max_order_created_at" property="maxOrderCreatedAt" />
+        <result column="avg_comment_level" property="avgCommentLevel" />
+        <result column="update_time" property="updateTime" />
+        <result column="member_created_at" property="memberCreatedAt" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        member_id, mobile, province_id, city_id, county_id, birthday, sex, rank_id, age, price_per_order, order_total_amt, order_count, discount_amt, hour_order_quantity, big_category_id, coupon_order_quantity, promotion_order_quantity, promotion_type8_order_quantity, goods_visit_times, min_order_created_at, max_order_created_at, avg_comment_level, update_time
+    </sql>
+
+</mapper>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.order.dao.OrderDao">
+
+    <select id="selectListView"
+		resultType="com.freeter.modules.order.entity.view.OrderView" >
+
+		SELECT `order` .*, `user` .user_name FROM
+		cn_order `order` LEFT JOIN cn_user `user` ON `order` .user_id = `user` .user_id
+        <where> 1=1  ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.freeter.modules.order.entity.view.OrderView" >
+		SELECT * FROM cn_order  `order` <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+</mapper>

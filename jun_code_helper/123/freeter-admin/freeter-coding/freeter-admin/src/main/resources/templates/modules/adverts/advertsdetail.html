@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>广告位详情</title>
+		<#include "/header.html">
+		<!-- //<link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css"> -->
+				<link rel="stylesheet" href="${request.contextPath}/statics/plugins/layui/css/layui.css">
+		
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("adverts:advertsdetail:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("adverts:advertsdetail:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("adverts:advertsdetail:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal"style="width:100%;">
+														                   
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">广告位置</div>
+                        <div class="col-sm-10">
+<!--                             <input type="text" class="form-control" v-model="advertsDetail.advertsId" placeholder="广告位ID"/>
+ -->                        
+ <select id="advertsId" name="advertsId" class="selectpicker"  
+							data-live-search="true"  >
+				</select>
+ </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">标题</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="advertsDetail.title" placeholder="标题" />
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">排序</div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" v-model="advertsDetail.sort" placeholder="排序"/>
+                        </div>
+                    </div>
+											                
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">类型</div>
+                        <div class="col-sm-10">
+                                <label class="radio-inline"><input type="radio" name="type" value="0" v-model="advertsDetail.type" > 图文</label> 
+						<label class="radio-inline"><input type="radio" name="type" value="1" v-model="advertsDetail.type"  > 图片</label>
+						   <label class="radio-inline"><input type="radio" name="type" value="2" v-model="advertsDetail.type" >视频</label> 
+                         </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">状态</div>
+                        <div class="col-sm-10">
+                         <label class="radio-inline"><input type="radio" name="status" value="0" v-model="advertsDetail.status" > 显示</label> 
+						<label class="radio-inline"><input type="radio" name="status" value="1" v-model="advertsDetail.status"  > 隐藏</label>
+                        </div>
+                    </div>
+											                    <div class="form-group"  v-if="advertsDetail.type==1"  >
+                        <div class="col-sm-2 control-label" >展示图片</div>
+					<div class="layui-upload" style="width: 76%; float: right;">
+						<button type="button" class="layui-btn" id="test1">上传图片</button>
+						<div class="layui-upload-list">
+							<img class="layui-upload-img" id="demo1" style="width:300px;height:300px" :src=src>
+							<p id="demoText"></p>
+						</div>
+					</div>
+					<!-- <div class="col-sm-10">
+                        
+                            <input type="text" class="form-control"  v-model="advertsDetail.picImg" placeholder="展示图片"/>
+                        </div>-->
+                    </div> 
+							    <div class="form-group"  v-if="advertsDetail.type==2" >
+                        <div class="col-sm-2 control-label">视频链接地址</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control"  v-model="advertsDetail.href" placeholder="链接地址"/>
+                        </div>
+                    </div>				                   
+								<div class="form-group"   v-if="advertsDetail.type==0" >
+                        <div class="col-sm-2 control-label">广告图文</div>
+                        <div class="col-sm-10">
+<!--                             <input type="text" class="form-control" v-model="advertsDetail.content" placeholder="广告内容"/>
+ -->                         <div id="editor"     style="width: 710px;">
+   							 </div>
+ 					   </div>
+                    </div>
+								
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">备注信息</div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" v-model="advertsDetail.remarks" placeholder="备注信息"/>
+                        </div>
+                    </div>
+							<!-- 				                    <div class="form-group">
+                        <div class="col-sm-2 control-label">广告起始时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="advertsDetail.beginTime" placeholder="广告起始时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">广告结束时间</div> -->
+                    <div class="form-group">
+                        <div class="layui-inline" style="width:50%;float:left;">
+					      <label class="layui-form-label" style="width:48%;">广告日期范围</label>
+					      	<div class="layui-input-inline" style="width:50%;">
+					        	<input type="text" class="layui-input" id="test6" placeholder=" - ">
+					      	</div>
+					    </div>
+					    <div class="layui-inline" style="width:50%;float:left">
+					      	<label class="layui-form-label" style="width:30%;">时间范围</label>
+					      	<div class="layui-input-inline" style="width:50%;">
+					        	<input type="text" class="layui-input" id="test9" placeholder=" - ">
+					      	</div>
+					     </div>
+					     </div>
+                       <!--  <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="advertsDetail.endTime" placeholder="广告结束时间"/>
+                        </div> -->
+                    
+											                    
+                    
+                     <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" v-model="advertsDetail.createTime" placeholder="创建时间" readonly="readonly"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建者</div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" v-model="advertsDetail.createBy" placeholder="创建者" readonly="readonly"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新时间</div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" v-model="advertsDetail.updateTime" placeholder="更新时间" readonly="readonly"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新者</div>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control" v-model="advertsDetail.updateBy" placeholder="更新者" readonly="readonly"/>
+                        </div>
+                    </div>
+                    
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+	  <script type="text/javascript" src="https://unpkg.com/wangeditor@3.1.1/release/wangEditor.min.js"></script>
+
+<script src="${request.contextPath}/statics/plugins/layui/layui.js"></script>
+<script src="${request.contextPath}/statics/js/modules/adverts/advertsdetail.js?_${.now?long}"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+layui.use('upload', function(){
+	  var $ = layui.jquery
+	  ,upload = layui.upload;
+	  
+	  //普通图片上传
+	  var uploadInst = upload.render({
+	    elem: '#test1'
+	    ,url: '/upload/'
+	    ,before: function(obj){
+	      //预读本地文件示例，不支持ie8
+	      obj.preview(function(index, file, result){
+	        $('#demo1').attr('src', result); //图片链接（base64）
+	      });
+	    }
+	    ,done: function(res){
+	      //如果上传失败
+	      if(res.code > 0){
+	        return layer.msg('上传失败');
+	      }
+	      //上传成功
+	    }
+	    ,error: function(){
+	      //演示失败状态，并实现重传
+	      var demoText = $('#demoText');
+	      demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+	      demoText.find('.demo-reload').on('click', function(){
+	        uploadInst.upload();
+	      });
+	    }
+	  });
+});
+//日期范围
+ layui.use('laydate', function(){
+  var laydate = layui.laydate;
+  laydate.render({
+    elem: '#test6'
+    ,range: true
+    ,done: function(value, date, endDate){
+        console.log(value); //得到日期生成的值，如：2017-08-18
+        
+        var strs= new Array(); //定义一数组
+        strs=value.split(" - "); //字符分割
+        vm.startDate=strs[0];
+        vm.endDate=strs[1];
+        
+    }
+  });
+  
+   
+  //时间范围
+  laydate.render({
+    elem: '#test9'
+    ,type: 'time'
+    ,range: true
+    ,done: function(value, date, endDate){
+        console.log(value); //得到日期生成的值，如：2017-08-18
+        var strs= new Array(); //定义一数组
+        strs=value.split(" - "); //字符分割
+        vm.startTime=strs[0];
+        vm.endTime=strs[1];
+        
+      }
+  });
+ })
+  </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+package ${package.Controller};
+
+import ${package.Entity.replace(".entity", "")}.util.JsonUtil;
+import ${package.Entity}.${entity};
+import ${package.Service}.${entity}Service;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+/**
+ * ${table.controllerName}控制器
+ *
+ * @author ${author}
+ * @Date ${date}
+ */
+@Controller
+@RequestMapping("/${entity.toLowerCase().substring(0,1)}${entity.substring(1)}")
+@Api(value = "${table.controllerName}-controller", description = "${table.controllerName}")
+public class ${table.controllerName}   {
+
+    @Autowired
+    private ${entity}Service ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Service;
+
+
+
+    /**
+     * 获取${entity}列表
+     */
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "获取${entity}列表", notes = "获取${entity}列表")
+    public Object list(String condition) {
+        List<${entity}> list = ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Service.list(null);
+        return JsonUtil.createPageObject(list);
+    }
+
+    /**
+     * 新增${entity}
+     */
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "新增${entity}", notes = "新增${entity}")
+    public Object add(${entity} ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}) {
+        ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Service.save(${entity.toLowerCase().substring(0,1)}${entity.substring(1)});
+        return JsonUtil.createOkJson();
+    }
+
+    /**
+     * 删除${entity}
+     */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "删除${entity}", notes = "删除${entity}")
+    public Object delete(@RequestParam Integer ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Id) {
+        ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Service.removeById(${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Id);
+        return JsonUtil.createOkJson();
+    }
+
+    /**
+     * 修改${entity}
+     */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "修改${entity}", notes = "修改${entity}")
+    public Object update(${entity} ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}) {
+        ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Service.updateById(${entity.toLowerCase().substring(0,1)}${entity.substring(1)});
+        return JsonUtil.createOkJson();
+    }
+
+    /**
+     * ${entity}详情
+     */
+    @RequestMapping(value = "/detail/{${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Id}", method = RequestMethod.GET)
+    @ResponseBody
+    @ApiOperation(value = "${entity}详情", notes = "${entity}详情")
+    public Object detail(@PathVariable("${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Id") Integer ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Id) {
+        ${entity} obj = ${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Service.getById(${entity.toLowerCase().substring(0,1)}${entity.substring(1)}Id);
+        return  JsonUtil.createOkObject(obj);
+    }
+}

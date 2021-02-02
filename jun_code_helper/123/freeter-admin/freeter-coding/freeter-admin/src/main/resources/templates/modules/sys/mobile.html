@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("sys:mobile:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("sys:mobile:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("sys:mobile:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">品牌</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.brand" placeholder="品牌"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">型号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.version" placeholder="型号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">上市月份</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.listedyear" placeholder="上市月份"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.listingmonth" placeholder=""/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">机身颜色</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.color" placeholder="机身颜色"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">操作系统</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.operatingSystem" placeholder="操作系统"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">屏幕</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.screen" placeholder="屏幕"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">机身存储空间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.rom" placeholder="机身存储空间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">机身的运行内存</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.ram" placeholder="机身的运行内存"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">屏幕分辨率</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.resolvingPower" placeholder="屏幕分辨率"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">机身重量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.weight" placeholder="机身重量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">主芯片</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.cpu" placeholder="主芯片"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">其他</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.other" placeholder="其他"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">描述</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.described" placeholder="描述"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">手机</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.phone" placeholder="手机"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">姓名</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.name" placeholder="姓名"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">像素</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.backCamera" placeholder="像素"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.createTime" placeholder=""/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">购买时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="mobile.buyTime" id="test5" placeholder="yyyy-MM-dd HH:mm:ss"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="${request.contextPath}/statics/plugins/layui/layui.js"></script>
+<script >//日期时间选择器
+layui.use('laydate', function(){
+	  var laydate = layui.laydate;
+  laydate.render({
+    elem: '#test5'
+    ,type: 'datetime'
+  });
+  
+});
+  </script>
+<script src="${request.contextPath}/statics/js/modules/sys/mobile.js?_${.now?long}"></script>
+</body>
+</html>

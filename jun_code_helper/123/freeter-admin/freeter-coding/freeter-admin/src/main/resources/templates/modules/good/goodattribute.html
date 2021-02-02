@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商品属性表</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("good:goodattribute:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("good:goodattribute:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("good:goodattribute:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品ID</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.goodId" placeholder="商品ID"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">总库存</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.stock" placeholder="总库存"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">销售量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.salesVolume" placeholder="销售量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">总访问量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.pageViews" placeholder="总访问量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">评论数量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.commentNumber" placeholder="评论数量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">累计评价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.commentTotal" placeholder="累计评价"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">平均评价</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.commentAverage" placeholder="平均评价"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">收藏数</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.favoriteNumber" placeholder="收藏数"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">提问数</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodAttribute.questionNumber" placeholder="提问数"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/good/goodattribute.js?_${.now?long}"></script>
+
+</body>
+</html>

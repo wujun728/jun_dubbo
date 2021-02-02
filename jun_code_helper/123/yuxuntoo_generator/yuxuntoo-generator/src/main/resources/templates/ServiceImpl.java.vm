@@ -1,0 +1,102 @@
+package ${package}.${moduleName}.service.impl;
+
+import com.github.pagehelper.PageHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import ${package}.${moduleName}.dao.${className}Mapper;
+import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.entity.${className}Example;
+import ${package}.${moduleName}.service.${className}Service;
+import ${package}.common.exception.BaseException;
+import ${package}.common.vo.resp.PageInfo;
+import ${package}.common.utils.RandomUtils;
+
+import java.util.List;
+
+@Service("${classname}Service")
+public class ${className}ServiceImpl implements ${className}Service {
+
+    @Autowired
+    private ${className}Mapper ${classname}Mapper;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Override
+    public ${pk.attrType} insertSelective(${className} ${classname}) throws BaseException {
+#if(${pk.attrType} == "String")
+    ${classname}.set${pk.attrName}(RandomUtils.uuidString());
+#end
+    if (${classname}Mapper.insertSelective(${classname}) > 0) {
+        return ${classname}.get${pk.attrName}();
+    }
+        return null;
+    }
+
+    @Override
+    public int deleteByPrimaryKey(${pk.attrType} id) throws BaseException {
+        return ${classname}Mapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public int updateByPrimaryKeySelective(${className} ${classname}) throws BaseException {
+        return ${classname}Mapper.updateByPrimaryKeySelective(${classname});
+    }
+
+    @Override
+    public ${className} selectByPrimaryKey(${pk.attrType} id) throws BaseException {
+        ${className} ${classname} = ${classname}Mapper.selectByPrimaryKey(id);
+        return ${classname};
+    }
+
+    @Override
+    public PageInfo<${className}> findPage(${className} ${classname}, int pageSize, int pageNo) throws BaseException {
+        ${className}Example example = new ${className}Example();
+        ${className}Example.Criteria criteria = example.createCriteria();
+
+#foreach ($column in $columns)
+#if(${column.pk} != "PRI")
+        if(${classname}.get${column.attrName}() != null){
+            criteria.and${column.attrName}EqualTo(${classname}.get${column.attrName}());
+        }
+#end
+#end
+        PageHelper.startPage(pageNo, pageSize);
+        List<${className}> ${classname}List = ${classname}Mapper.selectByExample(example);
+
+        PageInfo<${className}> pageInfo = new PageInfo<>(${classname}List);
+        return pageInfo;
+    }
+
+    @Override
+    public List<${className}> selectByExample(${className} ${classname}) throws BaseException{
+        ${className}Example example = new ${className}Example();
+        ${className}Example.Criteria criteria = example.createCriteria();
+
+#foreach ($column in $columns)
+#if(${column.pk} != "PRI")
+        if(${classname}.get${column.attrName}() != null){
+            criteria.and${column.attrName}EqualTo(${classname}.get${column.attrName}());
+        }
+#end
+#end
+        return ${classname}Mapper.selectByExample(example);
+    }
+
+    @Override
+    public int countByExample(${className} ${classname}) throws BaseException{
+        ${className}Example example = new ${className}Example();
+        ${className}Example.Criteria criteria = example.createCriteria();
+
+#foreach ($column in $columns)
+#if(${column.pk} != "PRI")
+        if(${classname}.get${column.attrName}() != null){
+        criteria.and${column.attrName}EqualTo(${classname}.get${column.attrName}());
+        }
+#end
+#end
+        return ${classname}Mapper.countByExample(example);
+    }
+}

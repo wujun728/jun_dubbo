@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${package}.${moduleName}.dao.${className}Mapper">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="${package}.${moduleName}.entity.${className}" id="BaseResultMap">
+#foreach($column in $columns)
+        <result column="${column.columnName}" jdbcType="${column.capitalizeDataType}" property="${column.attrname}"/>
+#end
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+#foreach($column in $columns)
+#if($velocityCount!=$!{columns.size()})
+     ${column.columnName},
+#else
+     ${column.columnName}
+#end
+#end
+    </sql>
+    <select id="selectByExample" parameterType="${package}.${moduleName}.entity.${className}Example" resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from ${tableName}
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+#foreach($column in $columns)
+#if($column.pk == "PRI")
+#if($column.dataType == "long" || $column.dataType == "bigint")
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+#elseif($column.dataType == "int" || $column.dataType == "integer")
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+#elseif($column.dataType == "varchar" || $column.dataType == "longtext")
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+#else
+    <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+#end
+#end
+#end
+        select
+        <include refid="Base_Column_List" />
+        from ${tableName}
+        where
+#foreach($column in $columns)
+    #if($column.pk == "PRI")
+        ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+    #end
+#end
+    </select>
+#foreach($column in $columns)
+#if($column.pk == "PRI")
+#if($column.dataType == "long" || $column.dataType == "bigint")
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+#elseif($column.dataType == "int" || $column.dataType == "integer")
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+#elseif($column.dataType == "varchar" || $column.dataType == "longtext")
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+#else
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+#end
+#end
+#end
+        delete from ${tableName}
+        where
+#foreach($column in $columns)
+    #if($column.pk == "PRI")
+      ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+    #end
+#end
+    </delete>
+    <delete id="deleteByExample" parameterType="${package}.${moduleName}.entity.${className}Example">
+        delete from ${tableName}
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="${package}.${moduleName}.entity.${className}">
+#foreach($column in $columns)
+#if($column.pk == "PRI")
+#if($column.dataType == "long" || $column.dataType == "bigint")
+    <selectKey keyProperty="${column.columnName}" order="AFTER" resultType="java.lang.Long">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+#elseif($column.dataType == "int" || $column.dataType == "integer" || $column.dataType == "tinyint" || $column.dataType == "smallint"|| $column.dataType == "mediumint"|| $column.dataType == "int4"|| $column.dataType == "int2")
+    <selectKey keyProperty="${column.columnName}" order="AFTER" resultType="java.lang.Integer">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+#end
+#end
+#end
+        insert into ${tableName} (
+#foreach($column in $columns)
+#if($velocityCount!=$!{columns.size()})
+#if($column.pk == "PRI" && ($column.dataType == "char" || $column.dataType == "varchar" || $column.dataType == "tinytext" || $column.dataType == "text" || $column.dataType == "mediumtext" || $column.dataType == "longtext" || $column.dataType == "VARCHAR" || $column.dataType == "VARCHAR2" || $column.dataType == "NVARCHAR" || $column.dataType == "NVARCHAR2" ||  $column.dataType == "nvarchar"))
+    ${column.columnName},
+#else
+    ${column.columnName},
+#end
+#else
+    ${column.columnName}
+#end
+#end
+        )
+        values (
+#foreach($column in $columns)
+#if($velocityCount!=$!{columns.size()})
+#if($column.pk == "PRI" && ($column.dataType == "char" || $column.dataType == "varchar" || $column.dataType == "tinytext" || $column.dataType == "text" || $column.dataType == "mediumtext" || $column.dataType == "longtext" || $column.dataType == "VARCHAR" || $column.dataType == "VARCHAR2" || $column.dataType == "NVARCHAR" || $column.dataType == "NVARCHAR2" ||  $column.dataType == "nvarchar"))
+    #{${column.attrname},jdbcType=${column.capitalizeDataType}},
+#else
+    #{${column.attrname},jdbcType=${column.capitalizeDataType}},
+#end
+#else
+    #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+#end
+#end
+        )
+    </insert>
+    <insert id="insertSelective" parameterType="${package}.${moduleName}.entity.${className}">
+#foreach($column in $columns)
+#if($column.pk == "PRI")
+#if($column.dataType == "long" || $column.dataType == "bigint")
+    <selectKey keyProperty="${column.columnName}" order="AFTER" resultType="java.lang.Long">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+#elseif($column.dataType == "int" || $column.dataType == "integer" || $column.dataType == "tinyint" || $column.dataType == "smallint"|| $column.dataType == "mediumint"|| $column.dataType == "int4"|| $column.dataType == "int2")
+    <selectKey keyProperty="${column.columnName}" order="AFTER" resultType="java.lang.Integer">
+        SELECT LAST_INSERT_ID()
+    </selectKey>
+#end
+#end
+#end
+        insert into ${tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+#foreach($column in $columns)
+#if($velocityCount!=$!{columns.size()})
+#if($column.pk == "PRI" && ($column.dataType == "char" || $column.dataType == "varchar" || $column.dataType == "tinytext" || $column.dataType == "text" || $column.dataType == "mediumtext" || $column.dataType == "longtext" || $column.dataType == "VARCHAR" || $column.dataType == "VARCHAR2" || $column.dataType == "NVARCHAR" || $column.dataType == "NVARCHAR2" ||  $column.dataType == "nvarchar"))
+    <if test="${column.attrname} != null">
+        ${column.columnName},
+    </if>
+#else
+    <if test="${column.attrname} != null">
+        ${column.columnName},
+    </if>
+#end
+#else
+    <if test="${column.attrname} != null">
+        ${column.columnName}
+    </if>
+#end
+#end
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+#foreach($column in $columns)
+#if($velocityCount!=$!{columns.size()})
+#if($column.pk == "PRI" && ($column.dataType == "char" || $column.dataType == "varchar" || $column.dataType == "tinytext" || $column.dataType == "text" || $column.dataType == "mediumtext" || $column.dataType == "longtext" || $column.dataType == "VARCHAR" || $column.dataType == "VARCHAR2" || $column.dataType == "NVARCHAR" || $column.dataType == "NVARCHAR2" ||  $column.dataType == "nvarchar"))
+    <if test="${column.attrname} != null">
+        #{${column.attrname},jdbcType=${column.capitalizeDataType}},
+    </if>
+#else
+    <if test="${column.attrname} != null">
+        #{${column.attrname},jdbcType=${column.capitalizeDataType}},
+    </if>
+#end
+#else
+    <if test="${column.attrname} != null">
+        #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+    </if>
+#end
+#end
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="${package}.${moduleName}.entity.${className}Example" resultType="java.lang.Integer">
+        select count(*) from ${tableName}
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update ${tableName}
+        <set>
+#foreach($column in $columns)
+    #if($velocityCount!=$!{columns.size()})
+        <if test="record.${column.attrname} != null">
+            ${column.columnName} = #{record.${column.attrname},jdbcType=${column.capitalizeDataType}},
+        </if>
+    #else
+        <if test="record.${column.attrname} != null">
+            ${column.columnName} = #{record.${column.attrname},jdbcType=${column.capitalizeDataType}}
+        </if>
+    #end
+#end
+
+</set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update ${tableName}
+        set
+#foreach($column in $columns)
+    #if($velocityCount!=$!{columns.size()})
+        ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}},
+    #else
+        ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+    #end
+#end
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="${package}.${moduleName}.entity.${className}">
+        update ${tableName}
+        <set>
+#foreach($column in $columns)
+#if($column.pk != "PRI")
+    #if($velocityCount!=$!{columns.size()})
+        <if test="${column.attrname} != null">
+            ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}},
+        </if>
+
+    #else
+        <if test="${column.attrname} != null">
+            ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+        </if>
+    #end
+#end
+#end
+        </set>
+        where
+        #foreach($column in $columns)
+            #if($column.pk == "PRI")
+                ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+            #end
+        #end
+    </update>
+    <update id="updateByPrimaryKey" parameterType="${package}.${moduleName}.entity.${className}">
+        update ${tableName}
+        set
+#foreach($column in $columns)
+#if($column.pk != "PRI")
+    #if($velocityCount!=$!{columns.size()})
+        ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}},
+    #else
+        ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+    #end
+#end
+#end
+        where
+#foreach($column in $columns)
+    #if($column.pk == "PRI")
+      ${column.columnName} = #{${column.attrname},jdbcType=${column.capitalizeDataType}}
+    #end
+#end
+    </update>
+
+
+</mapper>

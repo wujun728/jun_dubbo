@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.pc.dao.PcDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.pc.entity.PcEntity" id="pcMap">
+        <result property="pcId" column="pc_id"/>
+        <result property="pcName" column="pc_name"/>
+        <result property="title" column="title"/>
+        <result property="detail" column="detail"/>
+        <result property="remark" column="remark"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+    </resultMap>
+
+	<select id="selectListVO"
+		resultType="com.freeter.modules.pc.entity.vo.PcVO" >
+		SELECT * FROM t_pc  pc         
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectVO"
+		resultType="com.freeter.modules.pc.entity.vo.PcVO" >
+		SELECT  pc.* FROM t_pc  pc 	
+ 		<where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+    <select id="selectListView"
+		resultType="com.freeter.modules.pc.entity.view.PcView" >
+
+		SELECT  pc.* FROM t_pc  pc 	        
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.freeter.modules.pc.entity.view.PcView" >
+		SELECT * FROM t_pc  pc <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+</mapper>

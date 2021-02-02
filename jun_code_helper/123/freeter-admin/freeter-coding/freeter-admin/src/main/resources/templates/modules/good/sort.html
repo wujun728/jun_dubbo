@@ -1,0 +1,115 @@
+<html> 
+    <head>
+        <title>部门管理</title>
+        <#include "/header.html">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/fileinput/fileinput.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/addcss.css">
+        <script src="${request.contextPath}/statics/plugins/fileinput/fileinput.js"></script>
+        <script src="${request.contextPath}/statics/plugins/fileinput/zh.js"></script> 
+    </head> 
+    <body>
+        <div id="rrapp" v-cloak="">
+            <div v-show="showList" class="panel panel-default">
+                <div class="panel-heading">
+                    {{title}}
+                </div>
+                <form class="form-horizontal" method="post" id="uploadForm" enctype="multipart/form-data" style="width:90%;"> 
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="">选择分类</label>
+                        <div class="typechose" >
+                            <select class="form-control col-sm-2" name="" 	data-live-search="true"  class="selectpicker" id="channelId">
+                             </select>  
+                            <select class="form-control col-sm-2" name="" 	data-live-search="true"  id="oneCategory"  class="selectpicker">
+                             </select> 
+                            <select class="form-control col-sm-2" name="" 	data-live-search="true" id="twoCategory"  class="selectpicker">
+                             </select> 
+                        </div> 
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="">商品名称</label>
+                        <div class="col-sm-10"><input type="text" class="form-control" id=""  v-model="good.goodName" placeholder="请输入商品名称"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="">商品简介</label>
+                        <div class="col-sm-10"> <textarea class="form-control" rows="3"  v-model="good.introduce"></textarea> </div>
+                    </div>  
+                    
+					 
+				      <div class="form-group">
+						<div class="col-sm-2 control-label">单位</div> 
+						<div class="col-sm-10"><input type="text" placeholder="单位" class="form-control"  v-model="good.units"></div>
+					</div>      
+				 
+					<div class="form-group">
+						<div class="col-sm-2 control-label">是否置顶 </div> 
+						<label class="radio-inline"><input type="radio" name="showInTop" value="1" v-model="good.showInTop" > 置顶</label> 
+						<label class="radio-inline"><input type="radio" name="showInTop" value="0" v-model="good.showInTop"  > 默认</label>
+					</div> 
+					<div class="form-group">
+						<div class="col-sm-2 control-label">是否热门 </div> 
+						<label class="radio-inline"><input type="radio" name="showInHot" value="1" v-model="good.showInHot" > 热门</label> 
+						<label class="radio-inline"><input type="radio" name="showInHot" value="0" v-model="good.showInHot" > 默认</label>
+					</div> 
+					<div class="form-group">
+						<div class="col-sm-2 control-label">页面标题</div> 
+						<div class="col-sm-10"><input type="text" placeholder="页面标题" class="form-control"  v-model="good.pageTitle"></div>
+					</div> 
+					<div class="form-group"><div class="col-sm-2 control-label">页面描述</div> 
+						<div class="col-sm-10"><input type="text" placeholder="页面描述" class="form-control" v-model="good.pageDescription"></div>
+					</div> 
+					<div class="form-group">
+						<div class="col-sm-2 control-label">页面关键词</div> 
+						<div class="col-sm-10">
+							<input type="text" placeholder="页面关键词" class="form-control" v-model="good.pageKeyword">
+						</div>
+					</div> 
+					<div class="form-group">
+						<div class="col-sm-2 control-label">备注信息</div> 
+						<div class="col-sm-10">
+							<input type="text" placeholder="备注信息" class="form-control" v-model="good.remarks">
+						</div>
+					</div> 
+					
+					
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+	                
+                  <!--  上传图片start--> 
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="exampleInputName2">商品缩略图</label>
+                    </div>
+              <div class="form-group" id="picimg">  
+                        <div class="file-loading col-sm-10"  >
+                            <input id="input-7021" name="files" type="file"  data-min-file-count="1">
+                        </div>
+                     </div>  
+                  <!--  上传图片end-->  
+                  <!--  单图预览start-->
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label" for="exampleInputName2">商品相册</label>
+                    </div>
+                    <div class="form-group">  
+                        <div class="file-loading col-sm-10">
+                            <input id="input-702" name="files" type="file" multiple >
+                        </div>
+                     </div>
+                   
+                  <!--  单图预览end--> 
+                    <div class="form-group sublitwrap"> </div>
+  						<div class="form-group text-right">  
+							<input type="button" class="btn btn-warning" @click="reload"  value="返回" /><input type="button"  class="btn" value="下一步" @click="save"></input>
+						</div>
+                    
+                </form> 
+            </div>
+        </div> 
+        <script src="${request.contextPath}/statics/js/modules/good/sort.js?_${.now?long}"></script> 
+    </body>
+
+</html>

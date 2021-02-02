@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.good.dao.GoodDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.good.entity.GoodEntity" id="goodMap">
+        <result property="goodId" column="good_id"/>
+        <result property="goodName" column="good_name"/>
+        <result property="goodNumber" column="good_number"/>
+        <result property="maxPrice" column="max_price"/>
+        <result property="minPrice" column="min_price"/>
+        <result property="introduce" column="introduce"/>
+        <result property="picImg" column="pic_img"/>
+        <result property="showInTop" column="show_in_top"/>
+        <result property="showInNav" column="show_in_nav"/>
+        <result property="showInLike" column="show_in_like"/>
+        <result property="showInHot" column="show_in_hot"/>
+        <result property="showInShelve" column="show_in_shelve"/>
+        <result property="searchKey" column="search_key"/>
+        <result property="sales" column="sales"/>
+        <result property="pageTitle" column="page_title"/>
+        <result property="pageDescription" column="page_description"/>
+        <result property="pageKeyword" column="page_keyword"/>
+        <result property="remarks" column="remarks"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="shelveTime" column="shelve_time"/>
+        <result property="shelveBy" column="shelve_by"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="martId" column="mart_id"/>
+        <result property="delFlag" column="del_flag"/>
+    </resultMap>
+
+	<select id="selectListVO"
+		resultType="com.freeter.modules.good.entity.vo.GoodVO" >
+		SELECT * FROM cn_good as good <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectVO"
+		resultType="com.freeter.modules.good.entity.vo.GoodVO" >
+		SELECT * FROM cn_good as good <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+    <select id="selectListView"
+		resultType="com.freeter.modules.good.entity.view.GoodView" >
+		SELECT  good.* FROM cn_good as good <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.freeter.modules.good.entity.view.GoodView" >
+		SELECT * FROM cn_good as good <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectCategoryChannelByGood" resultType="com.freeter.modules.good.entity.view.GoodView">
+SELECT
+	good.*,category.`name` category_name,category.category_id,channel.name channel_name,(select name from cn_category owner where owner.category_id =category.parent_id ) category_parent_name
+	,(
+		SELECT
+			category_id
+		FROM
+			cn_category OWNER
+		WHERE
+			OWNER .category_id = category.parent_id
+	) one_category_id,good_attribute.sales_volume,good_attribute.stock,good_attribute.page_views,good_attribute.attribute_id
+FROM
+	cn_good good
+LEFT JOIN cn_category_good category_good ON good.good_id = category_good.good_id
+LEFT JOIN cn_category category ON category.category_id = category_good.category_id
+LEFT JOIN cn_channel channel on  channel.channel_id = category.channel_id 
+LEFT JOIN cn_good_attribute good_attribute on good.good_id = good_attribute.good_id 
+ <where> 1=1 ${ew.sqlSegment}</where>
+ </select>
+</mapper>

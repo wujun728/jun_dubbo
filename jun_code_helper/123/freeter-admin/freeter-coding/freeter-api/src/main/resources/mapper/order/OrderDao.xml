@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.order.dao.OrderDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.order.entity.OrderEntity" id="orderMap">
+        <result property="id" column="id"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="totalMoney" column="total_money"/>
+        <result property="orderStatus" column="order_status"/>
+        <result property="userId" column="user_id"/>
+        <result property="createdTime" column="created_time"/>
+        <result property="deliveryTime" column="delivery_time"/>
+        <result property="receivingTime" column="receiving_time"/>
+        <result property="refundPeriod" column="refund_period"/>
+        <result property="refundCompletePeriod" column="refund_complete_period"/>
+        <result property="address" column="address"/>
+        <result property="consignee" column="consignee"/>
+        <result property="postcode" column="postcode"/>
+        <result property="tel" column="tel"/>
+        <result property="expressNumber" column="express_number"/>
+        <result property="expressCompanyNo" column="express_company_no"/>
+        <result property="virDel" column="vir_del"/>
+    </resultMap>
+
+
+</mapper>

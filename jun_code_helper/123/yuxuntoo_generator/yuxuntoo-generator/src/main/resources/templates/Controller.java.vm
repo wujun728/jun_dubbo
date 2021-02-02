@@ -1,0 +1,101 @@
+package ${package}.${moduleName}.controller;
+
+import java.util.Map;
+
+import ${package}.common.utils.ObjUtils;
+import ${package}.common.vo.resp.ApiResult;
+import ${package}.common.exception.BaseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.service.${className}Service;
+import ${package}.common.vo.resp.PageInfo;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+@RestController
+@RequestMapping("${moduleName}/${pathName}")
+public class ${className}Controller {
+    @Autowired
+    private ${className}Service ${classname}Service;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    
+    /**
+     * 列表
+     */
+    @GetMapping("/list")
+    public ApiResult list(@RequestParam Map<String, Object> params) throws BaseException {
+        ApiResult apiResult = new ApiResult();
+        ${className} ${classname} = null;
+        try {
+            ${classname} = (${className})ObjUtils.mapToObject(params,${className}.class);
+        } catch (Exception e){
+            logger.error("【list中Map转】${className}异常：{}",e);
+        }
+        PageInfo result = ${classname}Service.findPage(${classname},Integer.valueOf(params.get("pageSize").toString()),Integer.valueOf(params.get("pageNo").toString()));
+        logger.info("【${className}列表操作】返回结果：{}",result.toString());
+        apiResult.getData().put("result", result);
+        return apiResult;
+    }
+
+
+    /**
+     * 详情
+     */
+    @GetMapping("/info/{${pk.attrname}}")
+    public ApiResult info(@PathVariable("${pk.attrname}") ${pk.attrType} ${pk.attrname}) throws BaseException{
+        ApiResult apiResult = new ApiResult();
+		${className} ${classname} = ${classname}Service.selectByPrimaryKey(${pk.attrname});
+		if(${classname} != null){
+            logger.info("【${className}查询操作】返回结果：{}",${classname}.toString());
+        }
+        apiResult.getData().put("${classname}", ${classname});
+        return apiResult;
+    }
+
+    /**
+     * 新增
+     */
+    @PostMapping("/save")
+    public ApiResult save(@RequestBody ${className} ${classname}) throws BaseException{
+        ApiResult apiResult = new ApiResult();
+		${pk.attrType} result = ${classname}Service.insertSelective(${classname});
+        logger.info("【${className}保存操作】保存结果：{}",result);
+        apiResult.getData().put("result",result);
+        return apiResult;
+    }
+
+    /**
+     * 修改
+     */
+    @PostMapping("/update")
+    public ApiResult update(@RequestBody ${className} ${classname}) throws BaseException{
+        ApiResult apiResult = new ApiResult();
+        int result = ${classname}Service.updateByPrimaryKeySelective(${classname});
+        logger.info("【${className}修改操作】修改结果：{}",result);
+        apiResult.getData().put("result",result);
+        return apiResult;
+    }
+
+    /**
+     * 删除
+     */
+    @GetMapping("/delete")
+    public ApiResult delete(${pk.attrType} ${pk.attrname}) throws BaseException {
+        ApiResult apiResult = new ApiResult();
+		int result = ${classname}Service.deleteByPrimaryKey(${pk.attrname});
+        logger.info("【${className}删除操作】删除结果：{}",result);
+        apiResult.getData().put("result",result);
+        return apiResult;
+    }
+
+}

@@ -1,0 +1,41 @@
+server:
+  port: 8080
+spring:
+  jmx:
+    enabled: false
+  datasource:
+    url: jdbc:mysql://${DB_IP}:${DB_PORT}/${DB_SCHEMA}?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowMultiQueries=true&serverTimezone=GMT
+    username: ${DB_NAME}
+    password: ${DB_PWD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+mybatis-plus:
+  global-config:
+    id-type: 0
+    db-column-underline: false
+    refresh-mapper: true
+    logic-delete-value: 0
+    logic-not-delete-value: 1
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true
+    lazyLoadingEnabled: true
+    multipleResultSetsEnabled: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+logging:
+  level.root: info
+  level.com.stylefeng: info
+  path: logs/
+  file: logs/guns.log
+log4j:
+  logger:
+    com:
+      ibatis: DEBUG
+      common.jdbc.SimpleDataSource: DEBUG
+      common.jdbc.ScriptRunner: DEBUG
+      sqlmap.engine.impl.SqlMapClientDelegate: DEBUG
+    java.sql:
+      Connection: DEBUG
+      Statement: DEBUG
+      PreparedStatement: DEBUG
+
+

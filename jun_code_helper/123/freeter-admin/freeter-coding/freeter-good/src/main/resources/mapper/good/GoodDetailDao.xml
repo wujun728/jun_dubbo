@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.good.dao.GoodDetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.good.entity.GoodDetailEntity" id="goodDetailMap">
+        <result property="goodDetailId" column="good_detail_id"/>
+        <result property="goodId" column="good_id"/>
+        <result property="description" column="description"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+    </resultMap>
+
+	<select id="selectListVO"
+		resultType="com.freeter.modules.good.entity.vo.GoodDetailVO" >
+		SELECT * FROM cn_good_detail as goodDetail <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectVO"
+		resultType="com.freeter.modules.good.entity.vo.GoodDetailVO" >
+		SELECT * FROM cn_good_detail as goodDetail <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+    <select id="selectListView"
+		resultType="com.freeter.modules.good.entity.view.GoodDetailView" >
+		SELECT  * FROM cn_good_detail as goodDetail <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.freeter.modules.good.entity.view.GoodDetailView" >
+		SELECT * FROM cn_good_detail as goodDetail <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+</mapper>

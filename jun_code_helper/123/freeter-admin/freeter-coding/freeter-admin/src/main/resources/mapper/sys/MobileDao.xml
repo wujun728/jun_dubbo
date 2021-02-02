@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.sys.dao.MobileDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.sys.entity.MobileEntity" id="mobileMap">
+        <result property="id" column="id"/>
+        <result property="brand" column="brand"/>
+        <result property="version" column="version"/>
+        <result property="listedyear" column="listedyear"/>
+        <result property="listingmonth" column="listingmonth"/>
+        <result property="color" column="color"/>
+        <result property="operatingSystem" column="operating_system"/>
+        <result property="screen" column="screen"/>
+        <result property="rom" column="ROM"/>
+        <result property="ram" column="RAM"/>
+        <result property="resolvingPower" column="resolving_power"/>
+        <result property="weight" column="weight"/>
+        <result property="cpu" column="CPU"/>
+        <result property="other" column="other"/>
+        <result property="described" column="described"/>
+        <result property="phone" column="phone"/>
+        <result property="name" column="name"/>
+        <result property="backCamera" column="back_camera"/>
+        <result property="createTime" column="create_time"/>
+        <result property="buyTime" column="buy_time"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+#set($header='<#include "/header.html">')
+ <title>${comments}</title>
+ $header
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight" id="rrapp">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox-content">
+		   <form class="form-horizontal">
+			#foreach($column in $columns)
+				#if($column.columnName != $pk.columnName)
+                    <div class="form-group">
+                        <div class="col-sm-2 control-label">${column.comments}</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="${classname}.${column.attrname}" placeholder="${column.comments}"/>
+                        </div>
+                    </div>
+				#end
+			#end
+           	<div class="form-group">
+				<div class="col-sm-3 control-label"></div>
+				<input type="button" class="btn btn-primary"  @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning"    onclick="closeContent();" value="返回"/>
+			</div>
+        </form>
+			
+			
+	 
+				</div>
+				
+			</div>
+		</div>
+		
+	</div>
+ 	<script>
+	 
+  function closeContent(){
+ 	 
+ 		var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+ 	}  
+  
+    $(document)
+	.ready(
+			function() {
+				vm.getInfo();	
+			});  
+  
+ 
+ var vm = new Vue({
+	el:'#rrapp',
+	data:{
+		showList: true,
+		title: null,
+		${classname}: {
+		$pk.attrname:T.p("$pk.attrname"),
+		}
+	},
+	methods: {
+		query: function () {
+			vm.reload();
+		} ,
+		saveOrUpdate: function (event) {
+			var url = vm.${classname}.${pk.attrname} == null ? "${moduleName}/${pathName}/save" : "${moduleName}/${pathName}/update";
+			$.ajax({
+				type: "POST",
+			    url: baseURL + url,
+                contentType: "application/json",
+			    data: JSON.stringify(vm.${classname}),
+			    success: function(r){
+			    	if(r.code === 0){
+						alert('操作成功', function(index){
+						parent.vm.reload();
+				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+				parent.layer.close(index);
+						});
+					}else{
+						alert(r.msg);
+					}
+				}
+			});
+		} ,
+		getInfo: function(){
+		 if(!T.p("${pk.attrname}")){
+				 return;
+			 }
+			$.get(baseURL + "${moduleName}/${pathName}/info/"+T.p("${pk.attrname}"), function(r){
+                vm.${classname} = r.${classname};
+            });
+		} 
+	}
+});
+	</script>
+	
+	
+</body>
+</html>

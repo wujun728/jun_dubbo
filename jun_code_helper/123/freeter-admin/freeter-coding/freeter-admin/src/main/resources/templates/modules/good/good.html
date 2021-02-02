@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>商品表</title>
+		<#include "/header.html">
+		  <link rel="stylesheet" href="${request.contextPath}/statics/plugins/fileinput/fileinput.css">
+	<link rel="stylesheet" href="${request.contextPath}/statics/css/addcss.css">
+	<script src="${request.contextPath}/statics/plugins/fileinput/fileinput.js"></script>
+    <script src="${request.contextPath}/statics/plugins/fileinput/zh.js"></script>
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+        <div class="form-group">
+ 				<select id="search_channelId" name="channelId" class="selectpicker" @keyup.enter="query" 
+							data-live-search="true"  >
+				</select>
+				<select id="search_oneCategory" name="channelId" class="selectpicker" @keyup.enter="query" 
+							data-live-search="true"  >
+				</select>
+				<select id="search_twoCategory" name="channelId" class="selectpicker" @keyup.enter="query" 
+							data-live-search="true"  >
+				</select>
+				<input type="text" class="form-control" style="display: inline-block; width: auto;" v-model="search.goodName"  @keyup.enter="query" placeholder="商品名称">	 			
+				<a class="btn btn-default" @click="query">查询</a>
+ 		</div>
+ 		<div class="form-group"> 
+			<#if shiro.hasPermission("good:good:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("good:good:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("good:good:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+			<a class="btn btn-success" @click="shelve1"><i class="fa fa-plus-square"></i>&nbsp;上架</a>
+				<a class="btn btn-success" @click="shelve0"><i class="fa fa-minus-square"></i>&nbsp;下架</a>
+				<a class="btn btn-danger" @click="activate"><i class="fa fa-check"></i>&nbsp;激活</a>
+				<a class="btn btn-danger" @click="noactivate"><i class="fa fa-close"></i>&nbsp;未激活</a>
+ 				<a class="btn btn-warning" @click="specReset"><i class="fa fa-refresh"></i>&nbsp;规格重置</a>
+ 		 
+				
+       		</div>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品名称</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.goodName" placeholder="商品名称"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品编号</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.goodNumber" placeholder="商品编号"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">最大价格</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.maxPrice" placeholder="最大价格"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">最小价格</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.minPrice" placeholder="最小价格"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品简介</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.introduce" placeholder="商品简介"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">展示图片</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.picImg" placeholder="展示图片"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否置顶 1=置顶/0=默认</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.showInTop" placeholder="是否置顶 1=置顶/0=默认"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否导航栏 1=显示/0=隐藏</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.showInNav" placeholder="是否导航栏 1=显示/0=隐藏"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">猜你喜欢 1=显示/0=隐藏</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.showInLike" placeholder="猜你喜欢 1=显示/0=隐藏"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否热门 1=热门/0=默认</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.showInHot" placeholder="是否热门 1=热门/0=默认"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否上架：1=上架/0=下架</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.showInShelve" placeholder="是否上架：1=上架/0=下架"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">搜索的关键词</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.searchKey" placeholder="搜索的关键词"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">销量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.sales" placeholder="销量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">页面标题</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.pageTitle" placeholder="页面标题"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">页面的描述</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.pageDescription" placeholder="页面的描述"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">页面的关键词</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.pageKeyword" placeholder="页面的关键词"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">备注信息</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.remarks" placeholder="备注信息"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.createTime" placeholder="创建时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">创建者</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.createBy" placeholder="创建者"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">上架时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.shelveTime" placeholder="上架时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">上架人</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.shelveBy" placeholder="上架人"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新者</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.updateBy" placeholder="更新者"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">更新时间</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.updateTime" placeholder="更新时间"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商户id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.martId" placeholder="商户id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label"></div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="good.delFlag" placeholder=""/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+       
+    </div>
+    <!-- 规格值预览 -->
+	 	<div id="specValLayer"  style="padding: 10px;display:none">
+		 	 				 
+	    <form class="form-horizontal" method="post" id="uploadForm" enctype="multipart/form-data">  
+						<div class="form-group">
+					<div class="addtypewrap" v-for="(type,index) in spec">
+						<label class="col-sm-2 control-label" for="">{{type.specName}}</label>
+						<div class="col-sm-4 ">
+							<input class="addinput form-control " type=""
+								v-bind:id="'spec'+type.id" placeholder="请输入属性值" />
+						</div>
+						<button class="AddMoreFileBox   btn btn-default" type="button"
+						@click="insertSpec(type)"	>添加属性值</button>
+						<div class="InputsWrapper">
+							<div class="col" v-for="(item,index) in specVal"
+								v-if="type.id == item.categorySpecId">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-4">
+									<input class="form-control" type="text"
+										v-model="item.specValue" readonly="" />
+								</div>
+								<button type="button" class="btn btn-default"
+									@click="remove(item)"	 >删除</button>
+							</div>
+						</div>
+
+					</div>
+					<!-- <table id="table"  >
+								<td><td v-for="table in table">{{table.name}}</td></th>
+								<tr v-for="tr in table.tr"><td>{{tr.name}}</td><td>{{tr.number}}</td><td>{{tr.brand}}</td></tr>
+							</table>   -->
+						</div>  
+						
+				</form>
+</div>
+ 	<!-- 规格预览 -->
+	 	<div id="specLayer"  style="display: none; padding: 10px;">
+		 	<div class="form-group formtitle " style="padding: 6px 12px;">
+								<div class="col-md-5 control-label" style="text-align:left;padding: 15px;">规格名称</div> 
+								<div class="col-md-2 control-label">库存</div> 
+								<div class="col-md-2 control-label">价格</div> 
+								<div class="col-md-2 control-label">销售量</div> 
+ 							</div>
+							<div class="form-group formitem" v-for="good in goodPrice" style="overflow:hidden;">
+								<div class="col-md-5">
+									<span class="form-control" style="border:0;box-shadow:none;">{{good.specName}}</span> 
+								</div>
+								<div class="col-md-2">
+									<input type="text" placeholder="库存" class="form-control stock trvalue" v-model="good.stock"> 
+								</div>
+								<div class="col-md-2">
+									<input type="text" placeholder="" class="form-control price trvalue"  v-model="good.price"> 
+								</div>
+								<div class="col-md-2">
+									<input type="text" placeholder="" class="form-control brand trvalue"  v-model="good.salesVolume"> 
+								</div>
+								
+							</div>
+							 
+	         
+	           		</div>
+	 </div>
+</div>
+
+
+	<!-- 图片预览 -->
+	 	<div id="imgLayer" style="display: none; padding: 10px;">
+		<div class="itemb tabitem"> 
+	           			<form class="form-horizontal" method="post" id="uploadForm" enctype="multipart/form-data">
+		                    <div class="form-group">
+		                        <label for=" "  class="col-sm-2 control-label">商品相册</label>
+		                        <div class="col-sm-10">
+		                       		<!-- <div id="gallery" v-for> 
+							         	<img src="${request.contextPath}/public/favicon.ico" width="70" height="70" alt=""> 
+							        </div> -->
+							         <div class="file-loading col-sm-10">
+			                            <input id="input-702" name="files" type="file" multiple>
+			                        </div>
+		                       	</div>
+		                    </div> 
+	               		 </form>
+	           		</div>
+	 </div>
+	 
+	
+<script src="${request.contextPath}/statics/js/modules/good/good.js?_${.now?long}"></script>
+
+</body>
+</html>

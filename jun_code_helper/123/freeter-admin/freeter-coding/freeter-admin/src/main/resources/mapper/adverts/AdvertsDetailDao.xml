@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.adverts.dao.AdvertsDetailDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.adverts.entity.AdvertsDetailEntity" id="advertsDetailMap">
+        <result property="advertsDetailId" column="adverts_detail_id"/>
+        <result property="name" column="name"/>
+        <result property="advertsId" column="adverts_id"/>
+        <result property="title" column="title"/>
+        <result property="sort" column="sort"/>
+        <result property="href" column="href"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+        <result property="picImg" column="pic_img"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="remarks" column="remarks"/>
+        <result property="beginTime" column="begin_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="content" column="content"/>
+    </resultMap>
+
+	<select id="selectListVO"
+		resultType="com.freeter.modules.adverts.entity.vo.AdvertsDetailVO" >
+		SELECT * FROM `cn_adverts_detail`  advertsDetail         
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectVO"
+		resultType="com.freeter.modules.adverts.entity.vo.AdvertsDetailVO" >
+		SELECT  advertsDetail.* FROM `cn_adverts_detail`  advertsDetail 	
+ 		<where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+    <select id="selectListView"
+		resultType="com.freeter.modules.adverts.entity.view.AdvertsDetailView" >
+
+		SELECT  advertsDetail.* FROM `cn_adverts_detail`  advertsDetail 	        
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.freeter.modules.adverts.entity.view.AdvertsDetailView" >
+		SELECT * FROM `cn_adverts_detail`  advertsDetail <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+</mapper>

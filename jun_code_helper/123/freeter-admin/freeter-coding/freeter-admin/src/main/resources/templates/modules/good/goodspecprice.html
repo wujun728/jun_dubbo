@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>规格价格表</title>
+		<#include "/header.html">
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+			<#if shiro.hasPermission("good:goodspecprice:save")>
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+			</#if>
+			<#if shiro.hasPermission("good:goodspecprice:update")>
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+			</#if>
+			<#if shiro.hasPermission("good:goodspecprice:delete")>
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+			</#if>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-default">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+														                    <div class="form-group">
+                        <div class="col-sm-2 control-label">商品id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodSpecPrice.goodId" placeholder="商品id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">规格 以，相隔  内容为规格值表的id</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodSpecPrice.spec" placeholder="规格 以，相隔  内容为规格值表的id"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">价格</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodSpecPrice.price" placeholder="价格"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">库存</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodSpecPrice.stock" placeholder="库存"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">是否默认</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodSpecPrice.defaultStatus" placeholder="是否默认"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">销售量</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodSpecPrice.salesVolume" placeholder="销售量"/>
+                        </div>
+                    </div>
+											                    <div class="form-group">
+                        <div class="col-sm-2 control-label">状态 0无库存 1 上架 2 下架</div>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" v-model="goodSpecPrice.status" placeholder="状态 0无库存 1 上架 2 下架"/>
+                        </div>
+                    </div>
+							            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script src="${request.contextPath}/statics/js/modules/good/goodspecprice.js?_${.now?long}"></script>
+
+</body>
+</html>

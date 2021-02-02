@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<#include "/header.html">
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight" id="rrapp">
+		<div class="row">
+			<div class="col-sm-12">
+				<div class="ibox-content">
+					<form class="form-horizontal" id="form">
+				<div class="form-group">
+				<div class="col-sm-3 control-label">用户名</div>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" v-model="user.username" placeholder="登录账号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3 control-label">所属部门</div>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" style="cursor:pointer;" v-model="user.deptName" @click="deptTree" readonly="readonly" placeholder="所属部门"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3 control-label">密码</div>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" v-model="user.password" placeholder="密码"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3 control-label">邮箱</div>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" v-model="user.email" placeholder="邮箱"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3 control-label">手机号</div>
+				<div class="col-sm-8">
+					<input type="text" class="form-control" v-model="user.mobile" placeholder="手机号"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3 control-label">角色</div>
+				<div class="col-sm-8">
+					<label v-for="role in roleList" class="checkbox-inline">
+						<input type="checkbox" :value="role.roleId" v-model="user.roleIdList">{{role.roleName}}
+					</label>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3 control-label">状态</div>
+				<label class="radio-inline">
+					<input type="radio" name="status" value="0" v-model="user.status"/> 禁用
+				</label>
+				<label class="radio-inline">
+					<input type="radio" name="status" value="1" v-model="user.status"/> 正常
+				</label>
+			</div>
+			<div class="form-group">
+				<div class="col-sm-3 control-label"></div>
+				<input type="button" class="btn btn-primary"  @click="saveOrUpdate" value="确定"/>
+				&nbsp;&nbsp;<input type="button" class="btn btn-warning"    onclick="closeContent();" value="返回"/>
+			</div>
+			</form>
+			
+			
+	<!-- 选择部门 -->
+	<div id="deptLayer" style="display: none; padding: 10px;">
+		<ul id="deptTree" class="ztree"></ul>
+	</div>
+				</div>
+				
+			</div>
+		</div>
+		
+	</div>
+ 	<script>
+	var setting = {
+			 
+			data : {
+
+				simpleData : {
+					enable : true,
+					idKey : "deptId",
+					pIdKey : "parentId",
+					rootPId : -1
+				},
+				key : {
+					url : "nourl"
+				},
+
+			}
+		};
+ 	
+  function closeContent(){
+ 	 
+ 		var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+ 	}  
+  
+    $(document)
+	.ready(
+			function() {
+				vm.getUser();	
+			});  
+  
+  var deptTree;
+  var vm = new Vue({
+		 el:'#rrapp',
+		 data:{
+		 q:{
+		 username: null
+		 },
+		 showList: true,
+		 title:null,
+		 roleList:{},
+		 user:{
+		 userId:T.p("userId"),
+		 status:1,
+		 deptId:null,
+		 deptName:null,
+		 roleIdList:[]
+		 },
+		 dept:{
+		 parentName:null,
+		 parentId:0,
+		 orderNum:0
+		 }
+		 },
+		 methods: {
+			 
+			  
+			 
+		 query: function () {
+		 vm.reload();
+		 },
+		 getDept: function(){
+		 //加载部门树
+		 $.get(baseURL + "sys/dept/list", function(r){
+			 deptTree = $.fn.zTree.init($("#deptTree"), setting, r);
+		 var node = deptTree.getNodeByParam("deptId", vm.user.deptId);
+		 if(node != null){
+			 deptTree.selectNode(node);
+
+		 vm.user.deptName = node.name;
+		 }
+		 })
+		 }, 
+		 saveOrUpdate: function () {
+		 var url = vm.user.userId == null ? "sys/user/save" : "sys/user/update";
+		 $.ajax({
+		 type: "POST",
+		 url: baseURL + url,
+		 contentType: "application/json",
+		 data: JSON.stringify(vm.user),
+		 success: function(r){
+		 if(r.code === 0){
+		 alert('操作成功', function(){
+ 				parent.vm.reload();
+				var index = parent.layer.getFrameIndex(window.name); // 获取窗口索引
+				parent.layer.close(index);
+		 });
+		 }else{
+		 alert(r.msg);
+		 }
+		 }
+		 });
+		 },
+		 getUser: function(){
+			 if(!T.p("userId")){
+				 return
+			 }
+		 $.get(baseURL + "sys/user/info/"+T.p("userId"), function(r){
+		 vm.user = r.user;
+		 vm.user.password = null;
+		 vm.getDept();
+		 vm.getRoleList();
+		 });
+		 },
+		 getRoleList: function(){
+		 $.get(baseURL + "sys/role/select", function(r){
+		 vm.roleList = r.list;
+		 });
+		 },
+		 deptTree: function(){
+		 layer.open({
+		 type: 1,
+		 offset: '50px',
+		 skin: 'layui-layer-molv',
+		 title: "选择部门",
+		 area: ['300px', '450px'],
+		 shade: 0,
+		 shadeClose: false,
+		 content: jQuery("#deptLayer"),
+		 btn: ['确定', '取消'],
+		 btn1: function (index) {
+		 var node = deptTree.getSelectedNodes();
+		 //选择上级部门
+		 vm.user.deptId = node[0].deptId;
+		 vm.user.deptName = node[0].name;
+
+		 layer.close(index);
+		 }
+		 });
+		 },
+		 
+		 }
+		 ,
+		 created: function () {
+ 			   this.getUser(); 
+			}
+		 });  
+		 
+	</script>
+	
+	
+</body>
+</html>

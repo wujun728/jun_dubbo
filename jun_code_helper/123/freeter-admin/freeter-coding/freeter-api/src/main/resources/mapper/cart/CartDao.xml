@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.cart.dao.CartDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.cart.entity.CartEntity" id="cartMap">
+        <result property="cartId" column="cart_id"/>
+        <result property="goodSpecPriceId" column="good_spec_price_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="buyNumber" column="buy_number"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="checkStatus" column="check_status"/>
+    </resultMap>
+
+
+</mapper>

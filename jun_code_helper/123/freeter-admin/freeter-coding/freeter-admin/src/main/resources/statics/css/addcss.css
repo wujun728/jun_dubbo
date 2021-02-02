@@ -1,0 +1,125 @@
+
+.form-horizontal{
+    width: auto;
+}
+/*图片上传的样式修改*/
+    .file-drop-zone { 
+        height: auto; 
+    }
+   .InputsWrapper{
+    margin-bottom: 10px;
+   }
+   .InputsWrapper>div{
+        height: 34px;
+        margin-top: 10px;
+    }
+    .typecol table{ 
+        border: 1px solid #dddddd;
+        border-bottom:none;
+        border-right: none;
+    }
+    .typecol td, .typecol th{
+        text-align: center;
+        line-height: 34px;
+        border-right: 1px solid #dddddd;
+        border-bottom:1px solid #dddddd;
+    }
+    .sublitwrap{
+        text-align: right;
+    }
+    label{
+        font-weight: 100;
+        color: #333333;
+    }
+    #uploadForm .typechose select{
+        margin-right: 5px;
+    }
+    .AddMoreFileBox, .AddMoreFileBox.btn-default:hover, .AddMoreFileBox.btn-default:focus{
+        background: #337ab7;
+        color: #ffffff;
+        border-color: #2e6da4;
+    }
+    #rrapp{
+            margin: 0px auto;
+        } 
+        .form-horizontal{
+            width: auto;
+        }
+        .tab_head{
+            height: 40px;
+        }
+        .tab_head>div{
+            float: left;
+            padding:10px;
+            cursor: pointer;   
+            background: #eeeeee;
+            margin-right: 10px;
+            color: #000000;
+            text-align: left;
+            width: 14%;
+        }
+        .tab_head>div.active{
+            background: #3c8dbc;
+            color: #ffffff;
+        }
+        .tabwrap{
+            position: relative;
+            top: 0;
+        }
+        .tabitem {
+            position: absolute;
+            left: 0;
+            top: 0;
+            padding:20px;
+            width: 100%;
+        } 
+        .advalue{
+            display: inline-block;
+        }
+        .advalue input{
+            height: 34px;
+            border-radius: 5px;
+        }
+        .tabpad{
+            padding-top: 20px;
+        } 
+        .file-input {
+             padding-left: 0;  
+        }
+        
+/*         stock样式 */
+.orderlist .widthseven{
+    width: 17%;
+    display: inline-block;
+}
+.orderselect .widthseven{
+    width: 17%;
+    display: inline-block;
+}
+.myorderlist .widthseven{
+    width: 17%;
+    display: inline-block;
+}
+.buttoonnamber{
+    margin-bottom:20px;
+}
+.buttoonnamber .btn{
+    color: #333;
+    background-color: #ffffff;
+    border-color: #8c8c8c;
+}
+
+
+.buttoonnamber .btn.active{
+    background-color: #337ab7!important;
+    border-color: #2e6da4!important;
+    color:#ffffff!important;
+}
+
+/* good */
+.formtitle{
+	overflow:hidden;
+}
+.formtitle .control-label{
+	text-align:center;
+}

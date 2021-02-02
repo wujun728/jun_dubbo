@@ -1,0 +1,68 @@
+package ${package}.${moduleName}.service;
+
+import ${package}.common.vo.resp.PageInfo;
+import ${package}.common.exception.BaseException;
+import ${package}.${moduleName}.entity.${className};
+
+import java.util.List;
+
+/**
+ * ${comments}
+ *
+ * @author ${author}
+ * @email ${email}
+ * @date ${datetime}
+ */
+public interface ${className}Service {
+
+   /**
+    * 新增
+    * @throws BaseException
+    */
+    ${pk.attrType} insertSelective(${className} ${classname}) throws BaseException;
+
+   /**
+    * 根据主键删除
+    * @return
+    * @throws BaseException
+    */
+    int deleteByPrimaryKey(${pk.attrType} id) throws BaseException;
+
+   /**
+    * 根据主键修改
+    * @return
+    * @throws BaseException
+    */
+    int updateByPrimaryKeySelective(${className} ${classname}) throws BaseException;
+
+   /**
+    * 主键查询
+    * @return   ${className}
+    * @throws   BaseException
+    */
+    ${className} selectByPrimaryKey(${pk.attrType} id) throws BaseException;
+
+    /**
+    * 分页
+    * @param pageSize   每页条数
+    * @param pageNo     当前页
+    * @return
+    * @throws BaseException
+    */
+    PageInfo<${className}> findPage(${className} ${classname}, int pageSize, int pageNo) throws BaseException;
+
+    /**
+     * 根据Example查询 （${classname}不为空的属性查询
+     * @param ${classname}  ${classname}对象
+     * @return
+     */
+    List<${className}> selectByExample(${className} ${classname}) throws BaseException;
+
+    /**
+     * 根据Example查询 （${classname}不为空的属性总数量
+     * @param ${classname}  ${classname}对象
+     * @return
+     */
+    int countByExample(${className} ${classname}) throws BaseException;
+}
+

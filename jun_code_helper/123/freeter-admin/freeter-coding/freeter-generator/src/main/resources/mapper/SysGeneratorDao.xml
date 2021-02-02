@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.dao.SysGeneratorDao">
+	<select id="queryList" resultType="map">
+		select table_name tableName, engine, table_comment tableComment,
+		create_time createTime from information_schema.tables
+		where table_schema = (select database()) and table_name NOT REGEXP
+		'sys_|qrtz_|schedule_'
+		<if test="tableName != null and tableName.trim() != ''">
+			and table_name like concat('%', #{tableName}, '%')
+		</if>
+		order by create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryTableList" resultType="com.freeter.entity.TableEntity">
+		select table_name tableName, engine, table_comment comments,
+		create_time createTime from information_schema.tables
+		where table_schema = (select database())  
+		<if test="tableName != null and tableName.trim() != ''">
+			and table_name like concat('%', #{tableName}, '%')
+		</if>
+		order by create_time desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+	<select id="queryOracleTableList" resultType="com.freeter.entity.TableEntity">
+	select t.table_name tableName,c.comments comments from user_tables t ,user_tab_comments c where t.table_name = c.table_name
+	</select>
+
+	<select id="queryDatabaseName" resultType="String">
+	select database()
+	</select>
+
+	<select id="queryReferenced" resultType="com.freeter.entity.ReferencedTable">
+		select table_name tableName,column_name columnName,REFERENCED_TABLE_NAME referencedTableName,REFERENCED_column_name
+		 referencedColumnName from INFORMATION_SCHEMA.KEY_COLUMN_USAGE where table_schema = (select
+		database()) and table_name = #{tableName} and constraint_name != 'PRIMARY'
+	</select>
+	<select id="queryTotal" resultType="int">
+		select count(*) from information_schema.tables where table_schema =
+		(select database()) and table_name NOT REGEXP 'sys_|qrtz_|schedule_'
+		<if test="tableName != null and tableName.trim() != ''">
+			and table_name like concat('%', #{tableName}, '%')
+		</if>
+	</select>
+
+	<select id="queryTable" resultType="map">
+		select table_name tableName,
+		engine, table_comment tableComment, create_time createTime from
+		information_schema.tables
+		where table_schema = (select database()) and table_name = #{tableName}
+	</select>
+
+	<select id="queryColumns" resultType="map">
+		select column_name
+		columnName, IS_NULLABLE isNullable,COLUMN_DEFAULT columnDefault,character_maximum_length dataLength,data_type dataType, column_comment
+		columnComment, column_key columnKey, extra from
+		information_schema.columns
+		where table_name = #{tableName} and table_schema = (select database())
+		order by ordinal_position
+	</select>
+	
+	<select id="selectAllColumns" resultType="com.freeter.entity.ColumnEntity">
+		select column_name
+		columnName, IS_NULLABLE isNullable,COLUMN_DEFAULT columnDefault,character_maximum_length dataLength,data_type dataType, column_comment
+		comments, (case  when column_key = 'PRI' THEN 'P' END)
+ AS columnKey, extra from
+		information_schema.columns
+		where table_name = #{tableName} and table_schema = (select database())
+		order by ordinal_position
+	</select>
+	
+	<select id="selectAllOracleColumns" resultType="com.freeter.entity.ColumnEntity">
+	select z.*, (select constraint_type from user_cons_columns a,
+	user_constraints b where a.constraint_name = b.constraint_name
+	and b.constraint_type = 'P'
+	and a.table_name = #{tableName}
+	and a.column_name = z.column_name) COLUMN_KEY from
+	( select t4.column_name ,
+	t1.comments comments,
+	data_default COLUMN_DEFAULT,
+	nullable IS_NULLABLE,
+	data_type || '(' || data_length || ')' COLUMN_TYPE, data_type,data_length,
+	'' as EXTRA from user_col_comments t1, user_tab_columns t4 where
+	t1.column_name = t4.column_name and t4.table_name = #{tableName}
+	and t1.table_name = t4.table_name)z
+
+	 
+	</select>
+</mapper>

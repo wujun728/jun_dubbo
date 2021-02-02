@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.good.dao.GoodSpecValueDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.good.entity.GoodSpecValueEntity" id="goodSpecValueMap">
+        <result property="id" column="id"/>
+        <result property="goodId" column="good_id"/>
+        <result property="categorySpecId" column="category_spec_id"/>
+        <result property="specValue" column="spec_value"/>
+    </resultMap>
+
+
+</mapper>

@@ -1,0 +1,53 @@
+<html> 
+    <head>
+        <title>添加属性</title>
+        <#include "/header.html">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/fileinput/fileinput.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/addcss.css">
+        <script src="${request.contextPath}/statics/plugins/fileinput/fileinput.js"></script>
+        <script src="${request.contextPath}/statics/plugins/fileinput/zh.js"></script> 
+    </head> 
+    <body>
+        <div id="rrapp" v-cloak="">            
+			<div v-show="showList" class="panel panel-default">
+					<div class="panel-heading">
+						{{title}}
+					</div>
+					<form class="form-horizontal" method="post" id="uploadForm" enctype="multipart/form-data">  
+						<div class="form-group">
+					<div class="addtypewrap" v-for="(type,index) in spec">
+						<label class="col-sm-2 control-label" for="">{{type.specName}}</label>
+						<div class="col-sm-4 ">
+							<input class="addinput form-control " type=""
+								v-bind:id="'spec'+type.id" placeholder="请输入属性值" />
+						</div>
+						<button class="AddMoreFileBox   btn btn-default" type="button"
+							@click="insertSpec(type)">添加属性值</button>
+						<div class="InputsWrapper">
+							<div class="col" v-for="(item,index) in speclist"
+								v-if="type.id == item.categorySpecId">
+								<label class="col-sm-2 control-label"></label>
+								<div class="col-sm-4">
+									<input class="form-control" type="text"
+										v-model="item.specValue" readonly="" />
+								</div>
+								<button type="button" class="btn btn-default"
+									@click="remove(item)">删除</button>
+							</div>
+						</div>
+
+					</div>
+					<!-- <table id="table"  >
+								<td><td v-for="table in table">{{table.name}}</td></th>
+								<tr v-for="tr in table.tr"><td>{{tr.name}}</td><td>{{tr.number}}</td><td>{{tr.brand}}</td></tr>
+							</table>   -->
+						</div>  
+						<div class="form-group text-right next">
+							<input type="button" @click="save" class="btn btn-default" style="margin-right:20px;" value="下一步"></input>  
+						</div>
+				</form>
+			</div> 
+		</div>
+        <script src="${request.contextPath}/statics/js/modules/good/standard.js?_${.now?long}"></script> 
+    </body> 
+</html>

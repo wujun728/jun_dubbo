@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.freeter.modules.adverts.dao.AdvertsDao">
+
+	<!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.freeter.modules.adverts.entity.AdvertsEntity" id="advertsMap">
+        <result property="advertsId" column="adverts_id"/>
+        <result property="name" column="name"/>
+        <result property="width" column="width"/>
+        <result property="height" column="height"/>
+        <result property="description" column="description"/>
+        <result property="template" column="template"/>
+        <result property="defultNumber" column="defult_number"/>
+        <result property="number" column="number"/>
+        <result property="createTime" column="create_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="status" column="status"/>
+    </resultMap>
+
+	<select id="selectListVO"
+		resultType="com.freeter.modules.adverts.entity.vo.AdvertsVO" >
+		SELECT * FROM `cn_adverts`  adverts         
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectVO"
+		resultType="com.freeter.modules.adverts.entity.vo.AdvertsVO" >
+		SELECT  adverts.* FROM `cn_adverts`  adverts 	
+ 		<where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+
+    <select id="selectListView"
+		resultType="com.freeter.modules.adverts.entity.view.AdvertsView" >
+
+		SELECT  adverts.* FROM `cn_adverts`  adverts 	        
+        <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+	
+	<select id="selectView"
+		resultType="com.freeter.modules.adverts.entity.view.AdvertsView" >
+		SELECT * FROM `cn_adverts`  adverts <where> 1=1 ${ew.sqlSegment}</where>
+	</select>
+</mapper>

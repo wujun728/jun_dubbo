@@ -1,0 +1,83 @@
+<html> 
+    <head>
+        <title>商品库存</title>
+        <#include "/header.html">
+        <link rel="stylesheet" href="${request.contextPath}/statics/plugins/fileinput/fileinput.css">
+        <link rel="stylesheet" href="${request.contextPath}/statics/css/addcss.css">
+        <script src="${request.contextPath}/statics/plugins/fileinput/fileinput.js"></script>
+        <script src="${request.contextPath}/statics/plugins/fileinput/zh.js"></script> 
+		<style type="text/css">
+			.formtitle .control-label{
+				padding-left:0;
+				padding-right:0;
+			}
+			.formtitle .control-label{
+				text-align:center;
+			}
+			#putwarp{
+				padding:20px 0;
+			}
+		</style>
+    </head> 
+    <body>
+        <div id="rrapp" v-cloak="">            
+			<div v-show="showList" class="panel panel-default">
+					<div class="panel-heading">
+						{{title}}
+					</div>
+					<div id="putwarp"> 
+						<div id="putin" class=" text-center" style="overflow: hidden; width: 90%;">
+							<div class="col-md-2 control-label" class="putin" >批量填入:</div> 
+							<div class="col-md-2">
+								<input type="text" id="stock" placeholder="库存" class="form-control ifin"> 
+							</div>
+							<div class="col-md-2">
+								<input type="text" id="price" placeholder="价格" class="form-control ifin"> 
+							</div>
+							<div class="col-md-2">
+								<input type="text" id="brand" placeholder="销售量" class="form-control ifin"> 
+							</div>
+							<div class="col-md-2 text-left">
+								<a href="#" class="btn btn-primary" onclick="putin()">填入</a>
+							</div> 
+						</div>
+						<form action="" method="" class="form-horizontal" style="width:90%;"> 
+							<div class="form-group formtitle ">
+								<div class="col-md-2 control-label">规格名称</div> 
+								<div class="col-md-2 control-label">库存</div> 
+								<div class="col-md-2 control-label">价格</div> 
+								<div class="col-md-2 control-label">销售量</div> 
+ 							</div>
+							<div class="form-group formitem" v-for="good in good">
+								<div class="col-md-2">
+									<span class="form-control">{{good.specName}}</span> 
+								</div>
+								<div class="col-md-2">
+									<input type="text" placeholder="库存" class="form-control stock trvalue" v-model="good.stock"> 
+								</div>
+								<div class="col-md-2">
+									<input type="text" placeholder="" class="form-control price trvalue"  v-model="good.price"> 
+								</div>
+								<div class="col-md-2">
+									<input type="text" placeholder="" class="form-control brand trvalue"  v-model="good.salesVolume"> 
+								</div>
+								
+								 
+							</div>
+							
+							   <div class="form-group sublitwrap"> </div>
+  
+										<div class="form-group text-right">  
+											<input type="button"
+						class="btn btn-warning" @click="reload"  value="返回" />	<input type="button"  class="btn" value="下一步" @click="saveOrUpdate"></input>
+										</div>
+					</form>
+				</div>
+			</div> 
+		</div>
+        <script src="${request.contextPath}/statics/js/modules/good/stock.js?_${.now?long}"></script> 
+		<script type="text/javascript">
+
+		</script>
+    </body> 
+</html>
