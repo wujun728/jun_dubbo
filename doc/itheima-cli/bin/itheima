@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+
+require('commander')
+  .version(require('../package').version)
+  .usage('<command> [options]')
+  .command('init', '创建新项目 - itheima init <template-name> <project-name>')
+  .command('moduleAdd', '创建新模块 - itheima moduleAdd <module-name>')
+  .parse(process.argv)
