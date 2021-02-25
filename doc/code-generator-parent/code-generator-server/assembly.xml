@@ -1,0 +1,67 @@
+<assembly>
+    <id>bin</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>true</useProjectArtifact>
+            <outputDirectory>lib</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+
+        <fileSet>
+            <directory>src/main/env/${env}</directory>
+            <outputDirectory>/conf</outputDirectory>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+            <includes>
+                <include>*.*</include>
+            </includes>
+        </fileSet>
+
+        <!-- scripts -->
+        <fileSet>
+            <directory>bin</directory>
+            <outputDirectory>/bin</outputDirectory>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+            <includes>
+                <include>*.sh</include>
+            </includes>
+        </fileSet>
+
+        <!-- conf -->
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>/conf</outputDirectory>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+            <includes>
+                <include>*.xml</include>
+                <include>*.properties</include>
+                <include>*.yaml</include>
+                <include>*.pri</include>
+                <include>*.pub</include>
+                <include>*.html</include>
+                <include>*.cer</include>
+                <include>*.pfx</include>
+            </includes>
+        </fileSet>
+
+        <!-- config dir -->
+
+        <!-- log dir -->
+        <fileSet>
+            <directory>src/main/</directory>
+            <outputDirectory>/logs</outputDirectory>
+            <fileMode>0755</fileMode>
+            <directoryMode>0755</directoryMode>
+            <excludes>
+                <exclude>*/**</exclude>
+            </excludes>
+        </fileSet>
+
+    </fileSets>
+</assembly>
